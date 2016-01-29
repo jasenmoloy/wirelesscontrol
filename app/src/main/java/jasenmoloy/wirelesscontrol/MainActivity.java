@@ -1,6 +1,7 @@
 package jasenmoloy.wirelesscontrol;
 
 import android.content.Intent;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +17,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Display a preference fragment as the main content for setting up
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment())
+                .commit();
+
+        //Set default parameters for all preferences.
+        PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings_wifi, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings_bluetooth, false);
+
+        //Set the active view
         setContentView(R.layout.activity_main);
     }
 
@@ -39,16 +52,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /** Called when the user clicks the Send button */
-    public void sendMessage(    View view) {
-        Intent intent = new Intent(this, DisplayMessageActivity.class);
-
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
-
-        startActivity(intent);
     }
 }

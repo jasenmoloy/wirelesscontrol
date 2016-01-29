@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="settings_general_gpstick"
+        android:title="@string/settings_general_gpstick_title"
+        android:summary="@string/settings_general_gpstick_summary"
+        android:persistent="true"
+        android:inputType="numberDecimal"
+        android:defaultValue="3.0" />
+</PreferenceScreen>
