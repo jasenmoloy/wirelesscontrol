@@ -48,12 +48,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.action_settings:
                 //JAM TODO Invoke the settings fragments.
-
-                // Display a preference fragment as the main content for setting up
-                getFragmentManager().beginTransaction()
-                        .replace(android.R.id.content, new SettingsFragment())
-                        .commit();
-
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 //JAM User action not recognized. Invoke the super class instead.
