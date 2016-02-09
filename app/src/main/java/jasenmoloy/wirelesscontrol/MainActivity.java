@@ -12,9 +12,7 @@ import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String apiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
-
-    ContentLoader mContent;
+    public static final String googleMapsApiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
