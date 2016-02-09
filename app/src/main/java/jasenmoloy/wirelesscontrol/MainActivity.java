@@ -29,6 +29,12 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_wifi, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_bluetooth, false);
+
+        //Acquire any saved geofences
+        //JAM Temp add on...
+        getFragmentManager().beginTransaction()
+                .add(R.id.main_fragmentHolder, new SavedGeofenceFragment())
+                .commit();
     }
 
     @Override
