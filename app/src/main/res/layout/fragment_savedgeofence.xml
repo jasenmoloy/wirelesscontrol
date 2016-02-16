@@ -5,16 +5,19 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/geofence_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:text="Hello"/>
     <ImageView
+        android:id="@+id/geofence_map_image"
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:src="@drawable/saved_geofence_map"/>
     <TextView
+        android:id="@+id/geofence_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
