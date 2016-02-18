@@ -1,6 +1,7 @@
 package jasenmoloy.wirelesscontrol;
 
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,10 @@ public class SavedGeofenceCardAdapter extends RecyclerView.Adapter<SavedGeofence
     //Providing a reference to the views that are contained within each card
     public static class ViewHolder extends RecyclerView.ViewHolder {
         //JAM TEMP: each data item is just a string for now.
-        public TextView mTextView;
-        public ViewHolder(TextView v) {
+        public CardView mCardView;
+        public ViewHolder(CardView v) {
             super(v);
-            mTextView = v;
+            mCardView = v;
         }
     }
 
@@ -31,7 +32,7 @@ public class SavedGeofenceCardAdapter extends RecyclerView.Adapter<SavedGeofence
     @Override
     public SavedGeofenceCardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
         //create a new view
-        TextView v = (TextView) LayoutInflater.from(parent.getContext())
+        CardView v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_savedgeofence, parent, false);
 
         //JAM TODO: set view size, margins, paddings, etc. parameters
@@ -45,7 +46,8 @@ public class SavedGeofenceCardAdapter extends RecyclerView.Adapter<SavedGeofence
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(mDataset[position]);
+        TextView textView = (TextView) holder.mCardView.findViewById(R.id.card_savedgeofence_name);
+        textView.setText(mDataset[position]);
     }
 
     //Return the size of the dataset (invoked by the layout manager)
