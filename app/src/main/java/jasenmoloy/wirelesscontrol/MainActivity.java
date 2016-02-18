@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +16,14 @@ import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String googleMapsApiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
+    public static final String msGoogleMapsApiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
+
+    public static final String[] mTestDataset = {"hello1", "hello2", "hello3", "hello4", "hello5", "hello6"};
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +40,20 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_wifi, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_bluetooth, false);
+
+        //Grab Recycler information
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_geofences);
+        mRecyclerView.setHasFixedSize(true); //Improves performance if you know the layout size does not change.
+
+        //Use a linear layout for geofence cards
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        //Specify target adapter to use to populate each card
+        mAdapter = new SavedGeofenceCardAdapter(mTestDataset);
+        mRecyclerView.setAdapter(mAdapter);
+
+
     }
 
     @Override
