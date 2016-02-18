@@ -1,5 +1,7 @@
 package jasenmoloy.wirelesscontrol;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
@@ -30,11 +32,21 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.settings_wifi, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_bluetooth, false);
 
-        //Acquire any saved geofences
-        //JAM Temp add on...
-        getFragmentManager().beginTransaction()
-                .add(R.id.main_fragmentHolder, new SavedGeofenceFragment())
-                .commit();
+        //Create FAB to add a new geofence entry
+        if(savedInstanceState == null) {
+            FragmentTransaction transaction;
+
+            //Acquire any saved geofences
+            //JAM Temp add on...
+//            transaction = getFragmentManager().beginTransaction();
+//            transaction.add(R.id.main_fragmentHolder, new SavedGeofenceFragment());
+//            transaction.commit();
+
+            //Add FAB to main screen
+//            transaction = getFragmentManager().beginTransaction();
+//            transaction.add(R.id.fab_fragment, new AddGeofenceFabFragment());
+//            transaction.commit();
+        }
     }
 
     @Override
