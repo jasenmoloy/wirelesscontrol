@@ -18,7 +18,44 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String msGoogleMapsApiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
 
-    public static final String[] mTestDataset = {"hello1", "hello2", "hello3", "hello4", "hello5", "hello6"};
+    public static final String[] mTestDataset = {
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
+            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
+            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
+    };
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
