@@ -29,7 +29,23 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
-            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <!-- Parent activity meta-data to support 4.0 (14) and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="jasenmoloy.wirelesscontrol.MainActivity" />
+        </activity>
+
+        <!-- Add Geofence Activity -->
+        <activity android:name="jasenmoloy.wirelesscontrol.AddGeofenceActivity"
+            android:label="@string/action_addgeofence"
+            android:parentActivityName="jasenmoloy.wirelesscontrol.MainActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- Parent activity meta-data to support 4.0 (14) and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="jasenmoloy.wirelesscontrol.MainActivity" />
