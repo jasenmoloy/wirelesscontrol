@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AddGeofenceActivity.class);
+                Intent intent = new Intent(v.getContext(), GeofenceMapsActivity.class);
                 startActivity(intent);
             }
         });
