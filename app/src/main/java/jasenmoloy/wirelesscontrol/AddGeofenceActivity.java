@@ -15,20 +15,26 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by jasenmoloy on 2/17/16.
  */
-public class AddGeofenceActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class AddGeofenceActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnCameraChangeListener {
 
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1;
 
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     private Location mLocation;
+    private Marker mGeofenceMarker;
+    private Circle mGeofenceCircle;
+
 
     /// ----------------------
     /// Public Methods
@@ -74,6 +80,15 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
     }
 
     /// ----------------------
+    /// Callback Methods
+    /// ----------------------
+
+    public void onCameraChange(CameraPosition cameraPos) {
+        mGeofenceMarker.setPosition(cameraPos.target);
+        mGeofenceCircle.setCenter(cameraPos.target);
+    }
+
+    /// ----------------------
     /// Private Methods
     /// ----------------------
 
@@ -90,6 +105,8 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
             LatLng currentPos = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentPos, (mMap.getMaxZoomLevel() * 0.8f));
 
+            //Set the listener for our map.
+            mMap.setOnCameraChangeListener(this);
 
             //Update the camera to point to where the user is located and zoom in a bit.
             mMap.animateCamera(cameraUpdate);
@@ -97,7 +114,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
             //Add a marker to your current location
             MarkerOptions markOps = new MarkerOptions();
             markOps.position(currentPos);
-            mMap.addMarker(markOps);
+            mGeofenceMarker = mMap.addMarker(markOps);
 
             //Add a radius to the current marker
             CircleOptions circleOps = new CircleOptions();
@@ -105,7 +122,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
             circleOps.radius(60.0);
             circleOps.fillColor(Color.argb(50, 0, 0, 255));
             circleOps.strokeWidth(4.0f);
-            mMap.addCircle(circleOps);
+            mGeofenceCircle = mMap.addCircle(circleOps);
         }
         catch(SecurityException secEx) {
             //TODO Request permissions to access the user's location.
