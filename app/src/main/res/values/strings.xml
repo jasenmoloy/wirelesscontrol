@@ -14,6 +14,7 @@
     <!-- Add Geofence Activity -->
     <string name="title_activity_addgeofence">Add Geofence</string>
     <string name="title_geofence_default_name">Name (e.g. Home)</string>
+    <string name="text_addgeofence_savebutton">Save</string>
 
     <!-- Geofence Map Fragment -->
     <string name="title_fragment_geofence_map">Geofence Map</string>

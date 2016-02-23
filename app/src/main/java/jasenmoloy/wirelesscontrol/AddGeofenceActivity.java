@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -86,6 +87,10 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
     public void onCameraChange(CameraPosition cameraPos) {
         mGeofenceMarker.setPosition(cameraPos.target);
         mGeofenceCircle.setCenter(cameraPos.target);
+    }
+
+    public void onSaveButtonClick(View view) {
+
     }
 
     /// ----------------------

@@ -17,34 +17,46 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         android:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+    <fragment
+        android:id="@+id/addgeofence_geofencemap"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        tools:context="jasenmoloy.wirelesscontrol.GeofenceMapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <fragment
-            android:id="@+id/addgeofence_geofencemap"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            tools:context="jasenmoloy.wirelesscontrol.GeofenceMapFragment"
-            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
         <EditText
             android:id="@+id/addgeofence_name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:hint="@string/title_geofence_default_name"
             android:inputType="text" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Wifi"/>
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="Wifi"/>-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Bluetooth"/>
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="Bluetooth"/>-->
+
+        <Button
+            android:id="@+id/addgeofence_savebutton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="bottom|right"
+            android:text="@string/text_addgeofence_savebutton"
+            android:onClick="onSaveButtonClick" />
 
 
     </LinearLayout>
