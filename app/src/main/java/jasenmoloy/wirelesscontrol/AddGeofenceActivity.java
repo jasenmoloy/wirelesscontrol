@@ -1,6 +1,7 @@
 package jasenmoloy.wirelesscontrol;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -8,14 +9,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by jasenmoloy on 2/17/16.
@@ -91,6 +93,19 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
 
             //Update the camera to point to where the user is located and zoom in a bit.
             mMap.animateCamera(cameraUpdate);
+
+            //Add a marker to your current location
+            MarkerOptions markOps = new MarkerOptions();
+            markOps.position(currentPos);
+            mMap.addMarker(markOps);
+
+            //Add a radius to the current marker
+            CircleOptions circleOps = new CircleOptions();
+            circleOps.center(currentPos);
+            circleOps.radius(60.0);
+            circleOps.fillColor(Color.argb(50, 0, 0, 255));
+            circleOps.strokeWidth(4.0f);
+            mMap.addCircle(circleOps);
         }
         catch(SecurityException secEx) {
             //TODO Request permissions to access the user's location.
