@@ -11,5 +11,6 @@
     <string name="settings_bt_notification_name">Send a notification when new Bluetooth connection is established</string>
     <string name="settings_bt_notification_summary">Blah Blah Blah</string>
 
-    <string name="title_activity_geofence_maps">GeofenceMap</string>
+    <!-- Geofence Map Fragment -->
+    <string name="title_fragment_geofence_map">Geofence Map</string>
 </resources>
