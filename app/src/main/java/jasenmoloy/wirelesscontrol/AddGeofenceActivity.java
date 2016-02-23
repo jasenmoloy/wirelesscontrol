@@ -70,8 +70,17 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+        //Initialize map to begin in Los Angeles to start.
+        mMap.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(34.0500, -118.2500), mMap.getMaxZoomLevel() * 0.6f)
+        );
 
+        //Initialize new geofence marker that will be placed
+        InitGeofenceMarker(mMap.getCameraPosition().target);
+
+        //Check and/or request permission if the app can use the user's location.
+        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSION_ACCESS_FINE_LOCATION);
         }
@@ -85,12 +94,11 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
     /// ----------------------
 
     public void onCameraChange(CameraPosition cameraPos) {
-        mGeofenceMarker.setPosition(cameraPos.target);
-        mGeofenceCircle.setCenter(cameraPos.target);
+        UpdateGeofenceMarker(cameraPos.target);
     }
 
     public void onSaveButtonClick(View view) {
-
+        //JAM TODO: Do some saving!
     }
 
     /// ----------------------
@@ -107,27 +115,15 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
                 mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
 
+            //Get the user's current position
             LatLng currentPos = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentPos, (mMap.getMaxZoomLevel() * 0.8f));
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentPos, mMap.getMaxZoomLevel() * 0.8f);
 
-            //Set the listener for our map.
-            mMap.setOnCameraChangeListener(this);
+            //Update the marker to that position before the users see the map animation
+            UpdateGeofenceMarker(currentPos);
 
             //Update the camera to point to where the user is located and zoom in a bit.
             mMap.animateCamera(cameraUpdate);
-
-            //Add a marker to your current location
-            MarkerOptions markOps = new MarkerOptions();
-            markOps.position(currentPos);
-            mGeofenceMarker = mMap.addMarker(markOps);
-
-            //Add a radius to the current marker
-            CircleOptions circleOps = new CircleOptions();
-            circleOps.center(currentPos);
-            circleOps.radius(60.0);
-            circleOps.fillColor(Color.argb(50, 0, 0, 255));
-            circleOps.strokeWidth(4.0f);
-            mGeofenceCircle = mMap.addCircle(circleOps);
         }
         catch(SecurityException secEx) {
             //TODO Request permissions to access the user's location.
@@ -135,6 +131,29 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
         catch(Exception ex) {
             //TODO Print out a log.
         }
+    }
 
+    private void InitGeofenceMarker(LatLng position) {
+        //Set the listener for our map.
+        mMap.setOnCameraChangeListener(this);
+
+        //Add a marker to your current location
+        MarkerOptions markOps = new MarkerOptions();
+        markOps.position(position);
+        mGeofenceMarker = mMap.addMarker(markOps);
+
+        //Add a radius to the current marker
+        CircleOptions circleOps = new CircleOptions();
+        circleOps.center(position);
+        circleOps.radius(60.0);
+        circleOps.fillColor(Color.argb(50, 0, 0, 255));
+        circleOps.strokeWidth(4.0f);
+        mGeofenceCircle = mMap.addCircle(circleOps);
+    }
+
+    private void UpdateGeofenceMarker(LatLng position) {
+        //JAM TODO Check for null
+        mGeofenceMarker.setPosition(position);
+        mGeofenceCircle.setCenter(position);
     }
 }
