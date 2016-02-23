@@ -14,9 +14,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.jar.Manifest;
 
 public class GeofenceMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -42,7 +39,7 @@ public class GeofenceMapsActivity extends FragmentActivity implements OnMapReady
         switch(requestCode) {
             case MY_PERMISSION_ACCESS_FINE_LOCATION:
                 if( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //User has granted permission, try and grab their location.
+                    //User has granted permission, grab their location.
                     InitMyLocationOnMap();
                 }
                 else {
@@ -73,8 +70,6 @@ public class GeofenceMapsActivity extends FragmentActivity implements OnMapReady
 
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSION_ACCESS_FINE_LOCATION);
-
-            mMap.setMyLocationEnabled(false);
         }
         else {
             InitMyLocationOnMap();
