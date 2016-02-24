@@ -23,10 +23,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import jasenmoloy.wirelesscontrol.debug.Debug;
+
 /**
  * Created by jasenmoloy on 2/17/16.
  */
 public class AddGeofenceActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnCameraChangeListener {
+
+    private static final String TAG = "AddGeofenceActivity";
 
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1;
 
@@ -99,6 +103,13 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
 
     public void onSaveButtonClick(View view) {
         //JAM TODO: Do some saving!
+
+        Debug.LogDebug(TAG, "onSaveButtonClick()");
+        Debug.LogVerbose(TAG, "onSaveButtonClick()");
+        Debug.LogWarning(TAG, "onSaveButtonClick()");
+        Debug.LogError(TAG, "onSaveButtonClick()");
+
+        Debug.ShowDebugOkDialog(this, "onSaveButtonClick()", "Save Button has been clicked!");
     }
 
     /// ----------------------
