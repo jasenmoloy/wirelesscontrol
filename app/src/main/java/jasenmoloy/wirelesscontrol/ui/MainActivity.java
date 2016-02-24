@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol;
+package jasenmoloy.wirelesscontrol.ui;
 
 import android.content.Intent;
 import android.preference.PreferenceManager;
@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+
+import jasenmoloy.wirelesscontrol.R;
 
 public class MainActivity extends AppCompatActivity {
 

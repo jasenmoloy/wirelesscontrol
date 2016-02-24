@@ -1,9 +1,11 @@
-package jasenmoloy.wirelesscontrol;
+package jasenmoloy.wirelesscontrol.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import jasenmoloy.wirelesscontrol.R;
 
 /**
  * Created by jasenmoloy on 1/29/16.

@@ -1,11 +1,12 @@
-package jasenmoloy.wirelesscontrol;
+package jasenmoloy.wirelesscontrol.ui;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import jasenmoloy.wirelesscontrol.R;
 
 /**
  * Created by jasenmoloy on 2/17/16.

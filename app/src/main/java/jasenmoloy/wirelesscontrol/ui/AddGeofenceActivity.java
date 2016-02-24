@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol;
+package jasenmoloy.wirelesscontrol.ui;
 
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 
 /**
@@ -44,31 +45,6 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
     /// ----------------------
     /// Public Methods
     /// ----------------------
-
-    /// ----------------------
-    /// Overwritten Methods
-    /// ----------------------
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_addgeofence);
-
-        //Set the toolbar according to the activity layout
-        Toolbar myChildToolbar =
-                (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(myChildToolbar);
-
-        //Enable the "Up" button to go back to the parent activity
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.addgeofence_geofencemap);
-        mapFragment.getMapAsync(this);
-
-    }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -110,6 +86,31 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
         Debug.LogError(TAG, "onSaveButtonClick()");
 
         Debug.ShowDebugOkDialog(this, "onSaveButtonClick()", "Save Button has been clicked!");
+    }
+
+    /// ----------------------
+    /// Protected Methods
+    /// ----------------------
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_addgeofence);
+
+        //Set the toolbar according to the activity layout
+        Toolbar myChildToolbar =
+                (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(myChildToolbar);
+
+        //Enable the "Up" button to go back to the parent activity
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.addgeofence_geofencemap);
+        mapFragment.getMapAsync(this);
+
     }
 
     /// ----------------------

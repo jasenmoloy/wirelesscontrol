@@ -1,7 +1,9 @@
-package jasenmoloy.wirelesscontrol;
+package jasenmoloy.wirelesscontrol.ui;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+
+import jasenmoloy.wirelesscontrol.R;
 
 /**
  * Created by jasenmoloy on 1/28/16.
