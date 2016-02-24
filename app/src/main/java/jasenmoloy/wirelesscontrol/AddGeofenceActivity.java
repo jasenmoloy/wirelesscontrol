@@ -106,7 +106,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
 
         Debug.LogDebug(TAG, "onSaveButtonClick()");
         Debug.LogVerbose(TAG, "onSaveButtonClick()");
-        Debug.LogWarning(TAG, "onSaveButtonClick()");
+        Debug.LogWarn(TAG, "onSaveButtonClick()");
         Debug.LogError(TAG, "onSaveButtonClick()");
 
         Debug.ShowDebugOkDialog(this, "onSaveButtonClick()", "Save Button has been clicked!");
