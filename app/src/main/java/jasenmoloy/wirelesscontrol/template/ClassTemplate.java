@@ -3,7 +3,7 @@ package jasenmoloy.wirelesscontrol.template;
 /**
  * Created by jasenmoloy on 2/25/16.
  */
-public interface ClassTemplate {
+public class ClassTemplate {
     /// ----------------------
     /// Class Fields
     /// ----------------------
