@@ -61,6 +61,35 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     /// ----------------------
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Initialize fields
+        mGeofence = new GeofenceMarker();
+        mPresenter = new AddGeofencePresenterImpl(this);
+
+        //Set up the activity's view
+        setContentView(R.layout.activity_addgeofence);
+
+        //Initialize any viewGroup related fields
+        mGeofenceName = (EditText) findViewById(R.id.addgeofence_name);
+
+        //Set the toolbar according to the activity layout
+        Toolbar myChildToolbar =
+                (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(myChildToolbar);
+
+        //Enable the "Up" button to go back to the parent activity
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.addgeofence_geofencemap);
+        mapFragment.getMapAsync(this);
+
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
@@ -114,35 +143,6 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     /// ----------------------
     /// Protected Methods
     /// ----------------------
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        //Initialize fields
-        mGeofence = new GeofenceMarker();
-        mPresenter = new AddGeofencePresenterImpl(this);
-
-        //Set up the activity's view
-        setContentView(R.layout.activity_addgeofence);
-
-        //Initialize any viewGroup related fields
-        mGeofenceName = (EditText) findViewById(R.id.addgeofence_name);
-
-        //Set the toolbar according to the activity layout
-        Toolbar myChildToolbar =
-                (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(myChildToolbar);
-
-        //Enable the "Up" button to go back to the parent activity
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.addgeofence_geofencemap);
-        mapFragment.getMapAsync(this);
-
-    }
 
     /// ----------------------
     /// Private Methods
