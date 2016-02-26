@@ -13,8 +13,14 @@ import android.view.View;
 import android.support.v7.widget.Toolbar;
 
 import jasenmoloy.wirelesscontrol.R;
+import jasenmoloy.wirelesscontrol.mvp.MainPresenter;
+import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;
+import jasenmoloy.wirelesscontrol.mvp.MainView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainView {
+    /// ----------------------
+    /// Class Fields
+    /// ----------------------
 
     public static final String msGoogleMapsApiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
 
@@ -57,38 +63,54 @@ public class MainActivity extends AppCompatActivity {
             "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
     };
 
+    /// ----------------------
+    /// Object Fields
+    /// ----------------------
+
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    private MainPresenter mPresenter;
+
+    /// ----------------------
+    /// Public Methods
+    /// ----------------------
+
+    /// ----------------------
+    /// Callback Methods
+    /// ----------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Set the active view
+        //Init fields
+        mPresenter = new MainPresenterImpl(this);
+
+        //Set up the activity's view
         setContentView(R.layout.activity_main);
 
-        //Set the active toolbar
-        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(mainToolbar);
+        //Init any UI related related fields
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_geofences);
+        mRecyclerView.setHasFixedSize(true); //Improves performance if you know the layout size does not change.
+
+        //Specify target adapter to use to populate each card
+        mAdapter = new SavedGeofenceCardAdapter(mTestDataset);
+        mRecyclerView.setAdapter(mAdapter);
+
+        //Use a linear layout for geofence cards
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         //Set default parameters for all preferences.
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_wifi, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_bluetooth, false);
 
-        //Grab Recycler information
-        mRecyclerView = (RecyclerView) findViewById(R.id.list_geofences);
-        mRecyclerView.setHasFixedSize(true); //Improves performance if you know the layout size does not change.
-
-        //Use a linear layout for geofence cards
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        //Specify target adapter to use to populate each card
-        mAdapter = new SavedGeofenceCardAdapter(mTestDataset);
-        mRecyclerView.setAdapter(mAdapter);
+        //Set the active toolbar
+        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(mainToolbar);
 
         //Set the add button to open a new geofence card
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main);
@@ -128,4 +150,13 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    /// ----------------------
+    /// Protected Methods
+    /// ----------------------
+
+    /// ----------------------
+    /// Private Methods
+    /// ----------------------
+
 }
