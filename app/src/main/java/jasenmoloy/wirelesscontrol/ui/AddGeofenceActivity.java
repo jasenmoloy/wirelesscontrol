@@ -10,40 +10,54 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import jasenmoloy.wirelesscontrol.R;
+import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.mvp.AddGeofencePresenter;
+import jasenmoloy.wirelesscontrol.mvp.AddGeofencePresenterImpl;
+import jasenmoloy.wirelesscontrol.mvp.AddGeofenceView;
 
 /**
  * Created by jasenmoloy on 2/17/16.
  */
-public class AddGeofenceActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnCameraChangeListener {
+public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenceView {
+    /// ----------------------
+    /// Class Fields
+    /// ----------------------
 
     private static final String TAG = "AddGeofenceActivity";
-
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1;
+
+    /// ----------------------
+    /// Object Fields
+    /// ----------------------
 
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     private Location mLocation;
-    private Marker mGeofenceMarker;
-    private Circle mGeofenceCircle;
 
+    private GeofenceMarker mGeofence;
+    private EditText mGeofenceName;
+
+    private AddGeofencePresenter mPresenter;
 
     /// ----------------------
     /// Public Methods
+    /// ----------------------
+
+    /// ----------------------
+    /// Callback Methods
     /// ----------------------
 
     @Override
@@ -69,23 +83,32 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
         }
     }
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
     public void onCameraChange(CameraPosition cameraPos) {
         UpdateGeofenceMarker(cameraPos.target);
     }
 
     public void onSaveButtonClick(View view) {
-        //JAM TODO: Do some saving!
+        GeofenceData data = new GeofenceData();
 
-        Debug.LogDebug(TAG, "onSaveButtonClick()");
-        Debug.LogVerbose(TAG, "onSaveButtonClick()");
-        Debug.LogWarn(TAG, "onSaveButtonClick()");
-        Debug.LogError(TAG, "onSaveButtonClick()");
+        data.name = mGeofenceName.getText().toString();
+        data.position = mGeofence.marker.getPosition();
+        data.radius = mGeofence.circle.getRadius();
 
-        Debug.ShowDebugOkDialog(this, "onSaveButtonClick()", "Save Button has been clicked!");
+        mPresenter.SaveGeofence(data);
+    }
+
+    public void onGeofenceSaveSuccess() {
+        Debug.LogWarn(TAG, "onGeofenceSaveSuccess() - Called but not implemented!");
+        //JAM TODO: Close out and return back to the main activity.
+    }
+
+    public void onGeofenceSaveError() {
+        Debug.LogWarn(TAG, "onGeofenceSaveError() - Called but not implemented!");
+
+        //Notify the user that an error has occurred
+        Debug.ShowDebugOkDialog(this, "Save Error", "An error occurred while saving. Please try again.");
+
+        //JAM TODO: Depending on the error, stay on the current screen and attempt to have the user save again (if possible).
     }
 
     /// ----------------------
@@ -96,7 +119,15 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Initialize fields
+        mGeofence = new GeofenceMarker();
+        mPresenter = new AddGeofencePresenterImpl(this);
+
+        //Set up the activity's view
         setContentView(R.layout.activity_addgeofence);
+
+        //Initialize any viewGroup related fields
+        mGeofenceName = (EditText) findViewById(R.id.addgeofence_name);
 
         //Set the toolbar according to the activity layout
         Toolbar myChildToolbar =
@@ -152,7 +183,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
         //Add a marker to your current location
         MarkerOptions markOps = new MarkerOptions();
         markOps.position(position);
-        mGeofenceMarker = mMap.addMarker(markOps);
+        mGeofence.marker = mMap.addMarker(markOps);
 
         //Add a radius to the current marker
         CircleOptions circleOps = new CircleOptions();
@@ -160,12 +191,12 @@ public class AddGeofenceActivity extends AppCompatActivity implements OnMapReady
         circleOps.radius(60.0);
         circleOps.fillColor(Color.argb(50, 0, 0, 255));
         circleOps.strokeWidth(4.0f);
-        mGeofenceCircle = mMap.addCircle(circleOps);
+        mGeofence.circle = mMap.addCircle(circleOps);
     }
 
     private void UpdateGeofenceMarker(LatLng position) {
         //JAM TODO Check for null
-        mGeofenceMarker.setPosition(position);
-        mGeofenceCircle.setCenter(position);
+        mGeofence.marker.setPosition(position);
+        mGeofence.circle.setCenter(position);
     }
 }
