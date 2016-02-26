@@ -11,12 +11,11 @@ import jasenmoloy.wirelesscontrol.R;
 /**
  * Created by jasenmoloy on 2/17/16.
  */
-public class SavedGeofenceCardAdapter extends RecyclerView.Adapter<SavedGeofenceCardAdapter.ViewHolder> {
+public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapter.ViewHolder> {
     private String[] mDataset;
 
     //Providing a reference to the views that are contained within each card
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        //JAM TEMP: each data item is just a string for now.
         public CardView mCardView;
         public ViewHolder(CardView v) {
             super(v);
@@ -25,13 +24,13 @@ public class SavedGeofenceCardAdapter extends RecyclerView.Adapter<SavedGeofence
     }
 
     //Providing a constructor to create this dataset
-    public SavedGeofenceCardAdapter(String[] dataset) {
+    public GeofenceCardAdapter(String[] dataset) {
         mDataset = dataset;
     }
 
     //Create new views (this is invoked by the layout manager)
     @Override
-    public SavedGeofenceCardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
+    public GeofenceCardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
         //create a new view
         CardView v = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_savedgeofence, parent, false);
