@@ -6,13 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:padding="16dp"
     android:paddingTop="20dp"
     android:paddingBottom="20dp"
     card_view:cardCornerRadius="4dp">
 
-    <TextView
-        android:id="@+id/card_savedgeofence_name"
+    <LinearLayout
+        android:id="@+id/card_savedgeofence_details"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/card_savedgeofence_name"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/card_savedgeofence_location"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/card_savedgeofence_radius"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
 </android.support.v7.widget.CardView>
 

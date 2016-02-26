@@ -9,4 +9,10 @@ public class GeofenceData {
     public String name;
     public LatLng position;
     public double radius;
+
+    public GeofenceData(String name, LatLng pos, double radius) {
+        this.name = name;
+        this.position = pos;
+        this.radius = radius;
+    }
 }

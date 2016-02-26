@@ -12,7 +12,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 
+import java.util.List;
+
 import jasenmoloy.wirelesscontrol.R;
+import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenter;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;
 import jasenmoloy.wirelesscontrol.mvp.MainView;
@@ -22,46 +26,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// Class Fields
     /// ----------------------
 
+    public static final String TAG = "MainActivity";
     public static final String msGoogleMapsApiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
-
-    public static final String[] mTestDataset = {
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-            "hello1", "hello2", "hello3", "hello4", "hello5", "hello6",
-            "hello7", "hello8", "hello9", "hello10", "hello11", "hello12",
-            "hello13", "hello14", "hello15", "hello16", "hello17", "hello18",
-    };
 
     /// ----------------------
     /// Object Fields
@@ -95,10 +61,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
         mRecyclerView = (RecyclerView) findViewById(R.id.list_geofences);
         mRecyclerView.setHasFixedSize(true); //Improves performance if you know the layout size does not change.
 
-        //Specify target adapter to use to populate each card
-        mAdapter = new SavedGeofenceCardAdapter(mTestDataset);
-        mRecyclerView.setAdapter(mAdapter);
-
         //Use a linear layout for geofence cards
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -121,6 +83,18 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mPresenter.onDestroy();
+        super.onDestroy();
     }
 
     @Override
@@ -149,6 +123,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 //JAM User action not recognized. Invoke the super class instead.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void onCardDataLoaded(List<GeofenceData> cardData) {
+
+        Debug.LogVerbose(TAG, "cardData.length:" + cardData.size());
+
+        //Specify target adapter to use to populate each card
+        mAdapter = new GeofenceCardAdapter(cardData);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     /// ----------------------

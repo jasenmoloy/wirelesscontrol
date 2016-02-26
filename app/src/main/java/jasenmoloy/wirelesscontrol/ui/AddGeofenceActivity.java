@@ -117,11 +117,11 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     }
 
     public void onSaveButtonClick(View view) {
-        GeofenceData data = new GeofenceData();
-
-        data.name = mGeofenceName.getText().toString();
-        data.position = mGeofence.marker.getPosition();
-        data.radius = mGeofence.circle.getRadius();
+        GeofenceData data = new GeofenceData(
+                mGeofenceName.getText().toString(),
+                mGeofence.marker.getPosition(),
+                mGeofence.circle.getRadius()
+        );
 
         mPresenter.SaveGeofence(data);
     }
