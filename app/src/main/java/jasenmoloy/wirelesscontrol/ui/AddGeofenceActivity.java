@@ -65,7 +65,6 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         super.onCreate(savedInstanceState);
 
         //Initialize fields
-        mGeofence = new GeofenceMarker();
         mPresenter = new AddGeofencePresenterImpl(this);
 
         //Set up the activity's view
@@ -119,8 +118,8 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     public void onSaveButtonClick(View view) {
         GeofenceData data = new GeofenceData(
                 mGeofenceName.getText().toString(),
-                mGeofence.marker.getPosition(),
-                mGeofence.circle.getRadius()
+                mGeofence.getPosition(),
+                mGeofence.getRadius()
         );
 
         mPresenter.SaveGeofence(data);
@@ -180,23 +179,12 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         //Set the listener for our map.
         mMap.setOnCameraChangeListener(this);
 
-        //Add a marker to your current location
-        MarkerOptions markOps = new MarkerOptions();
-        markOps.position(position);
-        mGeofence.marker = mMap.addMarker(markOps);
-
-        //Add a radius to the current marker
-        CircleOptions circleOps = new CircleOptions();
-        circleOps.center(position);
-        circleOps.radius(60.0);
-        circleOps.fillColor(Color.argb(50, 0, 0, 255));
-        circleOps.strokeWidth(4.0f);
-        mGeofence.circle = mMap.addCircle(circleOps);
+        mGeofence = new GeofenceMarker(position, 60.0);
+        mGeofence.AddToMap(mMap);
     }
 
     private void UpdateGeofenceMarker(LatLng position) {
         //JAM TODO Check for null
-        mGeofence.marker.setPosition(position);
-        mGeofence.circle.setCenter(position);
+        mGeofence.UpdateMarker(position, 60.0);
     }
 }
