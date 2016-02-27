@@ -48,6 +48,7 @@
             android:name=".ui.AddGeofenceActivity"
             android:label="@string/title_activity_addgeofence"
             android:parentActivityName=".ui.MainActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
 

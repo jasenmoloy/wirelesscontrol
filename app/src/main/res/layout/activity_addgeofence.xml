@@ -21,7 +21,6 @@
         android:id="@+id/addgeofence_geofencemap"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        tools:context=".ui.GeofenceMapFragment"
         android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
     <LinearLayout
