@@ -7,9 +7,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:padding="16dp"
+    android:padding="8dp"
+    android:layout_margin="16dp"
     card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="16dp">
+    card_view:cardElevation="4dp"
+    card_view:cardBackgroundColor="#bfbfbf">
 
     <LinearLayout
         android:id="@+id/card_savedgeofence_details"
