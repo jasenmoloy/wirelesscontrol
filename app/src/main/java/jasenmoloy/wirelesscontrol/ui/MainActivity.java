@@ -111,9 +111,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId())
         {
-            case R.id.action_addgeofence:
-                //JAM TODO Invoke add geo fence flow.
-                return true;
             case R.id.action_settings:
                 //JAM TODO Invoke the settings fragments.
                 Intent intent = new Intent(this, SettingsActivity.class);

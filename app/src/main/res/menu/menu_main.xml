@@ -5,12 +5,6 @@
     tools:context=".ui.MainActivity">
 
     <item
-        android:id="@+id/action_addgeofence"
-        android:icon="@drawable/ic_note_add_black"
-        android:title="@string/action_addgeofence"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
