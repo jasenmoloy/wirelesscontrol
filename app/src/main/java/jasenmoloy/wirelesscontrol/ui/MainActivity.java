@@ -1,6 +1,7 @@
 package jasenmoloy.wirelesscontrol.ui;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +13,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.LocationServices;
+
 import java.util.List;
 
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.managers.LocationServicesManager;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenter;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;
 import jasenmoloy.wirelesscontrol.mvp.MainView;
@@ -25,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
     /// Class Fields
     /// ----------------------
+
+    public static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1;
+    public static final int MY_PERMISSION_ACCESS_COARSE_LOCATION = 1;
 
     public static final String TAG = "MainActivity";
     public static final String msGoogleMapsApiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
@@ -39,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private MainPresenter mPresenter;
 
+    //Google Client API fields
+    LocationServicesManager mLocationManager;
+
     /// ----------------------
     /// Public Methods
     /// ----------------------
@@ -48,11 +60,18 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
 
     @Override
+    protected void onStart() {
+        mLocationManager.Connect();
+        super.onStart();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //Init fields
         mPresenter = new MainPresenterImpl(this);
+        mLocationManager = new LocationServicesManager(this);
 
         //Set up the activity's view
         setContentView(R.layout.activity_main);
@@ -92,6 +111,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
+    protected void onStop() {
+        mLocationManager.Disconnect();
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         mPresenter.onDestroy();
         super.onDestroy();
@@ -122,9 +147,41 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch(requestCode) {
+            case MY_PERMISSION_ACCESS_COARSE_LOCATION:
+                if( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //User has granted permission, inform the location manager we're good to go.
+                    mLocationManager.AcquireLocation();
+                }
+                else {
+                    //JAM TODO: User has denied permissions. Should present a dialog explaining that this is required for this app to work properly.
+                }
+                break;
+            default:
+                break;
+        }
+        return;
+    }
+
     public void onCardDataLoaded(List<GeofenceData> cardData) {
 
         Debug.LogVerbose(TAG, "cardData.length:" + cardData.size());
+
+//        GeofenceData geoData = cardData.get(0);
+//
+//        //Set up all geofence data
+//        mGeofenceBuilder = new Geofence.Builder();
+//
+//        mGeofenceBuilder.setRequestId(geoData.name);
+//        mGeofenceBuilder.setCircularRegion(geoData.position.latitude,
+//                geoData.position.longitude,
+//                (float) geoData.radius);
+//        mGeofenceBuilder.setExpirationDuration(Long.MAX_VALUE);
+//        mGeofenceBuilder.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT);;
+//
+//        mGeofenceList.add(mGeofenceBuilder.build());
 
         //Specify target adapter to use to populate each card
         mAdapter = new GeofenceCardAdapter(cardData);
