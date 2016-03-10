@@ -49,10 +49,10 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     private Activity mParentActivity;
 
     /// ----------------------
-    /// Accessors
+    /// Getters / Setters
     /// ----------------------
 
-    public void setLastLocation(Location lastLocation) {
+    private void setLastLocation(Location lastLocation) {
         this.mLastLocation = lastLocation;
         Debug.LogVerbose(TAG, "Updating last location: " + lastLocation);
     }
