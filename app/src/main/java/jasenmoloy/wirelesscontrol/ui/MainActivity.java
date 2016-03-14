@@ -22,6 +22,7 @@ import jasenmoloy.wirelesscontrol.managers.LocationServicesManager;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenter;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;
 import jasenmoloy.wirelesscontrol.mvp.MainView;
+import jasenmoloy.wirelesscontrol.service.InitializeGeofenceDataService;
 
 public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private RecyclerView.LayoutManager mLayoutManager;
 
     private MainPresenter mPresenter;
+
+    //Services
+    Intent mInitializationIntent;
 
     //TODO: Move these to the service and lay it out MVP
     LocationServicesManager mLocationServices;
@@ -92,6 +96,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 startActivity(intent);
             }
         });
+
+        //Create an intent service to start initializing geofence data
+        mInitializationIntent = new Intent(this, InitializeGeofenceDataService.class);
+        startService(mInitializationIntent);
     }
 
     @Override

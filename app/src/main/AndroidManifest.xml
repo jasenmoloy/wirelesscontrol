@@ -79,9 +79,7 @@
         </activity>
 
         <!-- Main Service -->
-        <!--<service-->
-            <!--android:name=".service.GeofenceTrackingService"-->
-            <!--android:exported="false" />-->
+        <service android:name=".service.InitializeGeofenceDataService" />
 
         <!-- Geofence Transition Service -->
         <service android:name=".service.GeofenceTransitionsIntentService" />
