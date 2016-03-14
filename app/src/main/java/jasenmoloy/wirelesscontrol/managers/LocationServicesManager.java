@@ -21,6 +21,9 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.LocationSettingsStates;
 
+import java.util.List;
+
+import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.ui.MainActivity;
 
@@ -48,12 +51,15 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     private LocationRequest mLocationRequest;
     private Activity mParentActivity;
 
+    GeofenceManager mGeofenceManager;
+    List<GeofenceData> tempData; //JAM TODO: This could be done better...
+
     /// ----------------------
     /// Getters / Setters
     /// ----------------------
 
     private void setLastLocation(Location lastLocation) {
-        this.mLastLocation = lastLocation;
+        mLastLocation = lastLocation;
         Debug.LogVerbose(TAG, "Updating last location: " + lastLocation);
     }
 
@@ -65,34 +71,47 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
         mParentActivity = parentActivity;
     }
 
-    public void Connect() {
-        if(mGoogleApiClient== null)
-            InitializeApi();
+    public void connect() {
+        if(mGoogleApiClient == null)
+            initializeApi();
 
         mGoogleApiClient.connect();
     }
 
-    public void Disconnect() {
-        if(mGoogleApiClient== null)
+    public void disconnect() {
+        if(mGoogleApiClient == null)
             return;
 
         mGoogleApiClient.disconnect();
     }
 
-    public void AcquireLocation() {
+    public void performLocationServices() {
         try {
             setLastLocation(LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient));
 
             //If we can verify we can get a location, fine tune the setting and set up periodic updates
-            BuildLocationSettings();
+            buildLocationSettings();
+
+            //Set up any geofencing we've loaded if there is any.
+            if(tempData != null) {
+                mGeofenceManager.addGeofences(tempData);
+                tempData = null;
+            }
         }
         catch(SecurityException secEx) {
             Debug.LogWarn(TAG, secEx.getMessage());
-            RequestLocationPermission();
+            requestLocationPermission();
         }
         catch(Exception ex) {
             Debug.LogError(TAG, ex.getMessage());
         }
+    }
+
+    public void sendGeofenceData(List<GeofenceData> data) {
+        if(mGoogleApiClient.isConnected())
+            mGeofenceManager.addGeofences(data);
+        else
+            tempData = data;
     }
 
     /// ----------------------
@@ -101,10 +120,10 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
 
     public void onConnected(Bundle connectionHint) {
         if ( ContextCompat.checkSelfPermission(mParentActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
-            RequestLocationPermission();
+            requestLocationPermission();
         }
         else
-            AcquireLocation();
+            performLocationServices();
     }
 
     public void onConnectionSuspended(int cause) {
@@ -147,15 +166,18 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     /// Protected Methods
     /// ----------------------
 
-    protected void InitializeApi() {
+    protected void initializeApi() {
         if(mGoogleApiClient == null) {
             GoogleApiClient.Builder builder = new GoogleApiClient.Builder(mParentActivity);
 
             builder.addConnectionCallbacks(this);
             builder.addOnConnectionFailedListener(this);
-            builder.addApi(com.google.android.gms.location.LocationServices.API);
+            builder.addApi(LocationServices.API);
 
             mGoogleApiClient = builder.build();
+
+            //Initialize any location based services after we've created an API client
+            mGeofenceManager = new GeofenceManager(mParentActivity, mGoogleApiClient);
         }
     }
 
@@ -163,12 +185,12 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     /// Private Methods
     /// ----------------------
 
-    private void RequestLocationPermission() {
+    private void requestLocationPermission() {
         ActivityCompat.requestPermissions(mParentActivity, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},
                 MainActivity.MY_PERMISSION_ACCESS_COARSE_LOCATION);
     }
 
-    private void BuildLocationSettings() {
+    private void buildLocationSettings() {
         LocationRequest request = new LocationRequest();
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder();
 
