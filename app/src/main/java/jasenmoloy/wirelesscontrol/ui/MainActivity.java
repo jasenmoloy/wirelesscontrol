@@ -18,8 +18,6 @@ import java.util.List;
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
-import jasenmoloy.wirelesscontrol.managers.ApiClientManager;
-import jasenmoloy.wirelesscontrol.managers.GeofenceManager;
 import jasenmoloy.wirelesscontrol.managers.LocationServicesManager;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenter;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;

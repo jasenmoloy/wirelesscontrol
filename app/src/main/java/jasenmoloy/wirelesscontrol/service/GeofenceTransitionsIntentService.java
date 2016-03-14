@@ -74,7 +74,11 @@ public class GeofenceTransitionsIntentService extends IntentService {
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
 
-        Debug.LogVerbose(TAG, "--- GEOFENCE_TRANSITION_ENTER: " + Geofence.GEOFENCE_TRANSITION_ENTER + " Geofence.GEOFENCE_TRANSITION_EXIT: " + Geofence.GEOFENCE_TRANSITION_EXIT);
+        Debug.LogVerbose(TAG,
+                "GEOFENCE_TRANSITION_ENTER: " + Geofence.GEOFENCE_TRANSITION_ENTER + " " +
+                "GEOFENCE_TRANSITION_DWELL: " + Geofence.GEOFENCE_TRANSITION_DWELL + " " +
+                "GEOFENCE_TRANSITION_EXIT: " + Geofence.GEOFENCE_TRANSITION_EXIT);
+
         Debug.LogVerbose(TAG, "--- geofenceTransition: " + geofenceTransition);
 
         // Test that the reported transition was of interest.

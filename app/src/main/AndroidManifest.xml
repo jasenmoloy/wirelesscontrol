@@ -17,7 +17,6 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:enabled="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <!--
@@ -85,7 +84,7 @@
             <!--android:exported="false" />-->
 
         <!-- Geofence Transition Service -->
-        <service android:name="jasenmoloy.wirelesscontrol.service.GeofenceTransitionsIntentService" />
+        <service android:name=".service.GeofenceTransitionsIntentService" />
     </application>
 
 </manifest>
