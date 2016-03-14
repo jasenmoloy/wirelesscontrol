@@ -15,9 +15,11 @@ public class MainModelImpl implements MainModel {
 
     public static final GeofenceData[] mTestGeofenceData = {
         new GeofenceData("Home", new LatLng(34.051452, -118.31262), 60.0), //1041 S Manhattan Pl
-            new GeofenceData("Work", new LatLng(37.7885067, -122.3989532), 100.0), //500 Howard St
-            new GeofenceData("Mr Coffee", new LatLng(34.0642398, -118.3115321), 80.0), //537 S Western Ave
-            new GeofenceData("Lupe's Place", new LatLng(33.930776, -117.338958), 90.0), //1204 Versailles Cir
+        new GeofenceData("Work", new LatLng(37.7885067, -122.3989532), 100.0), //500 Howard St
+        new GeofenceData("Mr Coffee", new LatLng(34.0642398, -118.3115321), 80.0), //537 S Western Ave
+        new GeofenceData("Cafe Loft", new LatLng(34.0634061,-118.3076793), 80.0), //3882 W 6th St
+        new GeofenceData("Lupe's Place", new LatLng(33.930776, -117.338958), 90.0), //1204 Versailles Cir
+        new GeofenceData("V's Home", new LatLng(34.064253,-118.2818659), 200.0), //450 S La Fayette Park Pl
 
     };
 
