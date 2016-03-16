@@ -13,28 +13,40 @@ public class Debug {
      * Write debug text out to Logcat.
      */
     public static void LogDebug(String tag, String msg) {
-        Log.d(tag, msg);
+        if(msg != null)
+            Log.d(tag, msg);
+        else
+            Log.d(tag, "null");
     }
 
     /**
      * Write warning text out to Logcat.
      */
     public static void LogWarn(String tag, String msg) {
-        Log.w(tag, msg);
+        if(msg != null)
+            Log.w(tag, msg);
+        else
+            Log.w(tag, "null");
     }
 
     /**
-     * Write warning text out to Logcat.
+     * Write error text out to Logcat.
      */
     public static void LogError(String tag, String msg) {
-        Log.e(tag, msg);
+        if(msg != null)
+            Log.e(tag, msg);
+        else
+            Log.e(tag, "null");
     }
 
     /**
-     * Write warning text out to Logcat.
+     * Write verbose text out to Logcat.
      */
     public static void LogVerbose(String tag, String msg) {
-        Log.v(tag, msg);
+        if(msg != null)
+            Log.v(tag, msg);
+        else
+            Log.v(tag, "null");
     }
 
     /**
