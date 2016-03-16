@@ -59,7 +59,7 @@ public class GeofenceManager implements ResultCallback {
         mGeofencePendingIntent = null;
     }
 
-    public void addGeofences(List<GeofenceData> data) {
+    public void addGeofences(GeofenceData[] data) {
         //Set up all geofence data
         if(mGeofenceBuilder == null)
             mGeofenceBuilder = new Geofence.Builder();
@@ -163,7 +163,7 @@ public class GeofenceManager implements ResultCallback {
             PendingIntent pIntent = getGeofencePendingIntent();
 
             pIntent.send();
-            
+
             LocationServices.GeofencingApi.addGeofences(
                     mApiClient,
                     buildGeofencingRequest(mGeofences),

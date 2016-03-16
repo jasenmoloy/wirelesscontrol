@@ -1,11 +1,19 @@
 package jasenmoloy.wirelesscontrol.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.os.Parcelable.Creator;
+
 import com.google.android.gms.maps.model.LatLng;
+
+import jasenmoloy.wirelesscontrol.debug.Debug;
 
 /**
  * Created by jasenmoloy on 2/25/16.
  */
-public class GeofenceData {
+public class GeofenceData implements Parcelable {
+    private static final String TAG = "GeofenceData";
+
     public String name;
     public LatLng position;
     public double radius;
@@ -14,5 +22,43 @@ public class GeofenceData {
         this.name = name;
         this.position = pos;
         this.radius = radius;
+    }
+
+    public GeofenceData(Parcel in) {
+        Debug.LogDebug(TAG, "GeofenceData()");
+
+
+        name = in.readString();
+        position = new LatLng(in.readDouble(), in.readDouble());
+        radius = in.readDouble();
+
+        Debug.LogDebug(TAG, "GeofenceData() - name: " + name);
+        Debug.LogDebug(TAG, "GeofenceData() - position: " + position);
+        Debug.LogDebug(TAG, "GeofenceData() - radius: " + radius);
+    }
+
+    public int describeContents() {
+        Debug.LogDebug(TAG, "describeContents()");
+        return 0;
+    }
+
+    public static final Parcelable.Creator<GeofenceData> CREATOR =
+            new Parcelable.Creator<GeofenceData>() {
+                public GeofenceData createFromParcel(Parcel in) {
+                    return new GeofenceData(in);
+                }
+
+                public GeofenceData[] newArray(int size) {
+                    return new GeofenceData[size];
+                }
+            };
+
+    public void writeToParcel(Parcel out, int flags) {
+        Debug.LogDebug(TAG, "writeToParcel()");
+
+        out.writeString(name);
+        out.writeDouble(position.latitude);
+        out.writeDouble(position.longitude);
+        out.writeDouble(radius);
     }
 }

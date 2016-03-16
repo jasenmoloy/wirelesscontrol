@@ -9,5 +9,7 @@ import jasenmoloy.wirelesscontrol.data.GeofenceData;
  */
 public interface MainView {
 
+    void requestPermissions();
+
     void onCardDataLoaded(List<GeofenceData> cardData);
 }

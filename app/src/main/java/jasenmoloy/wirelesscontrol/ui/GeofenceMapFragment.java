@@ -1,12 +1,11 @@
 package jasenmoloy.wirelesscontrol.ui;
 
-import android.content.pm.PackageManager;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -16,6 +15,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import jasenmoloy.wirelesscontrol.R;
+import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 
 public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyCallback {
@@ -52,24 +52,6 @@ public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyC
         mapFragment.getMapAsync(this);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch(requestCode) {
-            case MainActivity.MY_PERMISSION_ACCESS_FINE_LOCATION:
-                if( grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //User has granted permission, grab their location.
-                    InitMyLocationOnMap();
-                }
-                else {
-                    //JAM TODO: User has denied permissions. Should present a dialog explaining that this is required for this app to work properly.
-                }
-                break;
-            default:
-                break;
-        }
-        return;
-    }
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -83,14 +65,7 @@ public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
-
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    MainActivity.MY_PERMISSION_ACCESS_FINE_LOCATION);
-        }
-        else {
-            InitMyLocationOnMap();
-        }
+        InitMyLocationOnMap();
     }
 
     /// ----------------------
@@ -119,8 +94,11 @@ public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyC
             mMap.animateCamera(cameraUpdate);
         }
         catch(SecurityException secEx) {
-            Debug.LogError(TAG, secEx.getMessage());
-            //TODO Request permissions to access the user's location.
+            Debug.LogWarn(TAG, secEx.getMessage());
+
+            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+            Intent intent = new Intent(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
+            lbm.sendBroadcast(intent);
         }
         catch(Exception ex) {
             Debug.LogError(TAG, ex.getMessage());
