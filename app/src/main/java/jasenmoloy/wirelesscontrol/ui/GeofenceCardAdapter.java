@@ -37,6 +37,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
     //Providing a reference to the views that are contained within each card
     public static class ViewHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback, Application.ActivityLifecycleCallbacks, ComponentCallbacks {
         private GeofenceMarker mMarker;
+        boolean mIsCardRecycled;
 
         //UI Elements
         private CardView mCardView;
@@ -50,11 +51,20 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
             super(v);
             mCardView = v;
             mMap = null;
+            mIsCardRecycled = false;
 
             mName = (TextView) mCardView.findViewById(R.id.card_savedgeofence_name);
             mLocation = (TextView) mCardView.findViewById(R.id.card_savedgeofence_location);
             mRadius = (TextView) mCardView.findViewById(R.id.card_savedgeofence_radius);
             mMapView = (MapView) mCardView.findViewById(R.id.card_savedgeofence_map);
+        }
+
+        /**
+         * Remove any "intensive" resources from this view as we're being recycled.
+         */
+        public void onViewRecycled() {
+            mMapView.onPause();
+            mIsCardRecycled = true;
         }
 
         public void setCard(GeofenceData data) {
@@ -64,6 +74,11 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
 
             //If we already have one created, just update the marker
             if(mMarker != null && mMap != null) {
+                if( mIsCardRecycled ) {
+                    mMapView.onResume();
+                    mIsCardRecycled = false;
+                }
+
                 //Reset our existing marker and add it to the map.
                 mMarker.Reset(data.position, data.radius);
                 displayMarkerOnMap();
@@ -144,13 +159,20 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
     /// Public Methods
     /// ----------------------
 
-    //Providing a constructor to create this dataset
+    /**
+     * Providing a constructor to create this dataset
+     * @param globalApplication
+     * @param dataset
+     */
     public GeofenceCardAdapter(Application globalApplication, List<GeofenceData> dataset) {
         mApplication = globalApplication;
         mDataset = dataset;
     }
 
-    //Return the size of the dataset (invoked by the layout manager)
+    /**
+     * Return the size of the dataset (invoked by the layout manager)
+     * @return returns the size of the given dataset
+     */
     @Override
     public int getItemCount() {
         return mDataset.size();
@@ -160,7 +182,12 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
     /// Callback Methods
     /// ----------------------
 
-    //Create new views (this is invoked by the layout manager)
+    /**
+     * Create new views (this is invoked by the layout manager)
+     * @param parent
+     * @param viewType
+     * @return Newly created view holder with the initialized CardView
+     */
     @Override
     public GeofenceCardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
         //create a new view
@@ -179,10 +206,23 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         return vh;
     }
 
-    //Replace contents of a view (invoked by layout manager)
+    /**
+     * Sets the contents of the view (invoked by layout manager)
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.setCard(mDataset.get(position));
+    }
+
+    /**
+     * Callback when a view is being "recycled" so unload any heavy resources
+     * @param holder
+     */
+    @Override
+    public void onViewRecycled(ViewHolder holder) {
+        holder.onViewRecycled();
     }
 
     /// ----------------------
