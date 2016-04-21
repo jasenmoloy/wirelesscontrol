@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         Debug.LogVerbose(TAG, "cardData.length:" + geofenceData.size());
 
         //Specify target adapter to use to populate each card
-        mAdapter = new GeofenceCardAdapter(geofenceData);
+        mAdapter = new GeofenceCardAdapter(getApplication(), geofenceData);
         mRecyclerView.setAdapter(mAdapter);
     }
 

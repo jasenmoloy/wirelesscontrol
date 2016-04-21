@@ -11,16 +11,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import junit.framework.Assert;
+
+import jasenmoloy.wirelesscontrol.debug.Debug;
+
 /**
  * Created by jasenmoloy on 2/25/16.
  */
 public class GeofenceMarker {
+    private static final String TAG = "GeofenceMarker";
+
     private Marker mMarker;
     private Circle mCircle;
 
     private MarkerOptions mMarkerOps;
     private CircleOptions mCircleOps;
-
 
     public LatLng getPosition() {
         return mMarkerOps == null ? mMarker.getPosition() : mMarkerOps.getPosition();
@@ -35,6 +40,21 @@ public class GeofenceMarker {
     }
 
     public void AddToMap(GoogleMap map) {
+        if( mMarkerOps == null || mCircleOps == null ) {
+            Debug.LogWarn(TAG, "Marker Options have not be set for this geofence marker. Has it already been added to another map?");
+            return;
+        }
+
+        Debug.LogDebug(TAG, "mMarkerOps.position: " + mMarkerOps.getPosition());
+
+        if( mMarker != null && mCircle != null ) {
+            mMarker.remove();
+            mMarker = null;
+
+            mCircle.remove();
+            mCircle = null;
+        }
+
         mMarker = map.addMarker(mMarkerOps);
         mMarkerOps = null;
 
@@ -43,14 +63,31 @@ public class GeofenceMarker {
     }
 
     public void AnimateCameraOnMarker(GoogleMap map) {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), map.getMaxZoomLevel() * 0.7f);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), map.getMaxZoomLevel() * 0.7f); //JAM TODO: Move this value to resrouces file
         map.animateCamera(cameraUpdate);
     }
 
     public void MoveCameraOnMarker(GoogleMap map) {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), map.getMaxZoomLevel() * 0.7f);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), map.getMaxZoomLevel() * 0.7f); //JAM TODO: Move this value to resrouces file
         map.moveCamera(cameraUpdate);
 }
+
+    /**
+     * Removes the existing geofence marker and set up options to add to a new map.
+     * @param position
+     * @param radius
+     */
+    public void Reset(LatLng position, double radius) {
+        Assert.assertNotNull(mMarker);
+        Assert.assertNotNull(mCircle);
+
+        //Remove our existing data
+        mMarker.remove();
+        mCircle.remove();
+
+        //Set up our options in preparation to be added to a map.
+        SetOptions(position, radius);
+    }
 
     public void UpdateMarker(LatLng position, double radius) {
         if(mMarkerOps != null && mCircleOps != null) {

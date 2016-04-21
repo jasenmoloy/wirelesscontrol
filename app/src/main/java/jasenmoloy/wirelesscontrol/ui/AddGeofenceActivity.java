@@ -21,6 +21,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import junit.framework.Assert;
+
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
@@ -179,12 +181,13 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         //Set the listener for our map.
         mMap.setOnCameraChangeListener(this);
 
-        mGeofence = new GeofenceMarker(position, 60.0);
+        mGeofence = new GeofenceMarker(position, 60.0); //JAM TODO: Move this to resources file.
         mGeofence.AddToMap(mMap);
     }
 
     private void UpdateGeofenceMarker(LatLng position) {
+        Assert.assertNotNull(position);
         //JAM TODO Check for null
-        mGeofence.UpdateMarker(position, 60.0);
+        mGeofence.UpdateMarker(position, 60.0); //JAM TODO: Move this to resources file.
     }
 }
