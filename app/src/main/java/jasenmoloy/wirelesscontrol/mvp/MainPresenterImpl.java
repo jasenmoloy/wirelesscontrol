@@ -102,8 +102,6 @@ public class MainPresenterImpl implements MainPresenter {
             list.add(data);
         }
 
-        Debug.LogDebug(TAG, "geofenceData.length:" + geofenceData.length);
-
         //Let the service know to set up geofences to track
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
         Intent intent = new Intent(Constants.BROADCAST_ACTION_GEODATA_LOADED);
