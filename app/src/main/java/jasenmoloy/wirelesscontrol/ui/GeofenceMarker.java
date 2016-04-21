@@ -45,8 +45,6 @@ public class GeofenceMarker {
             return;
         }
 
-        Debug.LogDebug(TAG, "mMarkerOps.position: " + mMarkerOps.getPosition());
-
         if( mMarker != null && mCircle != null ) {
             mMarker.remove();
             mMarker = null;
@@ -89,6 +87,12 @@ public class GeofenceMarker {
         SetOptions(position, radius);
     }
 
+    /**
+     * Updated an existing marker on a map. If the marker hasn't been added to the map,
+     * update the marker option in preparation to be added to a map.
+     * @param position
+     * @param radius
+     */
     public void UpdateMarker(LatLng position, double radius) {
         if(mMarkerOps != null && mCircleOps != null) {
             SetOptions(position, radius);
