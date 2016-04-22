@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private MainPresenter mPresenter;
 
     //Services
-    Service mService;
+    private Service mService;
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -90,73 +90,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
     /// Callback Methods
     /// ----------------------
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        //Init fields
-        mPresenter = new MainPresenterImpl(this, this);
-
-        //Set default parameters for all preferences.
-        PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
-        PreferenceManager.setDefaultValues(this, R.xml.settings_wifi, false);
-        PreferenceManager.setDefaultValues(this, R.xml.settings_bluetooth, false);
-
-        //Set up the activity's view
-        setContentView(R.layout.activity_main);
-
-        //Init any UI related related fields
-        mRecyclerView = (RecyclerView) findViewById(R.id.list_geofences);
-        mRecyclerView.setHasFixedSize(true); //Improves performance if you know the layout size does not change.
-
-        //Use a linear layout for geofence cards
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        //Set the active toolbar
-        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(mainToolbar);
-
-        //Set the add button to open a new geofence card
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AddGeofenceActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //Start the background service that will maintain
-        initializeBackgroundService();
-
-        mPresenter.registerReceiver(LocalBroadcastManager.getInstance(this));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mPresenter.onResume();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        unbindService(mServiceConnection);
-
-        mPresenter.onDestroy();
-        super.onDestroy();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -224,6 +157,81 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
     /// Protected Methods
     /// ----------------------
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Init fields
+        mPresenter = new MainPresenterImpl(this, this);
+
+        //Set default parameters for all preferences.
+        PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings_wifi, false);
+        PreferenceManager.setDefaultValues(this, R.xml.settings_bluetooth, false);
+
+        //Set up the activity's view
+        setContentView(R.layout.activity_main);
+
+        //Init any UI related related fields
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_geofences);
+        mRecyclerView.setHasFixedSize(true); //Improves performance if you know the layout size does not change.
+
+        //Use a linear layout for geofence cards
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        //Set the active toolbar
+        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(mainToolbar);
+
+        //Set the add button to open a new geofence card
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), AddGeofenceActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //Start the background service that will maintain
+        initializeBackgroundService();
+
+        mPresenter.registerReceiver(LocalBroadcastManager.getInstance(this));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //Stubbed
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        //Stubbed
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        //Stubbed
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbindService(mServiceConnection);
+
+        mPresenter.onDestroy();
+        super.onDestroy();
+    }
 
     /// ----------------------
     /// Private Methods

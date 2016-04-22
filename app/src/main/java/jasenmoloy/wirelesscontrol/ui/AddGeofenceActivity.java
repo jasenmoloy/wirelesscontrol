@@ -62,57 +62,6 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     /// Callback Methods
     /// ----------------------
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        //Initialize fields
-        mPresenter = new AddGeofencePresenterImpl(this);
-
-        //Set up the activity's view
-        setContentView(R.layout.activity_addgeofence);
-
-        //Initialize any viewGroup related fields
-        mGeofenceName = (EditText) findViewById(R.id.addgeofence_name);
-
-        //Set the toolbar according to the activity layout
-        Toolbar myChildToolbar =
-                (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(myChildToolbar);
-
-        //Enable the "Up" button to go back to the parent activity
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.addgeofence_geofencemap);
-        mapFragment.getMapAsync(this);
-
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        //Initialize map to begin in Los Angeles to start.
-        mMap.animateCamera(
-                CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(34.0500, -118.2500), mMap.getMaxZoomLevel() * 0.6f)
-        );
-
-        //Initialize new geofence marker that will be placed
-        InitGeofenceMarker(mMap.getCameraPosition().target);
-
-        //Check and/or request permission if the app can use the user's location.
-        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSION_ACCESS_FINE_LOCATION);
-        }
-        else {
-            InitMyLocationOnMap();
-        }
-    }
-
     public void onCameraChange(CameraPosition cameraPos) {
         UpdateGeofenceMarker(cameraPos.target);
     }
@@ -141,9 +90,90 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         //JAM TODO: Depending on the error, stay on the current screen and attempt to have the user save again (if possible).
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        //Initialize map to begin in Los Angeles to start.
+        mMap.animateCamera(
+                CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(34.0500, -118.2500), mMap.getMaxZoomLevel() * 0.6f)
+        );
+
+        //Initialize new geofence marker that will be placed
+        InitGeofenceMarker(mMap.getCameraPosition().target);
+
+        //Check and/or request permission if the app can use the user's location.
+        if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSION_ACCESS_FINE_LOCATION);
+        }
+        else {
+            InitMyLocationOnMap();
+        }
+    }
+
     /// ----------------------
     /// Protected Methods
     /// ----------------------
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Initialize fields
+        mPresenter = new AddGeofencePresenterImpl(this);
+
+        //Set up the activity's view
+        setContentView(R.layout.activity_addgeofence);
+
+        //Initialize any viewGroup related fields
+        mGeofenceName = (EditText) findViewById(R.id.addgeofence_name);
+
+        //Set the toolbar according to the activity layout
+        Toolbar myChildToolbar =
+                (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(myChildToolbar);
+
+        //Enable the "Up" button to go back to the parent activity
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.addgeofence_geofencemap);
+        mapFragment.getMapAsync(this);
+    }
+
+
+    @Override
+    protected void onStart() {
+        //Stubbed
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Stubbed
+    }
+
+    @Override
+    protected void onPause() {
+        //Stubbed
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        //Stubbed
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        //Stubbed
+        super.onDestroy();
+    }
 
     /// ----------------------
     /// Private Methods
