@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             mService = ((AutonomousGeofenceHandlerService.ServiceBinder)service).getService();
+
+            //Check for permissions now that the service is connected.
+            //This will inform the service "down the road" "we're good to go in initializing location services.
+            checkPermissions();
         }
 
         @Override
@@ -70,20 +74,16 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// Public Methods
     /// ----------------------
 
-    public void requestPermissions() {
-        ArrayList<String> permissionRequests = new ArrayList<>(2); //Increase this value as more permissions are added below
+    public void checkPermissions() {
+        //Request the permissions needed from the user for this application from the start
+        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
 
-        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
-            permissionRequests.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+            //If we have all the permissions we need, then we're good to go!
+            mPresenter.onAllPermissionsGranted();
         }
-
-        if( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
-            permissionRequests.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-
-        if(permissionRequests.size() > 0) {
-            ActivityCompat.requestPermissions(this, permissionRequests.toArray(new String[permissionRequests.size()]),
-                    MainActivity.LOCATION_PERMISSIONS);
+        else {
+            requestPermissions();
         }
     }
 
@@ -132,16 +132,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
         initializeBackgroundService();
 
         mPresenter.registerReceiver(LocalBroadcastManager.getInstance(this));
-
-        //Request the permissions needed from the user for this application from the start
-        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
-            //If we have all the permissions we need, then we're good to go!
-            mPresenter.onAllPermissionsGranted();
-        }
-        else {
-            requestPermissions();
-        }
     }
 
     @Override
@@ -162,6 +152,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     protected void onDestroy() {
+        unbindService(mServiceConnection);
+
         mPresenter.onDestroy();
         super.onDestroy();
     }
@@ -217,8 +209,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
         return;
     }
 
+    /**
+     * Loads the recyclerView's cards with the loaded geofence data
+     * @param geofenceData Saved Geofence data created by the user
+     */
     public void onCardDataLoaded(List<GeofenceData> geofenceData) {
-
         Debug.LogVerbose(TAG, "cardData.length:" + geofenceData.size());
 
         //Specify target adapter to use to populate each card
@@ -234,11 +229,34 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// Private Methods
     /// ----------------------
 
+    /**
+     * Start the autonomous geofence handler service which loads and tracks geofences
+     */
     private void initializeBackgroundService() {
         Intent intent = new Intent(this, AutonomousGeofenceHandlerService.class);
         startService(intent);
 
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
         //JAM TODO: Communication should be handled by the presenter
+    }
+
+    /**
+     * Prompts the Android permission request to the user.
+     */
+    private void requestPermissions() {
+        ArrayList<String> permissionRequests = new ArrayList<>(2); //Increase this value as more permissions are added below
+
+        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            permissionRequests.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+
+        if( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+            permissionRequests.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+
+        if(permissionRequests.size() > 0) {
+            ActivityCompat.requestPermissions(this, permissionRequests.toArray(new String[permissionRequests.size()]),
+                    MainActivity.LOCATION_PERMISSIONS);
+        }
     }
 }

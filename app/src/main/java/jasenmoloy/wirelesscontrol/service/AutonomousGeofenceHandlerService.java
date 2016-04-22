@@ -39,7 +39,7 @@ public class AutonomousGeofenceHandlerService extends Service {
         }
 
         public void onReceive(Context context, Intent intent) {
-            Debug.LogDebug(TAG, "--- onReceive() ---");
+            Debug.LogDebug(TAG, "onReceive() - action:" + intent.getAction());
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_GEODATA_LOADED:
@@ -96,9 +96,9 @@ public class AutonomousGeofenceHandlerService extends Service {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
         mLocationServices.disconnect();
+
+        super.onDestroy();
     }
 
     @Override
@@ -119,12 +119,13 @@ public class AutonomousGeofenceHandlerService extends Service {
         new Thread(new Runnable() {
             public void run() {
                 mLocationServices.connect(true);
-
-                LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(AutonomousGeofenceHandlerService.this);
-
-                Intent intent = new Intent(Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED);
-                lbm.sendBroadcast(intent);
+                sendBroadcast(Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED);
             }
         }).start();
+    }
+
+    private void sendBroadcast(String action) {
+        Intent intent = new Intent(action);
+        LocalBroadcastManager.getInstance(AutonomousGeofenceHandlerService.this).sendBroadcast(intent);
     }
 }

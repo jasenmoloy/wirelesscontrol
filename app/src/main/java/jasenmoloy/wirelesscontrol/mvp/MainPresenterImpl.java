@@ -33,14 +33,14 @@ public class MainPresenterImpl implements MainPresenter {
         }
 
         public void onReceive(Context context, Intent intent) {
-            Debug.LogDebug(TAG, "--- onReceive() ---");
+            Debug.LogDebug(TAG, "onReceive() - action:" + intent.getAction());
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED:
                     mModel.LoadGeofenceData(MainPresenterImpl.this);
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSION_REQUESTED:
-                    mView.requestPermissions();
+                    mView.checkPermissions();
                     break;
             }
         }
@@ -73,8 +73,8 @@ public class MainPresenterImpl implements MainPresenter {
     /// ----------------------
 
     public void registerReceiver(LocalBroadcastManager broadcastManager) {
-        Debug.LogDebug(TAG, "registerReceiver()");
         IntentFilter intentFilter = new IntentFilter(Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED);
+        intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
         broadcastManager.registerReceiver(mReceiver, intentFilter);
     }
 
@@ -94,7 +94,6 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     public void onGeofenceDataLoadSuccess(GeofenceData[] geofenceData) {
-        Debug.LogDebug(TAG, "--- onGeofenceDataLoadSuccess() ---");
         List<GeofenceData> list = new Vector<GeofenceData>(geofenceData.length, 1); //Set capacityIncrement to 1 as the user will usually only add one more additional geofence at a time.
 
         //JAM TODO: Why is this set to a Vector?
