@@ -53,6 +53,7 @@ public class MainPresenterImpl implements MainPresenter {
     MainModel mModel;
     MainView mView;
     ResponseReceiver mReceiver;
+    LocalBroadcastManager mBroadcastManager;
 
     Context mContext;
 
@@ -75,13 +76,17 @@ public class MainPresenterImpl implements MainPresenter {
     public void registerReceiver(LocalBroadcastManager broadcastManager) {
         IntentFilter intentFilter = new IntentFilter(Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED);
         intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
-        broadcastManager.registerReceiver(mReceiver, intentFilter);
+
+        mBroadcastManager = broadcastManager;
+
+        mBroadcastManager.registerReceiver(mReceiver, intentFilter);
     }
 
     public void onResume() {
     }
 
     public void onDestroy() {
+        mBroadcastManager.unregisterReceiver(mReceiver);
         mView = null;
     }
 
