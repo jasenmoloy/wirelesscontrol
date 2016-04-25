@@ -36,12 +36,12 @@ public class GeofenceMarker {
     }
 
     public GeofenceMarker(LatLng position, double radius) {
-        SetOptions(position, radius);
+        setOptions(position, radius);
     }
 
-    public void AddToMap(GoogleMap map) {
+    public void addToMap(GoogleMap map) {
         if( mMarkerOps == null || mCircleOps == null ) {
-            Debug.LogWarn(TAG, "Marker Options have not be set for this geofence marker. Has it already been added to another map?");
+            Debug.logWarn(TAG, "Marker Options have not be set for this geofence marker. Has it already been added to another map?");
             return;
         }
 
@@ -60,12 +60,12 @@ public class GeofenceMarker {
         mCircleOps = null;
     }
 
-    public void AnimateCameraOnMarker(GoogleMap map) {
+    public void animateCameraOnMarker(GoogleMap map) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), map.getMaxZoomLevel() * 0.7f); //JAM TODO: Move this value to resrouces file
         map.animateCamera(cameraUpdate);
     }
 
-    public void MoveCameraOnMarker(GoogleMap map) {
+    public void moveCameraOnMarker(GoogleMap map) {
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), map.getMaxZoomLevel() * 0.7f); //JAM TODO: Move this value to resrouces file
         map.moveCamera(cameraUpdate);
 }
@@ -75,7 +75,7 @@ public class GeofenceMarker {
      * @param position
      * @param radius
      */
-    public void Reset(LatLng position, double radius) {
+    public void reset(LatLng position, double radius) {
         Assert.assertNotNull(mMarker);
         Assert.assertNotNull(mCircle);
 
@@ -84,7 +84,7 @@ public class GeofenceMarker {
         mCircle.remove();
 
         //Set up our options in preparation to be added to a map.
-        SetOptions(position, radius);
+        setOptions(position, radius);
     }
 
     /**
@@ -93,9 +93,9 @@ public class GeofenceMarker {
      * @param position
      * @param radius
      */
-    public void UpdateMarker(LatLng position, double radius) {
+    public void updateMarker(LatLng position, double radius) {
         if(mMarkerOps != null && mCircleOps != null) {
-            SetOptions(position, radius);
+            setOptions(position, radius);
         }
         else {
             mMarker.setPosition(position);
@@ -104,7 +104,7 @@ public class GeofenceMarker {
         }
     }
 
-    private void SetOptions(LatLng position, double radius) {
+    private void setOptions(LatLng position, double radius) {
         //If they don't exist, create them.
         if(mMarkerOps == null) mMarkerOps = new MarkerOptions();
         if(mCircleOps == null) mCircleOps = new CircleOptions();

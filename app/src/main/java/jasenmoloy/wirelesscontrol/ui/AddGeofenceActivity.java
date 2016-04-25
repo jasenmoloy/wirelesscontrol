@@ -1,7 +1,6 @@
 package jasenmoloy.wirelesscontrol.ui;
 
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -17,9 +16,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import junit.framework.Assert;
 
@@ -73,19 +70,19 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
                 mGeofence.getRadius()
         );
 
-        mPresenter.SaveGeofence(data);
+        mPresenter.saveGeofence(data);
     }
 
     public void onGeofenceSaveSuccess() {
-        Debug.LogWarn(TAG, "onGeofenceSaveSuccess() - Called but not implemented!");
+        Debug.logWarn(TAG, "onGeofenceSaveSuccess() - Called but not implemented!");
         //JAM TODO: Close out and return back to the main activity.
     }
 
     public void onGeofenceSaveError() {
-        Debug.LogWarn(TAG, "onGeofenceSaveError() - Called but not implemented!");
+        Debug.logWarn(TAG, "onGeofenceSaveError() - Called but not implemented!");
 
         //Notify the user that an error has occurred
-        Debug.ShowDebugOkDialog(this, "Save Error", "An error occurred while saving. Please try again.");
+        Debug.showDebugOkDialog(this, "Save Error", "An error occurred while saving. Please try again.");
 
         //JAM TODO: Depending on the error, stay on the current screen and attempt to have the user save again (if possible).
     }
@@ -101,7 +98,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         );
 
         //Initialize new geofence marker that will be placed
-        InitGeofenceMarker(mMap.getCameraPosition().target);
+        initGeofenceMarker(mMap.getCameraPosition().target);
 
         //Check and/or request permission if the app can use the user's location.
         if ( ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
@@ -109,7 +106,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
                     MY_PERMISSION_ACCESS_FINE_LOCATION);
         }
         else {
-            InitMyLocationOnMap();
+            initMyLocationOnMap();
         }
     }
 
@@ -179,7 +176,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     /// Private Methods
     /// ----------------------
 
-    private void InitMyLocationOnMap()
+    private void initMyLocationOnMap()
     {
         try {
             mMap.setMyLocationEnabled(true);
@@ -207,17 +204,17 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         }
     }
 
-    private void InitGeofenceMarker(LatLng position) {
+    private void initGeofenceMarker(LatLng position) {
         //Set the listener for our map.
         mMap.setOnCameraChangeListener(this);
 
         mGeofence = new GeofenceMarker(position, 60.0); //JAM TODO: Move this to resources file.
-        mGeofence.AddToMap(mMap);
+        mGeofence.addToMap(mMap);
     }
 
     private void UpdateGeofenceMarker(LatLng position) {
         Assert.assertNotNull(position);
         //JAM TODO Check for null
-        mGeofence.UpdateMarker(position, 60.0); //JAM TODO: Move this to resources file.
+        mGeofence.updateMarker(position, 60.0); //JAM TODO: Move this to resources file.
     }
 }

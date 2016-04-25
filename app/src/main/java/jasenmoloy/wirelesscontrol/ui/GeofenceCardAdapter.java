@@ -3,7 +3,6 @@ package jasenmoloy.wirelesscontrol.ui;
 import android.app.Activity;
 import android.app.Application;
 import android.content.ComponentCallbacks;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +21,6 @@ import java.util.List;
 
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
-import jasenmoloy.wirelesscontrol.debug.Debug;
 
 /**
  * Created by jasenmoloy on 2/17/16.
@@ -79,8 +77,8 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
                     mIsCardRecycled = false;
                 }
 
-                //Reset our existing marker and add it to the map.
-                mMarker.Reset(data.position, data.radius);
+                //reset our existing marker and add it to the map.
+                mMarker.reset(data.position, data.radius);
                 displayMarkerOnMap();
             }
             else {
@@ -143,8 +141,8 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         private void displayMarkerOnMap() {
             Assert.assertNotNull(mMap);
 
-            mMarker.AddToMap(mMap);
-            mMarker.MoveCameraOnMarker(mMap);
+            mMarker.addToMap(mMap);
+            mMarker.moveCameraOnMarker(mMap);
         }
     }
 

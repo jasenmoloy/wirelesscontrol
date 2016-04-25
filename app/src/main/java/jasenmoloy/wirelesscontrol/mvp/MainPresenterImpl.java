@@ -33,7 +33,7 @@ public class MainPresenterImpl implements MainPresenter {
         }
 
         public void onReceive(Context context, Intent intent) {
-            Debug.LogDebug(TAG, "onReceive() - action:" + intent.getAction());
+            Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED:

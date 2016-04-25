@@ -19,8 +19,6 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.LocationSettingsStates;
 
-import java.util.List;
-
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
@@ -58,7 +56,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
 
     private void setLastLocation(Location lastLocation) {
         mLastLocation = lastLocation;
-        Debug.LogVerbose(TAG, "Updating last location: " + lastLocation);
+        Debug.logVerbose(TAG, "Updating last location: " + lastLocation);
     }
 
     /// ----------------------
@@ -94,19 +92,19 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
             buildLocationSettings();
         }
         catch(SecurityException secEx) {
-            Debug.LogWarn(TAG, secEx.getMessage());
+            Debug.logWarn(TAG, secEx.getMessage());
 
             LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
             Intent intent = new Intent(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
             lbm.sendBroadcast(intent);
         }
         catch(Exception ex) {
-            Debug.LogError(TAG, ex.getMessage());
+            Debug.logError(TAG, ex.getMessage());
         }
     }
 
     public void sendGeofenceData(GeofenceData[] data) {
-        Debug.LogDebug(TAG, "sendGeofenceData() --- data.size():" + data.length);
+        Debug.logDebug(TAG, "sendGeofenceData() --- data.size():" + data.length);
 
         if(mGoogleApiClient.isConnected())
             mGeofenceManager.addGeofences(data);
@@ -146,7 +144,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
                 lbm.sendBroadcast(intent);
                 break;
             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                Debug.LogError(TAG, "onResult() - SETTINGS CHANGE UNAVAILABLE");
+                Debug.logError(TAG, "onResult() - SETTINGS CHANGE UNAVAILABLE");
                 break;
         }
     }

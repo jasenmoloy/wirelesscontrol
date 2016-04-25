@@ -11,8 +11,10 @@ public class Debug {
 
     /**
      * Write debug text out to Logcat.
+     * @param tag
+     * @param msg
      */
-    public static void LogDebug(String tag, String msg) {
+    public static void logDebug(String tag, String msg) {
         if(msg != null)
             Log.d(tag, msg);
         else
@@ -21,9 +23,11 @@ public class Debug {
 
     /**
      * Write warning text out to Logcat.
+     * @param tag
+     * @param msg
      */
-    public static void LogWarn(String tag, String msg) {
-        if(msg != null)
+    public static void logWarn(String tag, String msg) {
+        if (msg != null)
             Log.w(tag, msg);
         else
             Log.w(tag, "null");
@@ -31,9 +35,11 @@ public class Debug {
 
     /**
      * Write error text out to Logcat.
+     * @param tag
+     * @param msg
      */
-    public static void LogError(String tag, String msg) {
-        if(msg != null)
+    public static void logError(String tag, String msg) {
+        if (msg != null)
             Log.e(tag, msg);
         else
             Log.e(tag, "null");
@@ -41,9 +47,11 @@ public class Debug {
 
     /**
      * Write verbose text out to Logcat.
+     * @param tag
+     * @param msg
      */
-    public static void LogVerbose(String tag, String msg) {
-        if(msg != null)
+    public static void logVerbose(String tag, String msg) {
+        if (msg != null)
             Log.v(tag, msg);
         else
             Log.v(tag, "null");
@@ -52,15 +60,26 @@ public class Debug {
     /**
      * Show a basic debug dialog to provide more info on the built-in debug
      * options.
+     * @param context
+     * @param title
+     * @param body
      */
-    public static void ShowDebugOkDialog(Context context, String title, String body) {
+    public static void showDebugOkDialog(Context context, String title, String body) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(body)
                 .setPositiveButton(android.R.string.ok, null);
         builder.create().show();
     }
-    public static void ShowDebugOkDialog(Context context, int titleResourceId, String bodyResourceId) {
+
+    /**
+     * Show a basic debug dialog to provide more info on the built-in debug
+     * options.
+     * @param context
+     * @param titleResourceId
+     * @param bodyResourceId
+     */
+    public static void showDebugOkDialog(Context context, int titleResourceId, String bodyResourceId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(titleResourceId)
                 .setMessage(bodyResourceId)

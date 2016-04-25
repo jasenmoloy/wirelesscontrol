@@ -22,13 +22,13 @@ public class AddGeofenceModelImpl implements AddGeofenceModel {
     /// ----------------------
     /// Public Methods
     /// ----------------------
-    public void Save(GeofenceData data, OnGeofenceSaveFinishedListener listener) {
+    public void save(GeofenceData data, OnGeofenceSaveFinishedListener listener) {
         //JAM TODO: Implement Saving!
-        Debug.LogWarn(TAG, "Save() called but not implemented!");
+        Debug.logWarn(TAG, "Save() called but not implemented!");
 
-        Debug.LogVerbose(TAG, "GeofenceData data.name: " + data.name);
-        Debug.LogVerbose(TAG, "GeofenceData data.lat:" + data.position.latitude + " data.long:" + data.position.longitude);
-        Debug.LogVerbose(TAG, "GeofenceData data.radius: " + data.radius);
+        Debug.logVerbose(TAG, "GeofenceData data.name: " + data.name);
+        Debug.logVerbose(TAG, "GeofenceData data.lat:" + data.position.latitude + " data.long:" + data.position.longitude);
+        Debug.logVerbose(TAG, "GeofenceData data.radius: " + data.radius);
 
         listener.onGeofenceSaveError(); //JAM TODO: Remove this once saving is implemented!
     }

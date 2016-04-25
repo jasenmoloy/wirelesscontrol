@@ -2,7 +2,6 @@ package jasenmoloy.wirelesscontrol.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -25,20 +24,20 @@ public class GeofenceData implements Parcelable {
     }
 
     public GeofenceData(Parcel in) {
-        Debug.LogDebug(TAG, "GeofenceData()");
+        Debug.logDebug(TAG, "GeofenceData()");
 
 
         name = in.readString();
         position = new LatLng(in.readDouble(), in.readDouble());
         radius = in.readDouble();
 
-        Debug.LogDebug(TAG, "GeofenceData() - name: " + name);
-        Debug.LogDebug(TAG, "GeofenceData() - position: " + position);
-        Debug.LogDebug(TAG, "GeofenceData() - radius: " + radius);
+        Debug.logDebug(TAG, "GeofenceData() - name: " + name);
+        Debug.logDebug(TAG, "GeofenceData() - position: " + position);
+        Debug.logDebug(TAG, "GeofenceData() - radius: " + radius);
     }
 
     public int describeContents() {
-        Debug.LogDebug(TAG, "describeContents()");
+        Debug.logDebug(TAG, "describeContents()");
         return 0;
     }
 
@@ -54,7 +53,7 @@ public class GeofenceData implements Parcelable {
             };
 
     public void writeToParcel(Parcel out, int flags) {
-        Debug.LogDebug(TAG, "writeToParcel()");
+        Debug.logDebug(TAG, "writeToParcel()");
 
         out.writeString(name);
         out.writeDouble(position.latitude);

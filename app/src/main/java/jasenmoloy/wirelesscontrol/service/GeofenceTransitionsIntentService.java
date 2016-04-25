@@ -60,13 +60,13 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Debug.LogVerbose(TAG, "--- onHandleIntent() ---");
+        Debug.logVerbose(TAG, "--- onHandleIntent() ---");
 
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
             String errorMessage = ErrorMessages.getGeofenceErrorString(this,
                     geofencingEvent.getErrorCode());
-            Debug.LogError(TAG, errorMessage);
+            Debug.logError(TAG, errorMessage);
             return;
         }
 
@@ -74,12 +74,12 @@ public class GeofenceTransitionsIntentService extends IntentService {
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
 
-        Debug.LogVerbose(TAG,
+        Debug.logVerbose(TAG,
                 "GEOFENCE_TRANSITION_ENTER: " + Geofence.GEOFENCE_TRANSITION_ENTER + " " +
-                "GEOFENCE_TRANSITION_DWELL: " + Geofence.GEOFENCE_TRANSITION_DWELL + " " +
-                "GEOFENCE_TRANSITION_EXIT: " + Geofence.GEOFENCE_TRANSITION_EXIT);
+                        "GEOFENCE_TRANSITION_DWELL: " + Geofence.GEOFENCE_TRANSITION_DWELL + " " +
+                        "GEOFENCE_TRANSITION_EXIT: " + Geofence.GEOFENCE_TRANSITION_EXIT);
 
-        Debug.LogVerbose(TAG, "--- geofenceTransition: " + geofenceTransition);
+        Debug.logVerbose(TAG, "--- geofenceTransition: " + geofenceTransition);
 
         // Test that the reported transition was of interest.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
@@ -98,10 +98,10 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
             // Send notification and log the transition details.
             sendNotification(geofenceTransitionDetails);
-            Debug.LogVerbose(TAG, geofenceTransitionDetails);
+            Debug.logVerbose(TAG, geofenceTransitionDetails);
         } else {
             // Log the error.
-            Debug.LogError(TAG, getString(R.string.geofence_transition_invalid_type,
+            Debug.logError(TAG, getString(R.string.geofence_transition_invalid_type,
                     geofenceTransition));
         }
     }

@@ -28,7 +28,7 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
         mModel = new AddGeofenceModelImpl();
     }
 
-    public void SaveGeofence(GeofenceData data) {
+    public void saveGeofence(GeofenceData data) {
         //
         mModel.Save(data, this);
         //JAM TODO: Tell the model to save out the data and let me know when it's done.

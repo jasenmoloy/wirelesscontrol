@@ -7,5 +7,5 @@ import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
  * Created by jasenmoloy on 2/25/16.
  */
 public interface AddGeofenceModel {
-    void Save(GeofenceData data, OnGeofenceSaveFinishedListener listener);
+    void save(GeofenceData data, OnGeofenceSaveFinishedListener listener);
 }

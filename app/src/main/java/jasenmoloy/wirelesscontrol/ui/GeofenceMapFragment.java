@@ -65,7 +65,7 @@ public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyC
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        InitMyLocationOnMap();
+        initMyLocationOnMap();
     }
 
     /// ----------------------
@@ -76,7 +76,7 @@ public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyC
     /// Private Methods
     /// ----------------------
 
-    private void InitMyLocationOnMap()
+    private void initMyLocationOnMap()
     {
         try {
             mMap.setMyLocationEnabled(true);
@@ -94,14 +94,14 @@ public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyC
             mMap.animateCamera(cameraUpdate);
         }
         catch(SecurityException secEx) {
-            Debug.LogWarn(TAG, secEx.getMessage());
+            Debug.logWarn(TAG, secEx.getMessage());
 
             LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
             Intent intent = new Intent(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
             lbm.sendBroadcast(intent);
         }
         catch(Exception ex) {
-            Debug.LogError(TAG, ex.getMessage());
+            Debug.logError(TAG, ex.getMessage());
         }
 
     }

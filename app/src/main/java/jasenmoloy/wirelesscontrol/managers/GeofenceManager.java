@@ -3,15 +3,10 @@ package jasenmoloy.wirelesscontrol.managers;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
@@ -85,7 +80,7 @@ public class GeofenceManager implements ResultCallback {
     /// ----------------------
 
     public void onResult(Result result) {
-        Debug.LogVerbose(TAG, "onResult(): " + result.getStatus());
+        Debug.logVerbose(TAG, "onResult(): " + result.getStatus());
         //JAM TODO: Implement me
     }
 
@@ -106,7 +101,7 @@ public class GeofenceManager implements ResultCallback {
             return mGeofencePendingIntent;
         }
 
-        Debug.LogDebug(TAG, "GeofenceTransitionsIntentService.class:" + GeofenceTransitionsIntentService.class);
+        Debug.logDebug(TAG, "GeofenceTransitionsIntentService.class:" + GeofenceTransitionsIntentService.class);
 
         Intent intent = new Intent(mContext, GeofenceTransitionsIntentService.class);
         return PendingIntent.getService(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -156,8 +151,8 @@ public class GeofenceManager implements ResultCallback {
      */
     private void deliverGeofences() {
         try {
-            Debug.LogVerbose(TAG, "deliverGeofences() - mGeofences.size:" + mGeofences.size());
-            Debug.LogVerbose(TAG, "deliverGeofences() - Adding Geofences to LocationServices...");
+            Debug.logVerbose(TAG, "deliverGeofences() - mGeofences.size:" + mGeofences.size());
+            Debug.logVerbose(TAG, "deliverGeofences() - Adding Geofences to LocationServices...");
 
 
             PendingIntent pIntent = getGeofencePendingIntent();
@@ -171,7 +166,7 @@ public class GeofenceManager implements ResultCallback {
             ).setResultCallback(this);
         }
         catch(SecurityException secEx) {
-            Debug.LogWarn(TAG, secEx.getMessage());
+            Debug.logWarn(TAG, secEx.getMessage());
             //TODO Request permissions to access the user's location.
         }
         catch(PendingIntent.CanceledException canEx) {

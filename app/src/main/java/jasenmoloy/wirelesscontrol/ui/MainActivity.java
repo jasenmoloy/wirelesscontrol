@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
      * @param geofenceData Saved Geofence data created by the user
      */
     public void onCardDataLoaded(List<GeofenceData> geofenceData) {
-        Debug.LogVerbose(TAG, "cardData.length:" + geofenceData.size());
+        Debug.logVerbose(TAG, "cardData.length:" + geofenceData.size());
 
         //Specify target adapter to use to populate each card
         mAdapter = new GeofenceCardAdapter(getApplication(), geofenceData);

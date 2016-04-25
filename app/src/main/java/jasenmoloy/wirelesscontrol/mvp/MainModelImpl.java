@@ -31,7 +31,7 @@ public class MainModelImpl implements MainModel {
     /// Public Methods
     /// ----------------------
 
-    public void LoadGeofenceData(OnGeofenceDataLoadFinishedListener listener) {
+    public void loadGeofenceData(OnGeofenceDataLoadFinishedListener listener) {
         //JAM TODO: Actually attempt to load some data
         listener.onGeofenceDataLoadSuccess(mTestGeofenceData);
     }

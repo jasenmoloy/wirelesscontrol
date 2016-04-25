@@ -39,7 +39,7 @@ public class AutonomousGeofenceHandlerService extends Service {
         }
 
         public void onReceive(Context context, Intent intent) {
-            Debug.LogDebug(TAG, "onReceive() - action:" + intent.getAction());
+            Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_GEODATA_LOADED:
