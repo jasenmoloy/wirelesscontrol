@@ -37,7 +37,7 @@ public class MainPresenterImpl implements MainPresenter {
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED:
-                    mModel.LoadGeofenceData(MainPresenterImpl.this);
+                    mModel.loadGeofenceData(MainPresenterImpl.this);
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSION_REQUESTED:
                     mView.checkPermissions();

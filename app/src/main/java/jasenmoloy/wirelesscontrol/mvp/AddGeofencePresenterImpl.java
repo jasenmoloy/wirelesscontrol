@@ -30,7 +30,7 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
 
     public void saveGeofence(GeofenceData data) {
         //
-        mModel.Save(data, this);
+        mModel.save(data, this);
         //JAM TODO: Tell the model to save out the data and let me know when it's done.
         //JAM TODO: Once the model is done saving, let the view know to send the user back to the main screen.
     }
