@@ -1,5 +1,8 @@
 package jasenmoloy.wirelesscontrol.mvp;
 
+import java.util.ArrayList;
+
+import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
 
 /**
@@ -7,4 +10,6 @@ import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
  */
 public interface MainModel {
     void loadGeofenceData(OnGeofenceDataLoadFinishedListener listener);
+    void addGeofence(GeofenceData data);
+    ArrayList<GeofenceData> getGeofenceData();
 }

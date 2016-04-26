@@ -9,10 +9,13 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
+import java.util.ArrayList;
+
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.managers.LocationServicesManager;
+import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;
 
 /**
  * Created by jasenmoloy on 3/14/16.
@@ -38,18 +41,31 @@ public class AutonomousGeofenceHandlerService extends Service {
 
         }
 
+        public IntentFilter buildIntentFilter() {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_SAVE_GEOFENCE);
+            return intentFilter;
+        }
+
         public void onReceive(Context context, Intent intent) {
             Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_GEODATA_LOADED:
                     mLocationServices.performLocationServices();
-                    GeofenceData[] geoData = (GeofenceData[]) intent.getParcelableArrayExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
+                    ArrayList<GeofenceData> geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
                     mLocationServices.sendGeofenceData(geoData);
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED:
                     initializeLocationServices();
                     break;
+                case Constants.BROADCAST_ACTION_SAVE_GEOFENCE:
+                    GeofenceData geofence = intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
+                    mLocationServices.sendGeofenceData(geofence);
+                    break;
+
             }
         }
     }
@@ -58,8 +74,7 @@ public class AutonomousGeofenceHandlerService extends Service {
     /// Object Fields
     /// ----------------------
 
-    BroadcastReceiver mReceiver;
-
+    ResponseReceiver mReceiver;
     LocationServicesManager mLocationServices;
 
     /// ----------------------
@@ -89,9 +104,7 @@ public class AutonomousGeofenceHandlerService extends Service {
         super.onCreate();
 
         //Register the receivers
-        IntentFilter intentFilter = new IntentFilter(Constants.BROADCAST_ACTION_GEODATA_LOADED);
-        intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, intentFilter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.buildIntentFilter());
     }
 
     @Override

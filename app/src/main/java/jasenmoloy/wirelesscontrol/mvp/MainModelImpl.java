@@ -1,7 +1,15 @@
 package jasenmoloy.wirelesscontrol.mvp;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+
+import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
 
@@ -27,13 +35,44 @@ public class MainModelImpl implements MainModel {
     /// Object Fields
     /// ----------------------
 
+    private Context mContext;
+    private ArrayList<GeofenceData> mGeofenceData;
+
     /// ----------------------
     /// Public Methods
     /// ----------------------
 
+    public MainModelImpl(Context context) {
+        mContext = context;
+        mGeofenceData = new ArrayList<>();
+
+        //JAM Temporary
+        for(GeofenceData data : mTestGeofenceData) {
+            mGeofenceData.add(data);
+        }
+    }
+
+    public ArrayList<GeofenceData> getGeofenceData() {
+        return mGeofenceData;
+    }
+
     public void loadGeofenceData(OnGeofenceDataLoadFinishedListener listener) {
         //JAM TODO: Actually attempt to load some data
-        listener.onGeofenceDataLoadSuccess(mTestGeofenceData);
+        listener.onGeofenceDataLoadSuccess(mGeofenceData);
+    }
+
+    public void addGeofence(GeofenceData data) {
+        mGeofenceData.add(data);
+
+        //JAM TODO: Issue a save call
+
+        //Send a broadcast that a save has been made
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
+        Intent intent = new Intent(Constants.BROADCAST_ACTION_GEOFENCE_SAVED);
+        Bundle intentBundle = new Bundle();
+        intentBundle.putBoolean(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, true);
+        intent.putExtras(intentBundle);
+        lbm.sendBroadcast(intent);
     }
 
     /// ----------------------

@@ -1,11 +1,16 @@
 package jasenmoloy.wirelesscontrol.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -70,12 +75,15 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
                 mGeofence.getRadius()
         );
 
+        //JAM TODO: Verify data is correct before attempting to save
+
         mPresenter.saveGeofence(data);
     }
 
     public void onGeofenceSaveSuccess() {
-        Debug.logWarn(TAG, "onGeofenceSaveSuccess() - Called but not implemented!");
-        //JAM TODO: Close out and return back to the main activity.
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
+        startActivity(intent);
     }
 
     public void onGeofenceSaveError() {
@@ -118,9 +126,6 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Initialize fields
-        mPresenter = new AddGeofencePresenterImpl(this);
-
         //Set up the activity's view
         setContentView(R.layout.activity_addgeofence);
 
@@ -139,6 +144,11 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.addgeofence_geofencemap);
         mapFragment.getMapAsync(this);
+
+
+        mPresenter = new AddGeofencePresenterImpl(this, this);
+        mPresenter.onCreate();
+        mPresenter.registerReceiver(LocalBroadcastManager.getInstance(this));
     }
 
 
@@ -168,7 +178,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
 
     @Override
     protected void onDestroy() {
-        //Stubbed
+        mPresenter.onDestroy();
         super.onDestroy();
     }
 

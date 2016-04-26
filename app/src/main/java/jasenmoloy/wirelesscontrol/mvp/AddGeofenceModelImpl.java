@@ -1,5 +1,12 @@
 package jasenmoloy.wirelesscontrol.mvp;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+
+import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
@@ -17,20 +24,36 @@ public class AddGeofenceModelImpl implements AddGeofenceModel {
     /// ----------------------
     /// Object Fields
     /// ----------------------
-    private GeofenceData mData;
+    private Context mContext;
 
     /// ----------------------
     /// Public Methods
     /// ----------------------
-    public void save(GeofenceData data, OnGeofenceSaveFinishedListener listener) {
-        //JAM TODO: Implement Saving!
-        Debug.logWarn(TAG, "Save() called but not implemented!");
 
+    public AddGeofenceModelImpl(Context context) {
+        mContext = context;
+    }
+
+    public void save(GeofenceData data, OnGeofenceSaveFinishedListener listener) {
         Debug.logVerbose(TAG, "GeofenceData data.name: " + data.name);
         Debug.logVerbose(TAG, "GeofenceData data.lat:" + data.position.latitude + " data.long:" + data.position.longitude);
         Debug.logVerbose(TAG, "GeofenceData data.radius: " + data.radius);
 
-        listener.onGeofenceSaveError(); //JAM TODO: Remove this once saving is implemented!
+        //Let the service know to set up geofences to track
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
+        Intent intent = new Intent(Constants.BROADCAST_ACTION_SAVE_GEOFENCE);
+        Bundle intentBundle = new Bundle();
+        intentBundle.putParcelable(Constants.BROADCAST_EXTRA_KEY_GEODATA, data);
+        intent.putExtras(intentBundle);
+        lbm.sendBroadcast(intent);
+    }
+
+    public void onCreate() {
+
+    }
+
+    public void onDestroy() {
+
     }
 
     /// ----------------------

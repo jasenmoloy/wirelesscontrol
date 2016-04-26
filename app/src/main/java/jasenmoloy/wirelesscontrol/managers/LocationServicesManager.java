@@ -19,6 +19,8 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.LocationSettingsStates;
 
+import java.util.ArrayList;
+
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
@@ -48,7 +50,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     private Context mContext;
 
     GeofenceManager mGeofenceManager;
-    GeofenceData[] tempData; //JAM TODO: This could be done better...
+    ArrayList<GeofenceData> tempData; //JAM TODO: This could be done better...
 
     /// ----------------------
     /// Getters / Setters
@@ -103,13 +105,22 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
         }
     }
 
-    public void sendGeofenceData(GeofenceData[] data) {
-        Debug.logDebug(TAG, "sendGeofenceData() --- data.size():" + data.length);
+    public void sendGeofenceData(ArrayList<GeofenceData> data) {
+        Debug.logDebug(TAG, "sendGeofenceData() --- data.size():" + data.size());
 
         if(mGoogleApiClient.isConnected())
             mGeofenceManager.addGeofences(data);
         else
             tempData = data;
+    }
+
+    public void sendGeofenceData(GeofenceData data) {
+        Debug.logDebug(TAG, "sendGeofenceData() --- data.name:" + data.name);
+
+        if(mGoogleApiClient.isConnected())
+            mGeofenceManager.addGeofence(data);
+        else
+            Debug.logError(TAG, "Google API Client has not been connected yet! Disregarding geofence!");
     }
 
     /// ----------------------

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -32,6 +33,14 @@ public class MainPresenterImpl implements MainPresenter {
 
         }
 
+        public IntentFilter buildIntentFilter() {
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_SAVE_GEOFENCE);
+            return intentFilter;
+        }
+
         public void onReceive(Context context, Intent intent) {
             Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
 
@@ -41,6 +50,10 @@ public class MainPresenterImpl implements MainPresenter {
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSION_REQUESTED:
                     mView.checkPermissions();
+                case Constants.BROADCAST_ACTION_SAVE_GEOFENCE:
+                    GeofenceData geofence = intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
+                    mModel.addGeofence(geofence);
+                    reloadGeofenceData(mModel.getGeofenceData());
                     break;
             }
         }
@@ -63,29 +76,28 @@ public class MainPresenterImpl implements MainPresenter {
 
     public MainPresenterImpl(MainView view, Context context) {
         mView = view;
-        mModel = new MainModelImpl();
+        mModel = new MainModelImpl(context);
         mReceiver = new ResponseReceiver();
 
         mContext = context;
+    }
+
+    public void registerReceiver(LocalBroadcastManager broadcastManager) {
+        mBroadcastManager = broadcastManager;
+        mBroadcastManager.registerReceiver(mReceiver, mReceiver.buildIntentFilter());
     }
 
     /// ----------------------
     /// Callback Methods
     /// ----------------------
 
-    public void registerReceiver(LocalBroadcastManager broadcastManager) {
-        IntentFilter intentFilter = new IntentFilter(Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED);
-        intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
-
-        mBroadcastManager = broadcastManager;
-
-        mBroadcastManager.registerReceiver(mReceiver, intentFilter);
-    }
-
     public void onResume() {
+        Debug.logDebug(TAG, "JAM - onResume()");
     }
 
     public void onDestroy() {
+        Debug.logDebug(TAG, "JAM - onDestroy()");
+
         mBroadcastManager.unregisterReceiver(mReceiver);
         mView = null;
     }
@@ -98,24 +110,16 @@ public class MainPresenterImpl implements MainPresenter {
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED));
     }
 
-    public void onGeofenceDataLoadSuccess(GeofenceData[] geofenceData) {
-        List<GeofenceData> list = new Vector<GeofenceData>(geofenceData.length, 1); //Set capacityIncrement to 1 as the user will usually only add one more additional geofence at a time.
-
-        //JAM TODO: Why is this set to a Vector?
-        for (GeofenceData data: geofenceData) {
-            list.add(data);
-        }
-
+    public void onGeofenceDataLoadSuccess(ArrayList<GeofenceData> geofenceData) {
         //Let the service know to set up geofences to track
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
         Intent intent = new Intent(Constants.BROADCAST_ACTION_GEODATA_LOADED);
         Bundle intentBundle = new Bundle();
-        intentBundle.putParcelableArray(Constants.BROADCAST_EXTRA_KEY_GEODATA, geofenceData);
+        intentBundle.putParcelableArrayList(Constants.BROADCAST_EXTRA_KEY_GEODATA, geofenceData);
         intent.putExtras(intentBundle);
         lbm.sendBroadcast(intent);
 
-        //Let the UI know the data is loaded.
-        mView.onCardDataLoaded(list);
+        reloadGeofenceData(geofenceData);
     }
 
     public void onGeofenceDataLoadError() {
@@ -129,4 +133,9 @@ public class MainPresenterImpl implements MainPresenter {
     /// ----------------------
     /// Private Methods
     /// ----------------------
+
+    private void reloadGeofenceData(ArrayList<GeofenceData> geofenceData) {
+        //Let the UI know the data is loaded.
+        mView.onCardDataLoaded(geofenceData);
+    }
 }

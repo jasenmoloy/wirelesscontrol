@@ -54,7 +54,7 @@ public class GeofenceManager implements ResultCallback {
         mGeofencePendingIntent = null;
     }
 
-    public void addGeofences(GeofenceData[] data) {
+    public void addGeofences(ArrayList<GeofenceData> data) {
         //Set up all geofence data
         if(mGeofenceBuilder == null)
             mGeofenceBuilder = new Geofence.Builder();
