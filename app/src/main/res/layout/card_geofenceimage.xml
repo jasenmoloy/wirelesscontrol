@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<jasenmoloy.wirelesscontrol.ui.GeofenceCardView
     android:id="@+id/card_savedgeofenceimage_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/tools"
@@ -41,5 +41,5 @@
     </LinearLayout>
 
 
-</android.support.v7.widget.CardView>
+</jasenmoloy.wirelesscontrol.ui.GeofenceCardView>
 
