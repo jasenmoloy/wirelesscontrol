@@ -80,6 +80,15 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
 
         //JAM TODO: Verify data is correct before attempting to save
 
+        //JAM Clean and format the map before taking a snapshot
+        try {
+            mMap.setMyLocationEnabled(false);
+            mMap.moveCamera(CameraUpdateFactory.zoomTo(mMap.getMaxZoomLevel() * 0.5f));
+        }
+        catch(SecurityException secEx) {
+            Debug.logError(TAG, secEx.getMessage());
+        }
+
         //JAM Grab screenshot of the map
         mMap.snapshot(this);
     }
@@ -124,6 +133,14 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
 
     public void onSnapshotReady(Bitmap map) {
         if(map == null) {
+            //JAM Enable your location again
+            try {
+                mMap.setMyLocationEnabled(true);
+            }
+            catch(SecurityException secEx) {
+                Debug.logError(TAG, secEx.getMessage());
+            }
+
             onGeofenceSaveError();
             return;
         }
