@@ -17,7 +17,7 @@ public class GeofenceData implements Parcelable {
     public String name;
     public LatLng position;
     public double radius;
-    public Bitmap mMapScreenshot;
+    public Bitmap mapScreenshot;
 
     public GeofenceData(String name, LatLng pos, double radius) {
         this.name = name;
@@ -26,7 +26,7 @@ public class GeofenceData implements Parcelable {
     }
 
     public void addBitmap(Bitmap mapScreenshot) {
-        mMapScreenshot = mapScreenshot;
+        this.mapScreenshot = mapScreenshot;
     }
 
     public GeofenceData(Parcel in) {

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -32,8 +33,23 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
 
     private static final String TAG = "GeofenceCardAdapter";
 
+    private static final int VIEWTYPE_GOOGLEMAP = 0;
+    private static final int VIEWTYPE_BITMAP = 1;
+
+    protected abstract class ViewHolder extends RecyclerView.ViewHolder {
+        public ViewHolder(CardView v) {
+            super(v);
+        }
+
+        abstract void setCard(GeofenceData data);
+
+        abstract void onViewRecycled();
+    }
+
     //Providing a reference to the views that are contained within each card
-    public static class ViewHolder extends RecyclerView.ViewHolder implements OnMapReadyCallback, Application.ActivityLifecycleCallbacks, ComponentCallbacks {
+    public class ViewHolderGoogleMap extends GeofenceCardAdapter.ViewHolder implements
+            OnMapReadyCallback, Application.ActivityLifecycleCallbacks, ComponentCallbacks {
+
         private GeofenceMarker mMarker;
         boolean mIsCardRecycled;
 
@@ -45,7 +61,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         private TextView mLocation;
         private TextView mRadius;
 
-        public ViewHolder(CardView v) {
+        public ViewHolderGoogleMap(CardView v) {
             super(v);
             mCardView = v;
             mMap = null;
@@ -67,8 +83,10 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
 
         public void setCard(GeofenceData data) {
             mName.setText(data.name);
-            mLocation.setText("Lat:" + Double.toString(data.position.latitude) + " Long:" + Double.toString(data.position.longitude)); //JAM TODO: Move this to resoruces file
-            mRadius.setText("Radius:" + Double.toString(data.radius) + " meters"); //JAM TODO: Move this to resoruces file
+            mLocation.setText("Lat:" + Double.toString(data.position.latitude) +
+                    " Long:" + Double.toString(data.position.longitude)); //JAM TODO: Move this to resources file
+            mRadius.setText("Radius:" +
+                    Double.toString(data.radius) + " meters"); //JAM TODO: Move this to resources file
 
             //If we already have one created, just update the marker
             if(mMarker != null && mMap != null) {
@@ -146,6 +164,37 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         }
     }
 
+    public class ViewHolderBitmap extends GeofenceCardAdapter.ViewHolder {
+        private CardView mCardView;
+        private ImageView mImageView;
+        private TextView mName;
+        private TextView mLocation;
+        private TextView mRadius;
+
+        public ViewHolderBitmap(CardView v) {
+            super(v);
+            mCardView = v;
+
+            mName = (TextView) mCardView.findViewById(R.id.card_savedgeofence_name);
+            mLocation = (TextView) mCardView.findViewById(R.id.card_savedgeofence_location);
+            mRadius = (TextView) mCardView.findViewById(R.id.card_savedgeofence_radius);
+            mImageView = (ImageView) mCardView.findViewById(R.id.card_savedgeofence_image);
+        }
+
+        public void onViewRecycled() {
+
+        }
+
+        public void setCard(GeofenceData data) {
+            mName.setText(data.name);
+            mLocation.setText("Lat:" + Double.toString(data.position.latitude) +
+                    " Long:" + Double.toString(data.position.longitude)); //JAM TODO: Move this to resoruces file
+            mRadius.setText("Radius:" +
+                    Double.toString(data.radius) + " meters"); //JAM TODO: Move this to resoruces file
+            mImageView.setImageBitmap(data.mapScreenshot);
+        }
+    }
+
     /// ----------------------
     /// Object Fields
     /// ----------------------
@@ -176,6 +225,20 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         return mDataset.size();
     }
 
+    /**
+     * Determines which viewHolder to use depending on the position's data.
+     * @param position
+     * @return
+     */
+    @Override
+    public int getItemViewType(int position) {
+        if(mDataset.get(position).mapScreenshot != null)
+            return VIEWTYPE_BITMAP;
+        else
+            return VIEWTYPE_GOOGLEMAP;
+    }
+
+
     /// ----------------------
     /// Callback Methods
     /// ----------------------
@@ -188,18 +251,35 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
      */
     @Override
     public GeofenceCardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
-        //create a new view
-        CardView v = (CardView) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_geofence, parent, false);
+        CardView cardView;
+        ViewHolder vh;
 
-        //JAM TODO: set view size, margins, paddings, etc. parameters
+        switch(viewType) {
+            case VIEWTYPE_BITMAP:
+                //create a new view
+                cardView = (CardView) LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.card_geofenceimage, parent, false);
 
-        //Creat the view holder container
-        ViewHolder vh = new ViewHolder(v);
+                //Create and set the view holder container
+                vh = new ViewHolderBitmap(cardView);
+                break;
+            case VIEWTYPE_GOOGLEMAP:
+            default:
+                //create a new view
+                cardView = (CardView) LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.card_geofence, parent, false);
 
-        //Set callbacks for each cardView as they are required for Google Maps
-        mApplication.registerActivityLifecycleCallbacks(vh);
-        mApplication.registerComponentCallbacks(vh);
+                //Create the view holder container
+                ViewHolderGoogleMap vhGoogleMap = new ViewHolderGoogleMap(cardView);
+
+                //Set callbacks for this holder as MapView requires knowledge of the Activity's lifecycle
+                mApplication.registerActivityLifecycleCallbacks(vhGoogleMap);
+                mApplication.registerComponentCallbacks(vhGoogleMap);
+
+                //Set the viewHolder to be returned
+                vh = vhGoogleMap;
+                break;
+        }
 
         return vh;
     }
@@ -215,7 +295,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
     }
 
     /**
-     * Callback when a view is being "recycled" so unload any heavy resources
+     * Called when a view is need to be prepped for reuse. Unload any heavy resources.
      * @param holder
      */
     @Override
