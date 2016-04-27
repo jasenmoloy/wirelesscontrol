@@ -83,10 +83,13 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
 
         public void setCard(GeofenceData data) {
             mName.setText(data.name);
-            mLocation.setText("Lat:" + Double.toString(data.position.latitude) +
-                    " Long:" + Double.toString(data.position.longitude)); //JAM TODO: Move this to resources file
-            mRadius.setText("Radius:" +
-                    Double.toString(data.radius) + " meters"); //JAM TODO: Move this to resources file
+
+            mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f",
+                    data.position.latitude,
+                    data.position.longitude)); //JAM TODO: Move this to resources file
+
+            mRadius.setText(String.format("Radius: %1$.0f meters",
+                    data.radius)); //JAM TODO: Move this to resources file
 
             //If we already have one created, just update the marker
             if(mMarker != null && mMap != null) {
@@ -187,10 +190,14 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
 
         public void setCard(GeofenceData data) {
             mName.setText(data.name);
-            mLocation.setText("Lat:" + Double.toString(data.position.latitude) +
-                    " Long:" + Double.toString(data.position.longitude)); //JAM TODO: Move this to resoruces file
-            mRadius.setText("Radius:" +
-                    Double.toString(data.radius) + " meters"); //JAM TODO: Move this to resoruces file
+
+            mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f",
+                    data.position.latitude,
+                    data.position.longitude)); //JAM TODO: Move this to resoruces file
+
+            mRadius.setText(String.format("Radius: %1$.0f meters",
+                    data.radius)); //JAM TODO: Move this to resoruces file
+
             mImageView.setImageBitmap(data.mapScreenshot);
         }
     }
