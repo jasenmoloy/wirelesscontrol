@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -35,7 +36,7 @@ import jasenmoloy.wirelesscontrol.mvp.AddGeofenceView;
 /**
  * Created by jasenmoloy on 2/17/16.
  */
-public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenceView {
+public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenceView, GoogleMap.SnapshotReadyCallback {
     /// ----------------------
     /// Class Fields
     /// ----------------------
@@ -56,6 +57,8 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
 
     private AddGeofencePresenter mPresenter;
 
+    private GeofenceData mGeofenceSaveData;
+
     /// ----------------------
     /// Public Methods
     /// ----------------------
@@ -69,7 +72,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     }
 
     public void onSaveButtonClick(View view) {
-        GeofenceData data = new GeofenceData(
+        mGeofenceSaveData = new GeofenceData(
                 mGeofenceName.getText().toString(),
                 mGeofence.getPosition(),
                 mGeofence.getRadius()
@@ -77,7 +80,8 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
 
         //JAM TODO: Verify data is correct before attempting to save
 
-        mPresenter.saveGeofence(data);
+        //JAM Grab screenshot of the map
+        mMap.snapshot(this);
     }
 
     public void onGeofenceSaveSuccess() {
@@ -118,6 +122,20 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         }
     }
 
+    public void onSnapshotReady(Bitmap map) {
+        if(map == null) {
+            onGeofenceSaveError();
+            return;
+        }
+
+        //Add bitmap to geofence save data
+        mGeofenceSaveData.addBitmap(map);
+
+        //Let presenter know we're ready to save the data
+        mPresenter.saveGeofence(mGeofenceSaveData);
+        mGeofenceSaveData = null;
+    }
+
     /// ----------------------
     /// Protected Methods
     /// ----------------------
@@ -150,7 +168,6 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         mPresenter.onCreate();
         mPresenter.registerReceiver(LocalBroadcastManager.getInstance(this));
     }
-
 
     @Override
     protected void onStart() {

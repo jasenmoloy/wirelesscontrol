@@ -1,5 +1,6 @@
 package jasenmoloy.wirelesscontrol.data;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -16,11 +17,16 @@ public class GeofenceData implements Parcelable {
     public String name;
     public LatLng position;
     public double radius;
+    public Bitmap mMapScreenshot;
 
     public GeofenceData(String name, LatLng pos, double radius) {
         this.name = name;
         this.position = pos;
         this.radius = radius;
+    }
+
+    public void addBitmap(Bitmap mapScreenshot) {
+        mMapScreenshot = mapScreenshot;
     }
 
     public GeofenceData(Parcel in) {
