@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.bluelinelabs.logansquare.annotation.JsonField;
+import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.google.android.gms.maps.model.LatLng;
 
 import jasenmoloy.wirelesscontrol.debug.Debug;
@@ -11,12 +13,19 @@ import jasenmoloy.wirelesscontrol.debug.Debug;
 /**
  * Created by jasenmoloy on 2/25/16.
  */
+@JsonObject
 public class GeofenceData implements Parcelable {
     private static final String TAG = "GeofenceData";
 
+    @JsonField
     public String name;
+
+    @JsonField
     public LatLng position;
+
+    @JsonField
     public double radius;
+
     public Bitmap mapScreenshot;
 
     public GeofenceData(String name, LatLng pos, double radius) {
@@ -65,5 +74,11 @@ public class GeofenceData implements Parcelable {
         out.writeDouble(position.latitude);
         out.writeDouble(position.longitude);
         out.writeDouble(radius);
+    }
+
+    protected GeofenceData() {
+        this.name = "";
+        this.position = new LatLng(0d, 0d);
+        this.radius = 0;
     }
 }

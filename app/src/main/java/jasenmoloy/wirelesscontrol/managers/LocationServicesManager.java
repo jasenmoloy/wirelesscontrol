@@ -108,6 +108,10 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     public void sendGeofenceData(ArrayList<GeofenceData> data) {
         Debug.logDebug(TAG, "sendGeofenceData() --- data.size():" + data.size());
 
+        //Don't add any data if it's empty or doesn't exist.
+        if(data == null || data.size() == 0)
+            return;
+
         if(mGoogleApiClient.isConnected())
             mGeofenceManager.addGeofences(data);
         else
@@ -116,6 +120,10 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
 
     public void sendGeofenceData(GeofenceData data) {
         Debug.logDebug(TAG, "sendGeofenceData() --- data.name:" + data.name);
+
+        //JAM Don't add data if it doesn't exist
+        if(data == null)
+            return;
 
         if(mGoogleApiClient.isConnected())
             mGeofenceManager.addGeofence(data);

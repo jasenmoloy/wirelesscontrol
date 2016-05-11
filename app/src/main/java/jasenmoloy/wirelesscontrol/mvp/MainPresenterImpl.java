@@ -35,7 +35,7 @@ public class MainPresenterImpl implements MainPresenter {
 
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_SAVE_GEOFENCE);
             return intentFilter;
@@ -45,8 +45,9 @@ public class MainPresenterImpl implements MainPresenter {
             Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
 
             switch(intent.getAction()) {
-                case Constants.BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED:
-                    mModel.loadGeofenceData(MainPresenterImpl.this);
+                case Constants.BROADCAST_ACTION_GEODATA_LOADED:
+                    ArrayList<GeofenceData> geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
+                    reloadGeofenceData(geoData);
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSION_REQUESTED:
                     mView.checkPermissions();
