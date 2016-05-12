@@ -17,10 +17,23 @@ import jasenmoloy.wirelesscontrol.debug.Debug;
 public class GeofenceData implements Parcelable {
     private static final String TAG = "GeofenceData";
 
+    public static final Parcelable.Creator<GeofenceData> CREATOR =
+            new Parcelable.Creator<GeofenceData>() {
+                @Override
+                public GeofenceData createFromParcel(Parcel in) {
+                    return new GeofenceData(in);
+                }
+
+                @Override
+                public GeofenceData[] newArray(int size) {
+                    return new GeofenceData[size];
+                }
+            };
+
     @JsonField
     public String name;
 
-    @JsonField
+    @JsonField(typeConverter = LatLngTypeConverter.class)
     public LatLng position;
 
     @JsonField
@@ -51,22 +64,13 @@ public class GeofenceData implements Parcelable {
         Debug.logDebug(TAG, "GeofenceData() - radius: " + radius);
     }
 
+    @Override
     public int describeContents() {
         Debug.logDebug(TAG, "describeContents()");
         return 0;
     }
 
-    public static final Parcelable.Creator<GeofenceData> CREATOR =
-            new Parcelable.Creator<GeofenceData>() {
-                public GeofenceData createFromParcel(Parcel in) {
-                    return new GeofenceData(in);
-                }
-
-                public GeofenceData[] newArray(int size) {
-                    return new GeofenceData[size];
-                }
-            };
-
+    @Override
     public void writeToParcel(Parcel out, int flags) {
         Debug.logDebug(TAG, "writeToParcel()");
 
@@ -76,6 +80,8 @@ public class GeofenceData implements Parcelable {
         out.writeDouble(radius);
     }
 
+    //Created primarily for LoganSquare Serialization
+    //JAM TODO: Create a GeofenceDataTypeConverter class to write our own implementation
     protected GeofenceData() {
         this.name = "";
         this.position = new LatLng(0d, 0d);

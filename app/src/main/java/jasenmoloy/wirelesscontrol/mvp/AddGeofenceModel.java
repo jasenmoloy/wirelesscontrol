@@ -8,7 +8,4 @@ import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
  */
 public interface AddGeofenceModel {
     void save(GeofenceData data, OnGeofenceSaveFinishedListener listener);
-
-    void onCreate();
-    void onDestroy();
 }

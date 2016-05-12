@@ -1,5 +1,6 @@
 package jasenmoloy.wirelesscontrol.mvp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
@@ -12,4 +13,8 @@ public interface MainView {
     void checkPermissions();
 
     void onCardDataLoaded(List<GeofenceData> cardData);
+
+    void loadGeofenceCards(ArrayList<GeofenceData> geofenceData);
+
+    void unloadGeofenceCards();
 }

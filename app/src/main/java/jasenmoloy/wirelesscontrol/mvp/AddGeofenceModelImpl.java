@@ -34,6 +34,7 @@ public class AddGeofenceModelImpl implements AddGeofenceModel {
         mContext = context;
     }
 
+    @Override
     public void save(GeofenceData data, OnGeofenceSaveFinishedListener listener) {
         Debug.logVerbose(TAG, "GeofenceData data.name: " + data.name);
         Debug.logVerbose(TAG, "GeofenceData data.lat:" + data.position.latitude + " data.long:" + data.position.longitude);
@@ -46,14 +47,6 @@ public class AddGeofenceModelImpl implements AddGeofenceModel {
         intentBundle.putParcelable(Constants.BROADCAST_EXTRA_KEY_GEODATA, data);
         intent.putExtras(intentBundle);
         lbm.sendBroadcast(intent);
-    }
-
-    public void onCreate() {
-
-    }
-
-    public void onDestroy() {
-
     }
 
     /// ----------------------

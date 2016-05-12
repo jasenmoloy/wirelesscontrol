@@ -9,12 +9,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
+import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
 
 /**
  * Created by jasenmoloy on 5/10/16.
@@ -35,7 +37,7 @@ public class GeofenceDataManager {
     class LoadTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... params) {
-            File f = new File(params[0]);
+            File f = new File(mContext.getFilesDir() + "/" + params[0]);
 
             //If the file does not exist, send an empty string as we have no data to load yet.
             if(!f.exists()) {
@@ -66,30 +68,72 @@ public class GeofenceDataManager {
 
         @Override
         protected void onPostExecute(String jsonData) {
+            if(mLoadListener == null)
+                return;
+
             if(jsonData != null) {
                 //JAM if we have a string, then we have data to serialize
                 if(jsonData.length() > 0) {
                     try {
-                        LoganSquare.parseList(jsonData, mGeofenceData.getClass());
+                        mGeofenceData = (ArrayList<GeofenceData>) LoganSquare.parseList(jsonData, GeofenceData.class);
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
 
-                mListener.onGeofenceDataLoadSuccess(mGeofenceData);
+                mLoadListener.onGeofenceDataLoadSuccess(mGeofenceData);
             }
             else {
-                mListener.onGeofenceDataLoadError();
+                mLoadListener.onGeofenceDataLoadError();
             }
 
-            mListener = null;
+            mLoadListener = null;
+        }
+    }
+
+    class SaveTask extends AsyncTask<String, Void, Integer> {
+        @Override
+        protected Integer doInBackground(String... params) {
+            try {
+                FileOutputStream outputStream = mContext.openFileOutput(params[0], Context.MODE_PRIVATE);
+                FileWriter writer = new FileWriter(outputStream.getFD());
+                String jsonData = LoganSquare.serialize(mGeofenceData, GeofenceData.class);
+
+                writer.write(jsonData);
+                writer.flush();
+                writer.close();
+
+                return jsonData.length();
+            }
+            catch(Exception ex) {
+                ex.printStackTrace();
+
+            }
+
+            return -1;
+        }
+
+        @Override
+        protected void onPostExecute(Integer bytesSaved) {
+            if(mSaveListener == null)
+                return;
+
+            if(bytesSaved > 0) {
+                mSaveListener.onGeofenceSaveSuccess();
+            }
+            else {
+                mSaveListener.onGeofenceSaveError();
+            }
+
+            mSaveListener = null;
         }
     }
 
     Context mContext;
     ArrayList<GeofenceData> mGeofenceData;
 
-    OnGeofenceDataLoadFinishedListener mListener;
+    OnGeofenceDataLoadFinishedListener mLoadListener;
+    OnGeofenceSaveFinishedListener mSaveListener;
 
     /// ----------------------
     /// Getters / Setters
@@ -104,29 +148,23 @@ public class GeofenceDataManager {
         mGeofenceData = new ArrayList<>();
     }
 
-    public void addGeofence(GeofenceData data) {
+    public void addGeofence(GeofenceData data, OnGeofenceSaveFinishedListener listener) {
+        mSaveListener = listener;
         mGeofenceData.add(data);
+        new SaveTask().execute(getGeofenceDataFilename());
     }
 
-    public void addGeofence(List<GeofenceData> data) {
+    public void addGeofence(List<GeofenceData> data, OnGeofenceSaveFinishedListener listener) {
+        mSaveListener = listener;
         for(GeofenceData geofence : data) {
             mGeofenceData.add(geofence);
         }
+        new SaveTask().execute(getGeofenceDataFilename());
     }
 
-    public void save() {
-        try {
-            FileOutputStream outputStream = mContext.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            LoganSquare.serialize(mGeofenceData, outputStream);
-        }
-        catch(Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void load(OnGeofenceDataLoadFinishedListener listener) {
-        mListener = listener;
-        new LoadTask().execute(getGeofenceDataFilePath());
+    public void loadSavedGeofences(OnGeofenceDataLoadFinishedListener listener) {
+        mLoadListener = listener;
+        new LoadTask().execute(getGeofenceDataFilename());
     }
 
     /// ----------------------
@@ -137,8 +175,8 @@ public class GeofenceDataManager {
     /// Private Methods
     /// ----------------------
 
-    private String getGeofenceDataFilePath() {
-        return mContext.getFilesDir() + "/" +  FILENAME + ".json";
+    private String getGeofenceDataFilename() {
+            return FILENAME + ".json";
     }
 
 }

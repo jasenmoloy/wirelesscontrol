@@ -67,6 +67,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     /// Callback Methods
     /// ----------------------
 
+    @Override
     public void onCameraChange(CameraPosition cameraPos) {
         UpdateGeofenceMarker(cameraPos.target);
     }
@@ -93,12 +94,14 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         mMap.snapshot(this);
     }
 
+    @Override
     public void onGeofenceSaveSuccess() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
         startActivity(intent);
     }
 
+    @Override
     public void onGeofenceSaveError() {
         Debug.logWarn(TAG, "onGeofenceSaveError() - Called but not implemented!");
 
@@ -131,6 +134,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         }
     }
 
+    @Override
     public void onSnapshotReady(Bitmap map) {
         if(map == null) {
             //JAM Enable your location again

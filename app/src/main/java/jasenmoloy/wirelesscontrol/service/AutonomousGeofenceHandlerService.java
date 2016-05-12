@@ -16,14 +16,14 @@ import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
+import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
 import jasenmoloy.wirelesscontrol.managers.GeofenceDataManager;
 import jasenmoloy.wirelesscontrol.managers.LocationServicesManager;
-import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;
 
 /**
  * Created by jasenmoloy on 3/14/16.
  */
-public class AutonomousGeofenceHandlerService extends Service implements OnGeofenceDataLoadFinishedListener {
+public class AutonomousGeofenceHandlerService extends Service implements OnGeofenceDataLoadFinishedListener, OnGeofenceSaveFinishedListener {
     /// ----------------------
     /// Class Fields
     /// ----------------------
@@ -52,6 +52,7 @@ public class AutonomousGeofenceHandlerService extends Service implements OnGeofe
             return intentFilter;
         }
 
+        @Override
         public void onReceive(Context context, Intent intent) {
             Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
 
@@ -65,8 +66,9 @@ public class AutonomousGeofenceHandlerService extends Service implements OnGeofe
                     initializeLocationServices();
                     break;
                 case Constants.BROADCAST_ACTION_SAVE_GEOFENCE:
-                    GeofenceData geofence = intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
-                    mLocationServices.sendGeofenceData(geofence);
+                    mNewGeofence = intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
+                    mGeofenceDataManager.addGeofence(mNewGeofence, AutonomousGeofenceHandlerService.this);
+                    mLocationServices.sendGeofenceData(mNewGeofence);
                     break;
 
             }
@@ -80,6 +82,9 @@ public class AutonomousGeofenceHandlerService extends Service implements OnGeofe
     ResponseReceiver mReceiver;
     LocationServicesManager mLocationServices;
     GeofenceDataManager mGeofenceDataManager;
+
+    //JAM TODO Find a better way to handle this
+    GeofenceData mNewGeofence;
 
     /// ----------------------
     /// Getters / Setters
@@ -124,18 +129,24 @@ public class AutonomousGeofenceHandlerService extends Service implements OnGeofe
         return new ServiceBinder();
     }
 
-    public void onGeofenceDataLoadError() {
-        //JAM TODO: Send a message and pass in no geofence data.
+    @Override
+    public void onGeofenceDataLoadSuccess(ArrayList<GeofenceData> geofenceData) {
+        sendGeofenceLoadBroadcast(geofenceData);
     }
 
-    public void onGeofenceDataLoadSuccess(ArrayList<GeofenceData> geofenceData) {
-        //Let the service know to set up geofences to track
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        Intent intent = new Intent(Constants.BROADCAST_ACTION_GEODATA_LOADED);
-        Bundle intentBundle = new Bundle();
-        intentBundle.putParcelableArrayList(Constants.BROADCAST_EXTRA_KEY_GEODATA, geofenceData);
-        intent.putExtras(intentBundle);
-        lbm.sendBroadcast(intent);
+    @Override
+    public void onGeofenceDataLoadError() {
+        sendGeofenceLoadBroadcast(null);
+    }
+
+    @Override
+    public void onGeofenceSaveSuccess() {
+        sendGeofenceSaveBroadcast(true);
+    }
+
+    @Override
+    public void onGeofenceSaveError() {
+        sendGeofenceSaveBroadcast(false);
     }
 
     /// ----------------------
@@ -159,11 +170,33 @@ public class AutonomousGeofenceHandlerService extends Service implements OnGeofe
     }
 
     private void loadGeofenceData() {
-        mGeofenceDataManager.load(this);
+        mGeofenceDataManager.loadSavedGeofences(this);
     }
 
     private void sendBroadcast(String action) {
         Intent intent = new Intent(action);
         LocalBroadcastManager.getInstance(AutonomousGeofenceHandlerService.this).sendBroadcast(intent);
+    }
+
+    private void sendGeofenceLoadBroadcast(ArrayList<GeofenceData> geofenceData) {
+        //Let the service know to set up geofences to track
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        Intent intent = new Intent(Constants.BROADCAST_ACTION_GEODATA_LOADED);
+        Bundle intentBundle = new Bundle();
+        intentBundle.putParcelableArrayList(Constants.BROADCAST_EXTRA_KEY_GEODATA, geofenceData);
+        intent.putExtras(intentBundle);
+        lbm.sendBroadcast(intent);
+    }
+
+    private void sendGeofenceSaveBroadcast(boolean success) {
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        Intent intent = new Intent(Constants.BROADCAST_ACTION_GEOFENCE_SAVED);
+        Bundle intentBundle = new Bundle();
+        intentBundle.putBoolean(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, success);
+        intentBundle.putParcelable(Constants.BROADCAST_EXTRA_KEY_GEODATA, mNewGeofence);
+        intent.putExtras(intentBundle);
+        lbm.sendBroadcast(intent);
+
+        mNewGeofence = null;
     }
 }

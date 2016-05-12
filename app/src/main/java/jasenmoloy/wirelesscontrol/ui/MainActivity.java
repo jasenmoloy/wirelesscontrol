@@ -146,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
      * Loads the recyclerView's cards with the loaded geofence data
      * @param geofenceData Saved Geofence data created by the user
      */
+    @Override
     public void onCardDataLoaded(List<GeofenceData> geofenceData) {
         Debug.logVerbose(TAG, "cardData.length:" + geofenceData.size());
 
@@ -154,12 +155,24 @@ public class MainActivity extends AppCompatActivity implements MainView {
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    @Override
+    public void loadGeofenceCards(ArrayList<GeofenceData> geofenceData) {
+        //JAM TODO: Load all geofence cards
+    }
+
+    @Override
+    public void unloadGeofenceCards() {
+        //JAM TODO: Unload the adapter to relieve resources
+    }
+
     /// ----------------------
     /// Protected Methods
     /// ----------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Debug.logDebug(TAG, "JAM - onCreate()");
+
         super.onCreate(savedInstanceState);
 
         //Init fields
@@ -204,32 +217,36 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     protected void onStart() {
         super.onStart();
-        //Stubbed
+        Debug.logDebug(TAG, "JAM - onStart()");
+        mPresenter.onActivityStarted(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.onResume();
+        Debug.logDebug(TAG, "JAM - onResume()");
+        mPresenter.onActivityResumed(this);
     }
 
     @Override
     protected void onPause() {
-        //Stubbed
+        mPresenter.onActivityPaused(this);
+        Debug.logDebug(TAG, "JAM - onPause()");
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        //Stubbed
+        mPresenter.onActivityStopped(this);
+        Debug.logDebug(TAG, "JAM - onStop()");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
         unbindService(mServiceConnection);
-
-        mPresenter.onDestroy();
+        Debug.logDebug(TAG, "JAM - onDestroy()");
+        mPresenter.onActivityDestroyed(this);
         super.onDestroy();
     }
 

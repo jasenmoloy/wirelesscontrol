@@ -1,5 +1,6 @@
 package jasenmoloy.wirelesscontrol.mvp;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -28,35 +29,39 @@ public class MainPresenterImpl implements MainPresenter {
     public class ResponseReceiver extends BroadcastReceiver {
         private static final String TAG = "MainPresenterImpl.ResponseReceiver";
 
-        // Prevents instantiation
-        private ResponseReceiver() {
-
-        }
-
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
-            intentFilter.addAction(Constants.BROADCAST_ACTION_SAVE_GEOFENCE);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_SAVED);
             return intentFilter;
         }
 
+        @Override
         public void onReceive(Context context, Intent intent) {
             Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_GEODATA_LOADED:
                     ArrayList<GeofenceData> geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
+                    mModel.addGeofence(geoData);
                     reloadGeofenceData(geoData);
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSION_REQUESTED:
                     mView.checkPermissions();
-                case Constants.BROADCAST_ACTION_SAVE_GEOFENCE:
-                    GeofenceData geofence = intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
-                    mModel.addGeofence(geofence);
-                    reloadGeofenceData(mModel.getGeofenceData());
+                    break;
+                case Constants.BROADCAST_ACTION_GEOFENCE_SAVED:
+                    if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) ) {
+                        mModel.addGeofence((GeofenceData) intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA));
+                        reloadGeofenceData(mModel.getGeofenceData());
+                    }
                     break;
             }
+        }
+
+        // Prevents instantiation
+        private ResponseReceiver() {
+
         }
     }
 
@@ -83,6 +88,7 @@ public class MainPresenterImpl implements MainPresenter {
         mContext = context;
     }
 
+    @Override
     public void registerReceiver(LocalBroadcastManager broadcastManager) {
         mBroadcastManager = broadcastManager;
         mBroadcastManager.registerReceiver(mReceiver, mReceiver.buildIntentFilter());
@@ -92,25 +98,57 @@ public class MainPresenterImpl implements MainPresenter {
     /// Callback Methods
     /// ----------------------
 
-    public void onResume() {
+    @Override
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+
+    }
+
+    @Override
+    public void onActivityStarted(Activity activity) {
+        //JAM TODO: Issue with this as the activity will current start before the card data is loaded.
+        //mView.loadGeofenceCards(mModel.getGeofenceData());
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
         Debug.logDebug(TAG, "JAM - onResume()");
     }
 
-    public void onDestroy() {
+    @Override
+    public void onActivityPaused(Activity activity) {
+
+    }
+
+    @Override
+    public void onActivityStopped(Activity activity) {
+        //JAM TODO: Issue with this as the activity will current start before the card data is loaded so unloading it will cause problems.
+        //mView.unloadGeofenceCards();
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+    }
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
         Debug.logDebug(TAG, "JAM - onDestroy()");
 
         mBroadcastManager.unregisterReceiver(mReceiver);
         mView = null;
     }
 
+    @Override
     public void onCardClicked(int position) {
         //JAM TODO: Open up an "edit geofence" activity
     }
 
+    @Override
     public void onAllPermissionsGranted() {
         LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED));
     }
 
+    @Override
     public void onGeofenceDataLoadSuccess(ArrayList<GeofenceData> geofenceData) {
         //Let the service know to set up geofences to track
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
@@ -123,6 +161,7 @@ public class MainPresenterImpl implements MainPresenter {
         reloadGeofenceData(geofenceData);
     }
 
+    @Override
     public void onGeofenceDataLoadError() {
 
     }
