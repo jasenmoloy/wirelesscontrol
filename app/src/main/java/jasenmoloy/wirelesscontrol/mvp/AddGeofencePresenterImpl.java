@@ -80,11 +80,9 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
     }
 
     public void onCreate() {
-        mModel.onCreate();
     }
 
     public void onDestroy() {
-        mModel.onDestroy();
         mBroadcastManager.unregisterReceiver(mReceiver);
     }
 

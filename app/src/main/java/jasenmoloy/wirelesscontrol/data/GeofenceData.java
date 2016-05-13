@@ -15,7 +15,9 @@ import jasenmoloy.wirelesscontrol.debug.Debug;
  */
 @JsonObject
 public class GeofenceData implements Parcelable {
-    private static final String TAG = "GeofenceData";
+    /// ----------------------
+    /// Class Fields
+    /// ----------------------
 
     public static final Parcelable.Creator<GeofenceData> CREATOR =
             new Parcelable.Creator<GeofenceData>() {
@@ -30,6 +32,12 @@ public class GeofenceData implements Parcelable {
                 }
             };
 
+    private static final String TAG = "GeofenceData";
+
+    /// ----------------------
+    /// Object Fields
+    /// ----------------------
+
     @JsonField
     public String name;
 
@@ -39,12 +47,29 @@ public class GeofenceData implements Parcelable {
     @JsonField
     public double radius;
 
+    @JsonField
+    public String screenshotFileName;
+
     public Bitmap mapScreenshot;
+
+    /// ----------------------
+    /// Getters / Setters
+    /// ----------------------
+
+    /// ----------------------
+    /// Public Methods
+    /// ----------------------
 
     public GeofenceData(String name, LatLng pos, double radius) {
         this.name = name;
         this.position = pos;
         this.radius = radius;
+
+        //Generate filename for bitmap
+        int hashCode = (name + position.toString()).hashCode();
+
+        //Set the filename for JSON output
+        screenshotFileName = String.valueOf(hashCode) + ".png";
     }
 
     public void addBitmap(Bitmap mapScreenshot) {
@@ -79,6 +104,18 @@ public class GeofenceData implements Parcelable {
         out.writeDouble(position.longitude);
         out.writeDouble(radius);
     }
+
+    /// ----------------------
+    /// Callback Methods
+    /// ----------------------
+
+    /// ----------------------
+    /// Protected Methods
+    /// ----------------------
+
+    /// ----------------------
+    /// Private Methods
+    /// ----------------------
 
     //Created primarily for LoganSquare Serialization
     //JAM TODO: Create a GeofenceDataTypeConverter class to write our own implementation

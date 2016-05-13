@@ -1,6 +1,8 @@
 package jasenmoloy.wirelesscontrol.managers;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
 import com.bluelinelabs.logansquare.LoganSquare;
@@ -34,29 +36,48 @@ public class GeofenceDataManager {
     /// Object Fields
     /// ----------------------
 
-    class LoadTask extends AsyncTask<String, Void, String> {
+    class LoadTask extends AsyncTask<String, Void, ArrayList<GeofenceData>> {
         @Override
-        protected String doInBackground(String... params) {
+        protected ArrayList<GeofenceData> doInBackground(String... params) {
             File f = new File(mContext.getFilesDir() + "/" + params[0]);
 
-            //If the file does not exist, send an empty string as we have no data to load yet.
+            //If the file does not exist, send an empty list as we have no data to load yet.
             if(!f.exists()) {
-                return "";
+                return new ArrayList<>();
             }
 
             try {
                 StringBuffer output = new StringBuffer();
-                FileInputStream is = mContext.openFileInput(params[0]);
-                InputStreamReader inputStreamReader = new InputStreamReader(is);
+                FileInputStream inputStream = mContext.openFileInput(params[0]);
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String line;
+                ArrayList<GeofenceData> geoData;
+                Bitmap bitmap;
 
+                //Grab all JSON data
                 while((line = bufferedReader.readLine()) != null) {
                     output.append(line);
                 }
 
+                //Parse the new JSON data and assign it to a new list of GeofenceData
                 bufferedReader.close();
-                return output.toString();
+                geoData = (ArrayList<GeofenceData>) LoganSquare.parseList(output.toString(), GeofenceData.class);
+
+                //Load all bitmaps given the filenames within the JSON data
+                for(GeofenceData data : geoData) {
+                    inputStream = mContext.openFileInput(data.screenshotFileName);
+                    if((bitmap = BitmapFactory.decodeStream(inputStream)) != null) {
+                        data.addBitmap(bitmap);
+                        //Bitmap loaded successfully!
+                    }
+                    else {
+                        //Bitmap failed to load!
+                    }
+                    inputStream.close();
+                }
+
+                return geoData;
             }
             catch(Exception ex) {
                 ex.printStackTrace();
@@ -67,15 +88,15 @@ public class GeofenceDataManager {
         }
 
         @Override
-        protected void onPostExecute(String jsonData) {
+        protected void onPostExecute(ArrayList<GeofenceData> geofenceData) {
             if(mLoadListener == null)
                 return;
 
-            if(jsonData != null) {
+            if(geofenceData != null) {
                 //JAM if we have a string, then we have data to serialize
-                if(jsonData.length() > 0) {
+                if(geofenceData.size() > 0) {
                     try {
-                        mGeofenceData = (ArrayList<GeofenceData>) LoganSquare.parseList(jsonData, GeofenceData.class);
+                        mGeofenceData = geofenceData;
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -102,6 +123,19 @@ public class GeofenceDataManager {
                 writer.write(jsonData);
                 writer.flush();
                 writer.close();
+
+                //Save out all bitmaps to files for future retrieving
+                for(GeofenceData data : mGeofenceData) {
+                    outputStream = mContext.openFileOutput(data.screenshotFileName, Context.MODE_PRIVATE);
+                    if(data.mapScreenshot.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
+                        //JAM TODO: Report Success!
+                    }
+                    else {
+                        //JAM TODO: Report Failure!
+                    }
+                    outputStream.close();
+                }
+
 
                 return jsonData.length();
             }

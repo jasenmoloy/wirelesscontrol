@@ -3,7 +3,6 @@ package jasenmoloy.wirelesscontrol.data;
 import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
