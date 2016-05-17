@@ -105,7 +105,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
         }
     }
 
-    public void sendGeofenceData(ArrayList<GeofenceData> data) {
+    public void initGeofenceData(ArrayList<GeofenceData> data) {
         Debug.logDebug(TAG, "sendGeofenceData() --- data.size():" + data.size());
 
         //Don't add any data if it's empty or doesn't exist.
@@ -113,7 +113,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
             return;
 
         if(mGoogleApiClient.isConnected())
-            mGeofenceManager.addGeofences(data);
+            mGeofenceManager.initGeofences(data);
         else
             tempData = data;
     }
@@ -127,6 +127,20 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
 
         if(mGoogleApiClient.isConnected())
             mGeofenceManager.addGeofence(data);
+        else
+            Debug.logError(TAG, "Google API Client has not been connected yet! Disregarding geofence!");
+    }
+
+    public void updateGeofenceData(int id, GeofenceData data) {
+        Debug.logDebug(TAG, "updateGeofenceData() --- data.id: " + id + " data.name:" + data.name);
+
+        //JAM Don't add data if it doesn't exist
+        if(id < 0 || data == null)
+            return;
+
+        if(mGoogleApiClient.isConnected()) {
+            mGeofenceManager.updateGeofence(id, data);
+        }
         else
             Debug.logError(TAG, "Google API Client has not been connected yet! Disregarding geofence!");
     }

@@ -34,6 +34,7 @@ public class MainPresenterImpl implements MainPresenter {
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_SAVED);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_UPDATED);
             return intentFilter;
         }
 
@@ -53,6 +54,11 @@ public class MainPresenterImpl implements MainPresenter {
                 case Constants.BROADCAST_ACTION_GEOFENCE_SAVED:
                     if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) ) {
                         mModel.addGeofence((GeofenceData) intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA));
+                        reloadGeofenceData(mModel.getGeofenceData());
+                    }
+                case Constants.BROADCAST_ACTION_GEOFENCE_UPDATED:
+                    if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) ) {
+                        mModel.updateGeofence(intent.getIntExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, -1), (GeofenceData) intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA));
                         reloadGeofenceData(mModel.getGeofenceData());
                     }
                     break;

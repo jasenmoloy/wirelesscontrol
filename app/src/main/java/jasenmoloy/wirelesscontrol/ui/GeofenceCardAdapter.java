@@ -41,7 +41,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
             super(v);
         }
 
-        abstract void setCard(GeofenceData data);
+        abstract void setCard(int position, GeofenceData data);
 
         abstract void onViewRecycled();
     }
@@ -54,14 +54,14 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         boolean mIsCardRecycled;
 
         //UI Elements
-        private CardView mCardView;
+        private GeofenceCardView mCardView;
         private GoogleMap mMap;
         private MapView mMapView;
         private TextView mName;
         private TextView mLocation;
         private TextView mRadius;
 
-        public ViewHolderGoogleMap(CardView v) {
+        public ViewHolderGoogleMap(GeofenceCardView v) {
             super(v);
             mCardView = v;
             mMap = null;
@@ -81,7 +81,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
             mIsCardRecycled = true;
         }
 
-        public void setCard(GeofenceData data) {
+        public void setCard(int position, GeofenceData data) {
             mName.setText(data.name);
 
             mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f",
@@ -168,13 +168,13 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
     }
 
     public class ViewHolderBitmap extends GeofenceCardAdapter.ViewHolder {
-        private CardView mCardView;
+        private GeofenceCardView mCardView;
         private ImageView mImageView;
         private TextView mName;
         private TextView mLocation;
         private TextView mRadius;
 
-        public ViewHolderBitmap(CardView v) {
+        public ViewHolderBitmap(GeofenceCardView v) {
             super(v);
             mCardView = v;
 
@@ -185,10 +185,13 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         }
 
         public void onViewRecycled() {
-
+            mCardView.setData(-1, null);
         }
 
-        public void setCard(GeofenceData data) {
+        public void setCard(int position, GeofenceData data) {
+            //Set the new data on the CardView
+            mCardView.setData(position, data);
+
             mName.setText(data.name);
 
             mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f",
@@ -258,13 +261,13 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
      */
     @Override
     public GeofenceCardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType ) {
-        CardView cardView;
+        GeofenceCardView cardView;
         ViewHolder vh;
 
         switch(viewType) {
             case VIEWTYPE_BITMAP:
                 //create a new view
-                cardView = (CardView) LayoutInflater.from(parent.getContext())
+                cardView = (GeofenceCardView) LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.card_geofenceimage, parent, false);
 
                 //Create and set the view holder container
@@ -273,7 +276,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
             case VIEWTYPE_GOOGLEMAP:
             default:
                 //create a new view
-                cardView = (CardView) LayoutInflater.from(parent.getContext())
+                cardView = (GeofenceCardView) LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.card_geofence, parent, false);
 
                 //Create the view holder container
@@ -298,7 +301,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.setCard(mDataset.get(position));
+        holder.setCard(position, mDataset.get(position));
     }
 
     /**

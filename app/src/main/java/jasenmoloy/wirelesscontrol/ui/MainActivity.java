@@ -204,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), AddGeofenceActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
                 startActivity(intent);
             }
         });

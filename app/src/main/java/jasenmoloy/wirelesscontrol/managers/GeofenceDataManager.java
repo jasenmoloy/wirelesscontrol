@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
+import jasenmoloy.wirelesscontrol.io.OnGeofenceDataUpdateFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
 
 /**
@@ -27,6 +29,8 @@ public class GeofenceDataManager {
     /// ----------------------
     /// Class Fields
     /// ----------------------
+
+    private static final String TAG = "GeofenceDataManager";
 
     //JAM TODO Move to resources file
     private static final String FILENAME = "GeofenceData";
@@ -66,6 +70,11 @@ public class GeofenceDataManager {
 
                 //Load all bitmaps given the filenames within the JSON data
                 for(GeofenceData data : geoData) {
+                    if(data.screenshotFileName == null) { //JAM TODO: Skip this screenshot if it doesn't exist...for now
+                        Debug.logError(TAG, "screenshotFileName is NULL for " + data.name + "! Can't load an approparite bitmap.");
+                        continue;
+                    }
+
                     inputStream = mContext.openFileInput(data.screenshotFileName);
                     if((bitmap = BitmapFactory.decodeStream(inputStream)) != null) {
                         data.addBitmap(bitmap);
@@ -126,6 +135,11 @@ public class GeofenceDataManager {
 
                 //Save out all bitmaps to files for future retrieving
                 for(GeofenceData data : mGeofenceData) {
+                    if(data.screenshotFileName == null) { //JAM TODO: Skip this screenshot save if it doesn't exist...for now.
+                        Debug.logError(TAG, "screenshotFileName is NULL for " + data.name + "! Can't save an approparite bitmap!");
+                        continue;
+                    }
+
                     outputStream = mContext.openFileOutput(data.screenshotFileName, Context.MODE_PRIVATE);
                     if(data.mapScreenshot.compress(Bitmap.CompressFormat.PNG, 100, outputStream)) {
                         //JAM TODO: Report Success!
@@ -149,17 +163,26 @@ public class GeofenceDataManager {
 
         @Override
         protected void onPostExecute(Integer bytesSaved) {
-            if(mSaveListener == null)
-                return;
+            if(mSaveListener != null) {
+                if (bytesSaved > 0) {
+                    mSaveListener.onGeofenceSaveSuccess();
+                } else {
+                    mSaveListener.onGeofenceSaveError();
+                }
 
-            if(bytesSaved > 0) {
-                mSaveListener.onGeofenceSaveSuccess();
-            }
-            else {
-                mSaveListener.onGeofenceSaveError();
+                mSaveListener = null;
             }
 
-            mSaveListener = null;
+            if(mUpdateListener != null) {
+                if (bytesSaved > 0) {
+                    mUpdateListener.onGeofenceDataUpdateSuccess(mUpdatePosition, mGeofenceData.get(mUpdatePosition));
+                } else {
+                    mUpdateListener.onGeofenceDataUpdateError();
+                }
+
+                mUpdateListener = null;
+                mUpdatePosition = -1;
+            }
         }
     }
 
@@ -168,6 +191,9 @@ public class GeofenceDataManager {
 
     OnGeofenceDataLoadFinishedListener mLoadListener;
     OnGeofenceSaveFinishedListener mSaveListener;
+
+    OnGeofenceDataUpdateFinishedListener mUpdateListener;
+    int mUpdatePosition;
 
     /// ----------------------
     /// Getters / Setters
@@ -193,6 +219,13 @@ public class GeofenceDataManager {
         for(GeofenceData geofence : data) {
             mGeofenceData.add(geofence);
         }
+        new SaveTask().execute(getGeofenceDataFilename());
+    }
+
+    public void updateGeofence(int id, GeofenceData updateData, OnGeofenceDataUpdateFinishedListener listener) {
+        mUpdateListener = listener;
+        mUpdatePosition = id;
+        mGeofenceData.set(id, updateData);
         new SaveTask().execute(getGeofenceDataFilename());
     }
 

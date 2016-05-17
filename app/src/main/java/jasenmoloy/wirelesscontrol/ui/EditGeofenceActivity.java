@@ -1,9 +1,6 @@
 package jasenmoloy.wirelesscontrol.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -11,7 +8,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -20,6 +16,7 @@ import android.widget.EditText;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,22 +24,26 @@ import com.google.android.gms.maps.model.LatLng;
 import junit.framework.Assert;
 
 import jasenmoloy.wirelesscontrol.R;
+import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
-import jasenmoloy.wirelesscontrol.mvp.AddGeofencePresenter;
-import jasenmoloy.wirelesscontrol.mvp.AddGeofencePresenterImpl;
-import jasenmoloy.wirelesscontrol.mvp.AddGeofenceView;
+import jasenmoloy.wirelesscontrol.mvp.EditGeofencePresenter;
+import jasenmoloy.wirelesscontrol.mvp.EditGeofencePresenterImpl;
+import jasenmoloy.wirelesscontrol.mvp.EditGeofenceView;
 
 /**
- * Created by jasenmoloy on 2/17/16.
+ * Created by jasenmoloy on 5/13/16.
  */
-public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenceView, GoogleMap.SnapshotReadyCallback {
+public class EditGeofenceActivity extends AppCompatActivity implements
+        EditGeofenceView, GoogleMap.SnapshotReadyCallback, OnMapReadyCallback,
+        GoogleMap.OnCameraChangeListener {
+
     /// ----------------------
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "AddGeofenceActivity";
-    private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1;
+    private static final String TAG = "EditGeofenceActivity";
+    private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1; //JAM TODO: Fix this!
 
     /// ----------------------
     /// Object Fields
@@ -55,9 +56,14 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     private GeofenceMarker mGeofence;
     private EditText mGeofenceName;
 
-    private AddGeofencePresenter mPresenter;
+    private EditGeofencePresenter mPresenter;
 
+    private int mGeofenceSaveId;
     private GeofenceData mGeofenceSaveData;
+
+    /// ----------------------
+    /// Getters / Setters
+    /// ----------------------
 
     /// ----------------------
     /// Public Methods
@@ -95,14 +101,14 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     }
 
     @Override
-    public void onGeofenceSaveSuccess() {
+    public void onSaveSuccess() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
         startActivity(intent);
     }
 
     @Override
-    public void onGeofenceSaveError() {
+    public void onSaveFailure() {
         Debug.logWarn(TAG, "onGeofenceSaveError() - Called but not implemented!");
 
         //Notify the user that an error has occurred
@@ -115,10 +121,10 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        //Initialize map to begin in Los Angeles to start.
-        mMap.animateCamera(
+        //Initialize map to focus in on existing location
+        mMap.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(34.0500, -118.2500), mMap.getMaxZoomLevel() * 0.6f)
+                        mGeofenceSaveData.position, mMap.getMaxZoomLevel() * 0.6f)
         );
 
         //Initialize new geofence marker that will be placed
@@ -145,7 +151,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
                 Debug.logError(TAG, secEx.getMessage());
             }
 
-            onGeofenceSaveError();
+            onSaveFailure();
             return;
         }
 
@@ -153,7 +159,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         mGeofenceSaveData.addBitmap(map);
 
         //Let presenter know we're ready to save the data
-        mPresenter.saveGeofence(mGeofenceSaveData);
+        mPresenter.saveGeofence(mGeofenceSaveId, mGeofenceSaveData);
         mGeofenceSaveData = null;
     }
 
@@ -164,6 +170,14 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Grab the intent that started us and get the GeofenceData we intend to edit
+        Intent intent = getIntent();
+        mGeofenceSaveId = intent.getIntExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, -1);
+        mGeofenceSaveData = intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
+
+        Assert.assertTrue(mGeofenceSaveId >= 0); //ID needs to be within range to properly update
+        Assert.assertNotNull(mGeofenceSaveData); //Make sure we actually have some data to update
 
         //Set up the activity's view
         setContentView(R.layout.activity_addgeofence);
@@ -184,39 +198,40 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
                 .findFragmentById(R.id.addgeofence_geofencemap);
         mapFragment.getMapAsync(this);
 
+        //Fill in all the info form the existing Geofence.
+        mGeofenceName.setText(mGeofenceSaveData.name);
 
-        mPresenter = new AddGeofencePresenterImpl(this, this);
-        mPresenter.onCreate();
-        mPresenter.registerReceiver(LocalBroadcastManager.getInstance(this));
+        mPresenter = new EditGeofencePresenterImpl(this, this);
+        mPresenter.onActivityCreated(this, savedInstanceState);
     }
 
     @Override
     protected void onStart() {
-        //Stubbed
+        mPresenter.onActivityStarted(this);
         super.onStart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //Stubbed
+        mPresenter.onActivityResumed(this);
     }
 
     @Override
     protected void onPause() {
-        //Stubbed
+        mPresenter.onActivityPaused(this);
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        //Stubbed
+        mPresenter.onActivityStopped(this);
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        mPresenter.onDestroy();
+        mPresenter.onActivityDestroyed(this);
         super.onDestroy();
     }
 
@@ -229,20 +244,11 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         try {
             mMap.setMyLocationEnabled(true);
 
+            //Get the user's current position
             if( mLocationManager == null ) {
                 mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
                 mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
-
-            //Get the user's current position
-            LatLng currentPos = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentPos, mMap.getMaxZoomLevel() * 0.8f);
-
-            //Update the marker to that position before the users see the map animation
-            UpdateGeofenceMarker(currentPos);
-
-            //Update the camera to point to where the user is located and zoom in a bit.
-            mMap.animateCamera(cameraUpdate);
         }
         catch(SecurityException secEx) {
             //TODO Request permissions to access the user's location.

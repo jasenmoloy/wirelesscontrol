@@ -59,6 +59,11 @@ public class MainModelImpl implements MainModel {
         mGeofenceData.addAll(data);
     }
 
+    @Override
+    public void updateGeofence(int id, GeofenceData newData) {
+        mGeofenceData.set(id, newData);
+    }
+
     /// ----------------------
     /// Callback Methods
     /// ----------------------

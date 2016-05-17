@@ -12,5 +12,6 @@ import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
 public interface MainModel {
     void addGeofence(GeofenceData data);
     void addGeofence(List<GeofenceData> data);
+    void updateGeofence(int id, GeofenceData newData);
     ArrayList<GeofenceData> getGeofenceData();
 }

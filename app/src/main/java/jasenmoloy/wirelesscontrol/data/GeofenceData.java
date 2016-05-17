@@ -83,6 +83,7 @@ public class GeofenceData implements Parcelable {
         name = in.readString();
         position = new LatLng(in.readDouble(), in.readDouble());
         radius = in.readDouble();
+        screenshotFileName = in.readString();
 
         Debug.logDebug(TAG, "GeofenceData() - name: " + name);
         Debug.logDebug(TAG, "GeofenceData() - position: " + position);
@@ -103,6 +104,7 @@ public class GeofenceData implements Parcelable {
         out.writeDouble(position.latitude);
         out.writeDouble(position.longitude);
         out.writeDouble(radius);
+        out.writeString(screenshotFileName);
     }
 
     /// ----------------------
@@ -123,5 +125,6 @@ public class GeofenceData implements Parcelable {
         this.name = "";
         this.position = new LatLng(0d, 0d);
         this.radius = 0;
+        this.screenshotFileName = "";
     }
 }

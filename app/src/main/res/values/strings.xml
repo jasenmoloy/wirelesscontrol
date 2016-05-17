@@ -20,6 +20,10 @@
     <string name="title_geofence_default_name">Name (e.g. Home)</string>
     <string name="text_addgeofence_savebutton">Save</string>
 
+    <!-- Edit Geofence Activity -->
+    <string name="title_activity_editgeofence">Edit Geofence</string>
+    <string name="text_editgeofence_savebutton">Save</string>
+
     <!-- Geofence Map Fragment -->
     <string name="title_fragment_geofence_map">Geofence Map</string>
 

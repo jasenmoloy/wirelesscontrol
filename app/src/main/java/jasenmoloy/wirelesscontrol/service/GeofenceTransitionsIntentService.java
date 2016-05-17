@@ -63,6 +63,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
         Debug.logVerbose(TAG, "--- onHandleIntent() ---");
 
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
+        
         if (geofencingEvent.hasError()) {
             String errorMessage = ErrorMessages.getGeofenceErrorString(this,
                     geofencingEvent.getErrorCode());

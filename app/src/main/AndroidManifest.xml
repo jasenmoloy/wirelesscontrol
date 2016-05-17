@@ -64,6 +64,25 @@
                 android:value=".ui.MainActivity" />
         </activity>
 
+        <!-- Edit Geofence Activity -->
+        <activity
+            android:name=".ui.EditGeofenceActivity"
+            android:label="@string/title_activity_editgeofence"
+            android:parentActivityName=".ui.MainActivity"
+            android:screenOrientation="sensorPortrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MANAGE_NETWORK_USAGE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- Parent activity meta-data to support 4.0 (14) and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.MainActivity" />
+        </activity>
+
         <!-- Settings Activity -->
         <activity
             android:name=".ui.SettingsActivity"

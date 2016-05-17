@@ -16,6 +16,7 @@ import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
+import jasenmoloy.wirelesscontrol.io.OnGeofenceDataUpdateFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
 import jasenmoloy.wirelesscontrol.managers.GeofenceDataManager;
 import jasenmoloy.wirelesscontrol.managers.LocationServicesManager;
@@ -23,7 +24,8 @@ import jasenmoloy.wirelesscontrol.managers.LocationServicesManager;
 /**
  * Created by jasenmoloy on 3/14/16.
  */
-public class AutonomousGeofenceHandlerService extends Service implements OnGeofenceDataLoadFinishedListener, OnGeofenceSaveFinishedListener {
+public class AutonomousGeofenceHandlerService extends Service implements
+        OnGeofenceDataLoadFinishedListener, OnGeofenceSaveFinishedListener {
     /// ----------------------
     /// Class Fields
     /// ----------------------
@@ -49,6 +51,7 @@ public class AutonomousGeofenceHandlerService extends Service implements OnGeofe
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_SAVE_GEOFENCE);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_UPDATE_GEOFENCE);
             return intentFilter;
         }
 
@@ -60,7 +63,7 @@ public class AutonomousGeofenceHandlerService extends Service implements OnGeofe
                 case Constants.BROADCAST_ACTION_GEODATA_LOADED:
                     mLocationServices.performLocationServices();
                     ArrayList<GeofenceData> geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
-                    mLocationServices.sendGeofenceData(geoData);
+                    mLocationServices.initGeofenceData(geoData);
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED:
                     initializeLocationServices();
@@ -70,7 +73,36 @@ public class AutonomousGeofenceHandlerService extends Service implements OnGeofe
                     mGeofenceDataManager.addGeofence(mNewGeofence, AutonomousGeofenceHandlerService.this);
                     mLocationServices.sendGeofenceData(mNewGeofence);
                     break;
+                case Constants.BROADCAST_ACTION_UPDATE_GEOFENCE:
+                    int id = intent.getIntExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, -1);
+                    GeofenceData updateData = intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
 
+                    mGeofenceDataManager.updateGeofence(id, updateData, new OnGeofenceDataUpdateFinishedListener() {
+                        @Override
+                        public void onGeofenceDataUpdateError() {
+                            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(AutonomousGeofenceHandlerService.this);
+                            Intent intent = new Intent(Constants.BROADCAST_ACTION_GEOFENCE_UPDATED);
+                            Bundle intentBundle = new Bundle();
+                            intentBundle.putBoolean(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false);
+                            intent.putExtras(intentBundle);
+                            lbm.sendBroadcast(intent);
+                        }
+
+                        @Override
+                        public void onGeofenceDataUpdateSuccess(int position, GeofenceData updatedGeofence) {
+                            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(AutonomousGeofenceHandlerService.this);
+                            Intent intent = new Intent(Constants.BROADCAST_ACTION_GEOFENCE_UPDATED);
+                            Bundle intentBundle = new Bundle();
+                            intentBundle.putBoolean(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, true);
+                            intentBundle.putInt(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, position);
+                            intentBundle.putParcelable(Constants.BROADCAST_EXTRA_KEY_GEODATA, updatedGeofence);
+                            intent.putExtras(intentBundle);
+                            lbm.sendBroadcast(intent);
+                        }
+                    });
+
+                    mLocationServices.updateGeofenceData(id, updateData);
+                    break;
             }
         }
     }
