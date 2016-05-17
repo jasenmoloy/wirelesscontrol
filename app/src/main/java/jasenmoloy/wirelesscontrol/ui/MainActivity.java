@@ -57,16 +57,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mService = ((AutonomousGeofenceHandlerService.ServiceBinder)service).getService();
-
-            //Check for permissions now that the service is connected.
-            //This will inform the service "down the road" "we're good to go in initializing location services.
-            checkPermissions();
+            //Stubbed
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            mService = null;
+            //Stubbed
         }
     };
 
