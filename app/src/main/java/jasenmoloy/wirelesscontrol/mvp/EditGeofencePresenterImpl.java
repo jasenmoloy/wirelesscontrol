@@ -34,6 +34,7 @@ public class EditGeofencePresenterImpl implements
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_UPDATED);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_DELETED);
             return intentFilter;
         }
 
@@ -42,6 +43,12 @@ public class EditGeofencePresenterImpl implements
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_GEOFENCE_UPDATED:
+                    if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) )
+                        EditGeofencePresenterImpl.this.onGeofenceUpdateSuccess();
+                    else
+                        EditGeofencePresenterImpl.this.onGeofenceUpdateError();
+                    break;
+                case Constants.BROADCAST_ACTION_GEOFENCE_DELETED:
                     if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) )
                         EditGeofencePresenterImpl.this.onGeofenceUpdateSuccess();
                     else
@@ -76,10 +83,16 @@ public class EditGeofencePresenterImpl implements
         mReceiver = new ResponseReceiver();
     }
 
+    @Override
     public void saveGeofence(int id, GeofenceData data) {
         mModel.updateGeofence(id, data);
         //JAM TODO: Tell the model to save out the data and let me know when it's done.
         //JAM TODO: Once the model is done saving, let the view know to send the user back to the main screen.
+    }
+
+    @Override
+    public void deleteGeofence(int id) {
+        mModel.deleteGeofence(id);
     }
 
     /// ----------------------
@@ -87,12 +100,12 @@ public class EditGeofencePresenterImpl implements
     /// ----------------------
 
     public void onGeofenceUpdateSuccess() {
-        mView.onSaveSuccess();
+        mView.onEditSuccess();
     }
 
     public void onGeofenceUpdateError() {
         //JAM TODO: Determine the issue and notify the view with the appropriate action.
-        mView.onSaveFailure();
+        mView.onEditFailure();
     }
 
     @Override

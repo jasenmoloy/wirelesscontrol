@@ -35,11 +35,11 @@ public class EditGeofenceModelImpl implements EditGeofenceModel {
 
     @Override
     public void updateGeofence(int id, GeofenceData data) {
-        Debug.logVerbose(TAG, "New GeofenceData data.name: " + data.name);
-        Debug.logVerbose(TAG, "New GeofenceData data.lat:" + data.position.latitude + " data.long:" + data.position.longitude);
-        Debug.logVerbose(TAG, "New GeofenceData data.radius: " + data.radius);
+        Debug.logVerbose(TAG, "Updated GeofenceData data.name: " + data.name);
+        Debug.logVerbose(TAG, "Updated GeofenceData data.lat:" + data.position.latitude + " data.long:" + data.position.longitude);
+        Debug.logVerbose(TAG, "Updated GeofenceData data.radius: " + data.radius);
 
-        //Let the service know to set up geofences to track
+        //Let the service know to update the geofence with new information.
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
         Intent intent = new Intent(Constants.BROADCAST_ACTION_UPDATE_GEOFENCE);
         Bundle intentBundle = new Bundle();
@@ -47,6 +47,16 @@ public class EditGeofenceModelImpl implements EditGeofenceModel {
         intentBundle.putParcelable(Constants.BROADCAST_EXTRA_KEY_GEODATA, data);
         intent.putExtras(intentBundle);
         lbm.sendBroadcast(intent);
+    }
+
+    @Override
+    public void deleteGeofence(int id) {
+        //Let the service know we're deleting this geofence
+        Intent intent = new Intent(Constants.BROADCAST_ACTION_DELETE_GEOFENCE);
+        Bundle intentBundle = new Bundle();
+        intentBundle.putInt(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, id);
+        intent.putExtras(intentBundle);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     /// ----------------------

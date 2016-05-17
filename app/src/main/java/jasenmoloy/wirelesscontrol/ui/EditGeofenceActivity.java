@@ -10,10 +10,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -78,6 +79,24 @@ public class EditGeofenceActivity extends AppCompatActivity implements
         UpdateGeofenceMarker(cameraPos.target);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_edit, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.action_deletegeofence:
+                mPresenter.deleteGeofence(mGeofenceSaveId);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void onSaveButtonClick(View view) {
         mGeofenceSaveData = new GeofenceData(
                 mGeofenceName.getText().toString(),
@@ -101,14 +120,14 @@ public class EditGeofenceActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onSaveSuccess() {
+    public void onEditSuccess() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
         startActivity(intent);
     }
 
     @Override
-    public void onSaveFailure() {
+    public void onEditFailure() {
         Debug.logWarn(TAG, "onGeofenceSaveError() - Called but not implemented!");
 
         //Notify the user that an error has occurred
@@ -151,7 +170,7 @@ public class EditGeofenceActivity extends AppCompatActivity implements
                 Debug.logError(TAG, secEx.getMessage());
             }
 
-            onSaveFailure();
+            onEditFailure();
             return;
         }
 

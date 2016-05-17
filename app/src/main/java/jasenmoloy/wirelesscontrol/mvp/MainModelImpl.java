@@ -44,19 +44,20 @@ public class MainModelImpl implements MainModel {
     }
 
     @Override
+    public void initGeofences(List<GeofenceData> data) {
+        if(data == null)
+            return;
+
+        mGeofenceData.clear();
+        mGeofenceData.addAll(data);
+    }
+
+    @Override
     public void addGeofence(GeofenceData data) {
         if(data == null)
             return;
 
         mGeofenceData.add(data);
-    }
-
-    @Override
-    public void addGeofence(List<GeofenceData> data) {
-        if(data == null)
-            return;
-
-        mGeofenceData.addAll(data);
     }
 
     @Override

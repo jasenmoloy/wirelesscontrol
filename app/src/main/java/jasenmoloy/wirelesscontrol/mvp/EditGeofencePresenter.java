@@ -9,4 +9,5 @@ import jasenmoloy.wirelesscontrol.data.GeofenceData;
  */
 public interface EditGeofencePresenter extends Application.ActivityLifecycleCallbacks {
     void saveGeofence(int id, GeofenceData geofenceData);
+    void deleteGeofence(int id);
 }

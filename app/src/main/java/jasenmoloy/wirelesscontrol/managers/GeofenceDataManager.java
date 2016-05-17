@@ -212,6 +212,10 @@ public class GeofenceDataManager {
     /// Getters / Setters
     /// ----------------------
 
+    public ArrayList<GeofenceData> getGeofenceData() {
+        return mGeofenceData;
+    }
+
     /// ----------------------
     /// Public Methods
     /// ----------------------

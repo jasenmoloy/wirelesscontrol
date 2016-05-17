@@ -16,6 +16,8 @@ public final class Constants {
 
     public static final String BROADCAST_ACTION_PERMISSIONS_GRANTED = "com.jasenmoloy.wirelesscontrol.service.AutonomousGeofenceHandlerService.PERMISSIONS_GRANTED";
     public static final String BROADCAST_ACTION_GEODATA_LOADED = "com.jasenmoloy.wirelesscontrol.service.AutonomousGeofenceHandlerService.GEODATA_LOADED";
+    public static final String BROADCAST_ACTION_GEODATA_REQUEST = "com.jasenmoloy.wirelesscontrol.service.AutonomousGeofenceHandlerService.GEODATA_REQUEST";
+    public static final String BROADCAST_ACTION_GEODATA_DELIVERY = "com.jasenmoloy.wirelesscontrol.service.AutonomousGeofenceHandlerService.GEODATA_DELIVERY";
     public static final String BROADCAST_ACTION_SAVE_GEOFENCE = "com.jasenmoloy.wirelesscontrol.MainActivity.SAVE_GEOFENCE";
     public static final String BROADCAST_ACTION_UPDATE_GEOFENCE = "com.jasenmoloy.wirelesscontrol.MainActivity.UPDATE_GEOFENCE";
     public static final String BROADCAST_ACTION_DELETE_GEOFENCE = "com.jasenmoloy.wirelesscontrol.MainActivity.DELETE_GEOFENCE";

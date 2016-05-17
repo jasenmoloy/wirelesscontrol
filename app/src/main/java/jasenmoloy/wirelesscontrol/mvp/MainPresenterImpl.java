@@ -32,9 +32,11 @@ public class MainPresenterImpl implements MainPresenter {
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_DELIVERY);
             intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_SAVED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_UPDATED);
+            intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_DELETED);
             return intentFilter;
         }
 
@@ -42,10 +44,17 @@ public class MainPresenterImpl implements MainPresenter {
         public void onReceive(Context context, Intent intent) {
             Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
 
+            ArrayList<GeofenceData> geoData;
+
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_GEODATA_LOADED:
-                    ArrayList<GeofenceData> geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATALIST);
-                    mModel.addGeofence(geoData);
+                    geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATALIST);
+                    mModel.initGeofences(geoData);
+                    reloadGeofenceData(geoData);
+                    break;
+                case Constants.BROADCAST_ACTION_GEODATA_DELIVERY:
+                    geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATALIST);
+                    mModel.initGeofences(geoData);
                     reloadGeofenceData(geoData);
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSION_REQUESTED:
@@ -56,10 +65,16 @@ public class MainPresenterImpl implements MainPresenter {
                         mModel.addGeofence((GeofenceData) intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA));
                         reloadGeofenceData(mModel.getGeofenceData());
                     }
+                    break;
                 case Constants.BROADCAST_ACTION_GEOFENCE_UPDATED:
                     if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) ) {
                         mModel.updateGeofence(intent.getIntExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, -1), (GeofenceData) intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA));
                         reloadGeofenceData(mModel.getGeofenceData());
+                    }
+                    break;
+                case Constants.BROADCAST_ACTION_GEOFENCE_DELETED:
+                    if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) ) {
+                        MainPresenterImpl.this.mBroadcastManager.sendBroadcast(new Intent(Constants.BROADCAST_ACTION_GEODATA_REQUEST));
                     }
                     break;
             }

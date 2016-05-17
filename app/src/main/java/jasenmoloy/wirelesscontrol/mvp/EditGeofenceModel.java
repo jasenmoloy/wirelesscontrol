@@ -9,4 +9,5 @@ import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
  */
 public interface EditGeofenceModel {
     void updateGeofence(int id, GeofenceData data);
+    void deleteGeofence(int id);
 }
