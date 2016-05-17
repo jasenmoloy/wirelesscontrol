@@ -57,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            //Stubbed
+            //Once we're connected to our service, ask the user about permissions
+            checkPermissions();
         }
 
         @Override
@@ -69,19 +70,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
     /// Public Methods
     /// ----------------------
-
-    public void checkPermissions() {
-        //Request the permissions needed from the user for this application from the start
-        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
-
-            //If we have all the permissions we need, then we're good to go!
-            mPresenter.onAllPermissionsGranted();
-        }
-        else {
-            requestPermissions();
-        }
-    }
 
     /// ----------------------
     /// Callback Methods
@@ -206,9 +194,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         bindService(new Intent(this, AutonomousGeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
 
-        //Determine if all applicable permissions are set
-        checkPermissions();
-
         mPresenter.onActivityCreated(this, savedInstanceState);
     }
 
@@ -270,6 +255,19 @@ public class MainActivity extends AppCompatActivity implements MainView {
         if(permissionRequests.size() > 0) {
             ActivityCompat.requestPermissions(this, permissionRequests.toArray(new String[permissionRequests.size()]),
                     MainActivity.LOCATION_PERMISSIONS);
+        }
+    }
+
+    private void checkPermissions() {
+        //Request the permissions needed from the user for this application from the start
+        if ( ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED ) {
+
+            //If we have all the permissions we need, then we're good to go!
+            mPresenter.onAllPermissionsGranted();
+        }
+        else {
+            requestPermissions();
         }
     }
 }

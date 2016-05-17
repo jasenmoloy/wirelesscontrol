@@ -56,7 +56,8 @@ public class MainPresenterImpl implements MainPresenter {
                     reloadGeofenceData(geoData);
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSION_REQUESTED:
-                    mView.checkPermissions();
+                    //JAM TODO: Handle when permissions are requested.
+                    //mView.checkPermissions();
                     break;
                 case Constants.BROADCAST_ACTION_GEOFENCE_SAVED:
                     if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) ) {
