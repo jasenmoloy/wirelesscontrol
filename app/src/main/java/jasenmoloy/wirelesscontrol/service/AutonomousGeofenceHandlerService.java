@@ -10,11 +10,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.google.android.gms.location.LocationServices;
+
 import java.util.ArrayList;
 
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.io.OnGeofenceDataDeleteFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataUpdateFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
@@ -58,6 +61,7 @@ public class AutonomousGeofenceHandlerService extends Service implements
         @Override
         public void onReceive(Context context, Intent intent) {
             Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
+            int id;
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_GEODATA_LOADED:
@@ -74,9 +78,9 @@ public class AutonomousGeofenceHandlerService extends Service implements
                     mLocationServices.sendGeofenceData(mNewGeofence);
                     break;
                 case Constants.BROADCAST_ACTION_UPDATE_GEOFENCE:
-                    int id = intent.getIntExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, -1);
+                    id = intent.getIntExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, -1);
                     GeofenceData updateData = intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
-
+                    mLocationServices.updateGeofenceData(id, updateData);
                     mGeofenceDataManager.updateGeofence(id, updateData, new OnGeofenceDataUpdateFinishedListener() {
                         @Override
                         public void onGeofenceDataUpdateError() {
@@ -100,8 +104,31 @@ public class AutonomousGeofenceHandlerService extends Service implements
                             lbm.sendBroadcast(intent);
                         }
                     });
+                    break;
+                case Constants.BROADCAST_ACTION_DELETE_GEOFENCE:
+                    id = intent.getIntExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, -1);
+                    mLocationServices.deleteGeofence(id);
+                    mGeofenceDataManager.deleteGeofence(id, new OnGeofenceDataDeleteFinishedListener() {
+                        @Override
+                        public void onGeofenceDataDeleteError() {
+                            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(AutonomousGeofenceHandlerService.this);
+                            Intent intent = new Intent(Constants.BROADCAST_ACTION_GEOFENCE_DELETED);
+                            Bundle intentBundle = new Bundle();
+                            intentBundle.putBoolean(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false);
+                            intent.putExtras(intentBundle);
+                            lbm.sendBroadcast(intent);
+                        }
 
-                    mLocationServices.updateGeofenceData(id, updateData);
+                        @Override
+                        public void onGeofenceDataDeleteSuccess() {
+                            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(AutonomousGeofenceHandlerService.this);
+                            Intent intent = new Intent(Constants.BROADCAST_ACTION_GEOFENCE_DELETED);
+                            Bundle intentBundle = new Bundle();
+                            intentBundle.putBoolean(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, true);
+                            intent.putExtras(intentBundle);
+                            lbm.sendBroadcast(intent);
+                        }
+                    });
                     break;
             }
         }

@@ -145,6 +145,20 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
             Debug.logError(TAG, "Google API Client has not been connected yet! Disregarding geofence!");
     }
 
+    public void deleteGeofence(int id) {
+        Debug.logDebug(TAG, "deleteGeofence() --- data.id: " + id);
+
+        //JAM Don't delete if it doesn't exist
+        if(id < 0)
+            return;
+
+        if(mGoogleApiClient.isConnected()) {
+            mGeofenceManager.deleteGeofence(id);
+        }
+        else
+            Debug.logError(TAG, "Google API Client has not been connected yet! Disregarding geofence!");
+    }
+
     /// ----------------------
     /// Callback Methods
     /// ----------------------

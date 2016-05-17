@@ -18,6 +18,7 @@ import java.util.List;
 
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.io.OnGeofenceDataDeleteFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataUpdateFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
@@ -183,6 +184,16 @@ public class GeofenceDataManager {
                 mUpdateListener = null;
                 mUpdatePosition = -1;
             }
+
+            if(mDeleteListener != null) {
+                if (bytesSaved > 0) {
+                    mDeleteListener.onGeofenceDataDeleteSuccess();
+                } else {
+                    mDeleteListener.onGeofenceDataDeleteError();
+                }
+
+                mDeleteListener = null;
+            }
         }
     }
 
@@ -194,6 +205,8 @@ public class GeofenceDataManager {
 
     OnGeofenceDataUpdateFinishedListener mUpdateListener;
     int mUpdatePosition;
+
+    OnGeofenceDataDeleteFinishedListener mDeleteListener;
 
     /// ----------------------
     /// Getters / Setters
@@ -226,6 +239,13 @@ public class GeofenceDataManager {
         mUpdateListener = listener;
         mUpdatePosition = id;
         mGeofenceData.set(id, updateData);
+        new SaveTask().execute(getGeofenceDataFilename());
+    }
+
+    public void deleteGeofence(int id, OnGeofenceDataDeleteFinishedListener listener) {
+        mDeleteListener = listener;
+        mUpdatePosition = id;
+        mGeofenceData.remove(id);
         new SaveTask().execute(getGeofenceDataFilename());
     }
 

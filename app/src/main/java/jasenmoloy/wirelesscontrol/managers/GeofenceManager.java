@@ -38,7 +38,6 @@ public class GeofenceManager implements ResultCallback {
     GoogleApiClient mApiClient;
     ArrayList<Geofence> mGeofences;
     Geofence.Builder mGeofenceBuilder;
-    GeofencingRequest mGeofencingRequest;
     PendingIntent mGeofencePendingIntent;
 
     /// ----------------------
@@ -99,6 +98,16 @@ public class GeofenceManager implements ResultCallback {
         ArrayList<Geofence> geofences = new ArrayList<Geofence>(1);
         geofences.add(mGeofences.get(id));
         deliverGeofences(geofences);
+    }
+
+    public void deleteGeofence(int id) {
+        Assert.assertFalse(id < 0);
+
+        //get old geofence request ID to remove it from location services
+        String requestId = mGeofences.get(id).getRequestId();
+        ArrayList<String> ids = new ArrayList<>(1);
+        ids.add(requestId);
+        removeGeofences(ids);
     }
 
     /// ----------------------
@@ -179,7 +188,7 @@ public class GeofenceManager implements ResultCallback {
     private void deliverGeofences(List<Geofence> geofences) {
         try {
             Debug.logVerbose(TAG, "deliverGeofences() - mGeofences.size:" + geofences.size());
-            Debug.logVerbose(TAG, "deliverGeofences() - Adding Geofences to LocationServices...");
+            Debug.logVerbose(TAG, "deliverGeofences() - Adding Geofences (RequestsIds: " + geofences.toString() + " to LocationServices...");
 
 
             PendingIntent pIntent = getGeofencePendingIntent();
@@ -197,7 +206,7 @@ public class GeofenceManager implements ResultCallback {
             //TODO Request permissions to access the user's location.
         }
         catch(PendingIntent.CanceledException canEx) {
-
+            Debug.logWarn(TAG, canEx.getMessage());
         }
     }
 
