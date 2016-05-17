@@ -4,16 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
-import jasenmoloy.wirelesscontrol.debug.Debug;
 
 /**
  * Created by jasenmoloy on 4/26/16.
  */
-public class GeofenceCardView extends CardView {
+public class GeofenceCardView extends CardView implements GestureDetector.OnGestureListener {
     /// ----------------------
     /// Class Fields
     /// ----------------------
@@ -22,9 +22,10 @@ public class GeofenceCardView extends CardView {
     /// Object Fields
     /// ----------------------
 
+    GestureDetector mGestureDectector;
+
     int mPosition;
     GeofenceData mData;
-    int mLastEvent;
 
     /// ----------------------
     /// Getters / Setters
@@ -36,14 +37,17 @@ public class GeofenceCardView extends CardView {
 
     public GeofenceCardView(Context context) {
         super(context);
+        init();
     }
 
     public GeofenceCardView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public GeofenceCardView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
     }
 
     public void setData(int position, GeofenceData data) {
@@ -62,27 +66,11 @@ public class GeofenceCardView extends CardView {
      */
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        Debug.logDebug("GeofenceCardView", "position: " + mPosition + " ev.getAction(): " + ev.getAction());
-        int action = ev.getAction();
-
-        switch(action) {
-            case MotionEvent.ACTION_UP:
-                //If the user's last action was pressing down, then we're attempting to "tap"
-                // the button rather than scroll.
-                if(mLastEvent == MotionEvent.ACTION_DOWN) {
-                    Context context = getContext();
-                    Intent intent = new Intent(context, EditGeofenceActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
-                    intent.putExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, mPosition);
-                    intent.putExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA, mData);
-                    context.startActivity(intent);
-                }
-                break;
-        }
-
-        mLastEvent = action;
+        mGestureDectector.onTouchEvent(ev);
         return true;
     }
+
+
 
     /**
      * Intecept all touch events heading to the children to be handled here.
@@ -94,6 +82,42 @@ public class GeofenceCardView extends CardView {
         return true; //JAM Intercept all touch events within this view group
     }
 
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        Context context = getContext();
+        Intent intent = new Intent(context, EditGeofenceActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
+        intent.putExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, mPosition);
+        intent.putExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA, mData);
+        context.startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        return false;
+    }
+
     /// ----------------------
     /// Protected Methods
     /// ----------------------
@@ -101,4 +125,8 @@ public class GeofenceCardView extends CardView {
     /// ----------------------
     /// Private Methods
     /// ----------------------
+    private void init() {
+        mGestureDectector = new GestureDetector(getContext(), this);
+        mGestureDectector.setIsLongpressEnabled(false);
+    }
 }
