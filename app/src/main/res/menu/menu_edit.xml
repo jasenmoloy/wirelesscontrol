@@ -10,5 +10,5 @@
         android:title="@string/action_deletegeofence"
         android:icon="@drawable/ic_action_deleteforever"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 </menu>

@@ -2,7 +2,7 @@
     <string name="app_name">Wireless Control</string>
     <string name="action_settings">Settings</string>
     <string name="action_addgeofence">Add Geofence</string>
-    <string name="action_deletegeofence">Delete Geofence</string>
+    <string name="action_deletegeofence">Delete</string>
 
     <!-- Preference Strings -->
     <string name="settings_general_gpstick_title">GPS Tick Interval (in minutes)</string>
