@@ -210,6 +210,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         bindService(new Intent(this, AutonomousGeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
 
+        //Determine if all applicable permissions are set
+        checkPermissions();
+
         mPresenter.onActivityCreated(this, savedInstanceState);
     }
 
@@ -217,9 +220,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     protected void onStart() {
         super.onStart();
         Debug.logDebug(TAG, "JAM - onStart()");
-
-        //Determine if all applicable permissions are set
-        checkPermissions();
 
         mPresenter.onActivityStarted(this);
     }
