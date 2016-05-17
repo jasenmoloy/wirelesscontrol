@@ -27,6 +27,7 @@ public final class Constants {
     public static final String BROADCAST_EXTRA_KEY_PERMISSION_REQUEST = "PERMISSION_REQUEST";
     public static final String BROADCAST_EXTRA_KEY_GEOFENCE_ID = "GEOFENCE_ID";
     public static final String BROADCAST_EXTRA_KEY_GEODATA = "GEODATA";
+    public static final String BROADCAST_EXTRA_KEY_GEODATALIST = "GEODATALIST";
     public static final String BROADCAST_EXTRA_KEY_BOOLEAN = "BOOLEAN";
 
     /**

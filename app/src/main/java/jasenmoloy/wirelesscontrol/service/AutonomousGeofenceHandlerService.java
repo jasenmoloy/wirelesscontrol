@@ -62,7 +62,7 @@ public class AutonomousGeofenceHandlerService extends Service implements
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_GEODATA_LOADED:
                     mLocationServices.performLocationServices();
-                    ArrayList<GeofenceData> geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
+                    ArrayList<GeofenceData> geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATALIST);
                     mLocationServices.initGeofenceData(geoData);
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED:
@@ -215,7 +215,7 @@ public class AutonomousGeofenceHandlerService extends Service implements
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
         Intent intent = new Intent(Constants.BROADCAST_ACTION_GEODATA_LOADED);
         Bundle intentBundle = new Bundle();
-        intentBundle.putParcelableArrayList(Constants.BROADCAST_EXTRA_KEY_GEODATA, geofenceData);
+        intentBundle.putParcelableArrayList(Constants.BROADCAST_EXTRA_KEY_GEODATALIST, geofenceData);
         intent.putExtras(intentBundle);
         lbm.sendBroadcast(intent);
     }

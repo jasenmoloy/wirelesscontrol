@@ -44,7 +44,7 @@ public class MainPresenterImpl implements MainPresenter {
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_GEODATA_LOADED:
-                    ArrayList<GeofenceData> geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA);
+                    ArrayList<GeofenceData> geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATALIST);
                     mModel.addGeofence(geoData);
                     reloadGeofenceData(geoData);
                     break;
@@ -160,7 +160,7 @@ public class MainPresenterImpl implements MainPresenter {
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
         Intent intent = new Intent(Constants.BROADCAST_ACTION_GEODATA_LOADED);
         Bundle intentBundle = new Bundle();
-        intentBundle.putParcelableArrayList(Constants.BROADCAST_EXTRA_KEY_GEODATA, geofenceData);
+        intentBundle.putParcelableArrayList(Constants.BROADCAST_EXTRA_KEY_GEODATALIST, geofenceData);
         intent.putExtras(intentBundle);
         lbm.sendBroadcast(intent);
 
