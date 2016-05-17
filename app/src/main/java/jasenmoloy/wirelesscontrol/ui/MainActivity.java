@@ -208,8 +208,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             }
         });
 
-        //Start the background service that will maintain
-        initializeBackgroundService();
+        bindService(new Intent(this, AutonomousGeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
 
         mPresenter.registerReceiver(LocalBroadcastManager.getInstance(this));
     }
@@ -218,6 +217,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
     protected void onStart() {
         super.onStart();
         Debug.logDebug(TAG, "JAM - onStart()");
+
+        //Determine if all applicable permissions are set
+        checkPermissions();
+
         mPresenter.onActivityStarted(this);
     }
 
@@ -253,17 +256,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
     /// Private Methods
     /// ----------------------
-
-    /**
-     * Start the autonomous geofence handler service which loads and tracks geofences
-     */
-    private void initializeBackgroundService() {
-        Intent intent = new Intent(this, AutonomousGeofenceHandlerService.class);
-        startService(intent);
-
-        bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
-        //JAM TODO: Communication should be handled by the presenter
-    }
 
     /**
      * Prompts the Android permission request to the user.

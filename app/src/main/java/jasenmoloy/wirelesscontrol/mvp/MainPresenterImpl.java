@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
@@ -74,7 +72,7 @@ public class MainPresenterImpl implements MainPresenter {
                     break;
                 case Constants.BROADCAST_ACTION_GEOFENCE_DELETED:
                     if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) ) {
-                        MainPresenterImpl.this.mBroadcastManager.sendBroadcast(new Intent(Constants.BROADCAST_ACTION_GEODATA_REQUEST));
+                        MainPresenterImpl.this.mLocalBroadcastManager.sendBroadcast(new Intent(Constants.BROADCAST_ACTION_GEODATA_REQUEST));
                     }
                     break;
             }
@@ -93,7 +91,7 @@ public class MainPresenterImpl implements MainPresenter {
     MainModel mModel;
     MainView mView;
     ResponseReceiver mReceiver;
-    LocalBroadcastManager mBroadcastManager;
+    LocalBroadcastManager mLocalBroadcastManager;
 
     Context mContext;
 
@@ -111,8 +109,8 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void registerReceiver(LocalBroadcastManager broadcastManager) {
-        mBroadcastManager = broadcastManager;
-        mBroadcastManager.registerReceiver(mReceiver, mReceiver.buildIntentFilter());
+        mLocalBroadcastManager = broadcastManager;
+        mLocalBroadcastManager.registerReceiver(mReceiver, mReceiver.buildIntentFilter());
     }
 
     /// ----------------------
@@ -155,7 +153,7 @@ public class MainPresenterImpl implements MainPresenter {
     public void onActivityDestroyed(Activity activity) {
         Debug.logDebug(TAG, "JAM - onDestroy()");
 
-        mBroadcastManager.unregisterReceiver(mReceiver);
+        mLocalBroadcastManager.unregisterReceiver(mReceiver);
         mView = null;
     }
 
@@ -166,7 +164,9 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void onAllPermissionsGranted() {
-        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent(Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED));
+        Debug.logDebug(TAG, "onAllPermissionsGranted()");
+
+        mLocalBroadcastManager.sendBroadcast(new Intent(Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED));
     }
 
     @Override

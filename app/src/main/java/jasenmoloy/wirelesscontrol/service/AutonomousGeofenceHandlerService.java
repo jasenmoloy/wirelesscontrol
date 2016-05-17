@@ -33,7 +33,7 @@ public class AutonomousGeofenceHandlerService extends Service implements
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "AutonomousGeofenceHandlerService";
+    private static final String TAG = AutonomousGeofenceHandlerService.class.getSimpleName();
 
     public class ServiceBinder extends Binder {
         public AutonomousGeofenceHandlerService getService() {
@@ -168,6 +168,7 @@ public class AutonomousGeofenceHandlerService extends Service implements
     @Override
     public void onCreate() {
         super.onCreate();
+        Debug.logDebug(TAG, "onCreate()");
 
         //Register the receivers
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.buildIntentFilter());
@@ -175,8 +176,9 @@ public class AutonomousGeofenceHandlerService extends Service implements
 
     @Override
     public void onDestroy() {
-        mLocationServices.disconnect();
+        Debug.logDebug(TAG, "onDestroy()");
 
+        mLocationServices.disconnect();
         super.onDestroy();
     }
 

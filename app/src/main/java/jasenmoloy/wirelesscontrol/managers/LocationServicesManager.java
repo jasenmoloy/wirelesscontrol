@@ -56,17 +56,19 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     /// Getters / Setters
     /// ----------------------
 
-    private void setLastLocation(Location lastLocation) {
-        mLastLocation = lastLocation;
-        Debug.logVerbose(TAG, "Updating last location: " + lastLocation);
-    }
-
     /// ----------------------
     /// Public Methods
     /// ----------------------
 
     public LocationServicesManager(Context context) {
         mContext = context;
+    }
+
+    public boolean isConnected() {
+        if(mGoogleApiClient == null)
+            return false;
+
+        return mGoogleApiClient.isConnected();
     }
 
     public void connect(boolean blocking) {
@@ -238,5 +240,10 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
                 LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
 
         result.setResultCallback(this);
+    }
+
+    private void setLastLocation(Location lastLocation) {
+        mLastLocation = lastLocation;
+        Debug.logVerbose(TAG, "Updating last location: " + lastLocation);
     }
 }
