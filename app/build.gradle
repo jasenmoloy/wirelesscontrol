@@ -40,4 +40,9 @@ dependencies {
     //LoganSquare v1.3.7. ref: https://github.com/bluelinelabs/LoganSquare/tree/master
     apt 'com.bluelinelabs:logansquare-compiler:1.3.7'
     compile 'com.bluelinelabs:logansquare:1.3.7'
+
+    //LeakCanary ref: https://github.com/square/leakcanary
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 }

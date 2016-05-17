@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 
+import com.squareup.leakcanary.LeakCanary;
+
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.service.AutonomousGeofenceHandlerService;
 
@@ -22,6 +24,9 @@ public class WirelessControlApplication extends Application {
         super.onCreate();
 
         Debug.logDebug(TAG, "onCreate()");
+
+        //LeakCanary initialization
+        LeakCanary.install(this);
 
         //Start the background service that will be alive for as long as possible
         initializeBackgroundService();
