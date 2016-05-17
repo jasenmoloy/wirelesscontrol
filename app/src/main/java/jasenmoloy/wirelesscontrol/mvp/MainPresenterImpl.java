@@ -105,12 +105,7 @@ public class MainPresenterImpl implements MainPresenter {
         mReceiver = new ResponseReceiver();
 
         mContext = context;
-    }
-
-    @Override
-    public void registerReceiver(LocalBroadcastManager broadcastManager) {
-        mLocalBroadcastManager = broadcastManager;
-        mLocalBroadcastManager.registerReceiver(mReceiver, mReceiver.buildIntentFilter());
+        mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
 
     /// ----------------------
@@ -119,7 +114,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
+        mLocalBroadcastManager.registerReceiver(mReceiver, mReceiver.buildIntentFilter());
     }
 
     @Override

@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         bindService(new Intent(this, AutonomousGeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
 
-        mPresenter.registerReceiver(LocalBroadcastManager.getInstance(this));
+        mPresenter.onActivityCreated(this, savedInstanceState);
     }
 
     @Override
