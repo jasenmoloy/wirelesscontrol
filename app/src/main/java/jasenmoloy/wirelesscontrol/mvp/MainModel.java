@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
-import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
 
 /**
  * Created by jasenmoloy on 2/25/16.

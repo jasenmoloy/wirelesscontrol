@@ -1,7 +1,6 @@
 package jasenmoloy.wirelesscontrol.mvp;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +11,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
-import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
 
 /**
  * Created by jasenmoloy on 5/13/16.

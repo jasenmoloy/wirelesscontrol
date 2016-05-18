@@ -1,8 +1,6 @@
 package jasenmoloy.wirelesscontrol.mvp;
 
 import android.app.Application;
-import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
 

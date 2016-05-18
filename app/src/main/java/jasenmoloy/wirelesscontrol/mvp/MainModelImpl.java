@@ -1,18 +1,11 @@
 package jasenmoloy.wirelesscontrol.mvp;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
-import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
 
 /**
  * Created by jasenmoloy on 2/25/16.

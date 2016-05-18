@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.google.android.gms.location.LocationServices;
-
 import java.util.ArrayList;
 
 import jasenmoloy.wirelesscontrol.data.Constants;

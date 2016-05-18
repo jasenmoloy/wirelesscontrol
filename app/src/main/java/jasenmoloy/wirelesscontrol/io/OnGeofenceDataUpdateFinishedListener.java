@@ -1,7 +1,5 @@
 package jasenmoloy.wirelesscontrol.io;
 
-import java.util.ArrayList;
-
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 
 /**
