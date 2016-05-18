@@ -157,9 +157,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         super.onCreate(savedInstanceState);
 
-        //Init fields
-        mPresenter = new MainPresenterImpl(this, this);
-
         //Set default parameters for all preferences.
         PreferenceManager.setDefaultValues(this, R.xml.settings_general, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_wifi, false);
@@ -191,9 +188,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
             }
         });
 
-        bindService(new Intent(this, AutonomousGeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
-
+        //Set up our presenter
+        mPresenter = new MainPresenterImpl(this, this);
         mPresenter.onActivityCreated(this, savedInstanceState);
+
+        //Bind to our background service
+        bindService(new Intent(this, AutonomousGeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
