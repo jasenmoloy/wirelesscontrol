@@ -9,6 +9,4 @@ import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
  */
 public interface MainPresenter extends OnGeofenceDataLoadFinishedListener, Application.ActivityLifecycleCallbacks {
     void onAllPermissionsGranted();
-
-    void onCardClicked(int position);
 }

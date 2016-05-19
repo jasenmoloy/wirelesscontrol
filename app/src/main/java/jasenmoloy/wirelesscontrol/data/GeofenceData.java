@@ -45,7 +45,7 @@ public class GeofenceData implements Parcelable {
     public LatLng position;
 
     @JsonField
-    public double radius;
+    public int radius;
 
     @JsonField
     public String screenshotFileName;
@@ -60,7 +60,7 @@ public class GeofenceData implements Parcelable {
     /// Public Methods
     /// ----------------------
 
-    public GeofenceData(String name, LatLng pos, double radius) {
+    public GeofenceData(String name, LatLng pos, int radius) {
         this.name = name;
         this.position = pos;
         this.radius = radius;
@@ -82,7 +82,7 @@ public class GeofenceData implements Parcelable {
 
         name = in.readString();
         position = new LatLng(in.readDouble(), in.readDouble());
-        radius = in.readDouble();
+        radius = in.readInt();
         screenshotFileName = in.readString();
 
         Debug.logDebug(TAG, "GeofenceData() - name: " + name);
@@ -103,7 +103,7 @@ public class GeofenceData implements Parcelable {
         out.writeString(name);
         out.writeDouble(position.latitude);
         out.writeDouble(position.longitude);
-        out.writeDouble(radius);
+        out.writeInt(radius);
         out.writeString(screenshotFileName);
     }
 

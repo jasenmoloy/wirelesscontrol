@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="geofence_card_location_format">Lat:%1$.4f Long:%2$.4f</string>
+    <string name="geofence_card_radius_format">Radius: %1$d meters</string>
+</resources>

@@ -84,12 +84,12 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         public void setCard(int position, GeofenceData data) {
             mName.setText(data.name);
 
-            mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f",
+            mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f", //JAM TODO: Need to get access to context to get resources
                     data.position.latitude,
-                    data.position.longitude)); //JAM TODO: Move this to resources file
+                    data.position.longitude));
 
-            mRadius.setText(String.format("Radius: %1$.0f meters",
-                    data.radius)); //JAM TODO: Move this to resources file
+            mRadius.setText(String.format("Radius: %1$.0f meters", //JAM TODO: Need to get access to context to get resources
+                    data.radius));
 
             //If we already have one created, just update the marker
             if(mMarker != null && mMap != null) {
@@ -194,12 +194,12 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
 
             mName.setText(data.name);
 
-            mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f",
+            mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f", //JAM TODO: Need to get access to context to get resources
                     data.position.latitude,
-                    data.position.longitude)); //JAM TODO: Move this to resoruces file
+                    data.position.longitude));
 
-            mRadius.setText(String.format("Radius: %1$.0f meters",
-                    data.radius)); //JAM TODO: Move this to resoruces file
+            mRadius.setText(String.format("Radius: %1$d meters", //JAM TODO: Need to get access to context to get resources
+                    data.radius));
 
             mImageView.setImageBitmap(data.mapScreenshot);
         }

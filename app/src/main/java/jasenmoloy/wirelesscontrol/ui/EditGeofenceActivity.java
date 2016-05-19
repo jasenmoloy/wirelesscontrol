@@ -44,7 +44,7 @@ public class EditGeofenceActivity extends AppCompatActivity implements
     /// ----------------------
 
     private static final String TAG = EditGeofenceActivity.class.getSimpleName();
-    private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1; //JAM TODO: Fix this!
+    private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1; //JAM TODO: Move this to a global constants file
 
     /// ----------------------
     /// Object Fields
@@ -61,6 +61,8 @@ public class EditGeofenceActivity extends AppCompatActivity implements
 
     private int mGeofenceSaveId;
     private GeofenceData mGeofenceSaveData;
+
+    private int mStandardGeofenceRadius; //JAM TODO: Should be moved to a global resources location
 
     /// ----------------------
     /// Getters / Setters
@@ -190,6 +192,8 @@ public class EditGeofenceActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mStandardGeofenceRadius = getResources().getInteger(R.integer.standard_geofence_radius);
+
         //Grab the intent that started us and get the GeofenceData we intend to edit
         Intent intent = getIntent();
         mGeofenceSaveId = intent.getIntExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, -1);
@@ -273,7 +277,7 @@ public class EditGeofenceActivity extends AppCompatActivity implements
             //TODO Request permissions to access the user's location.
         }
         catch(Exception ex) {
-            //TODO Print out a log.
+            ex.printStackTrace();
         }
     }
 
@@ -281,13 +285,13 @@ public class EditGeofenceActivity extends AppCompatActivity implements
         //Set the listener for our map.
         mMap.setOnCameraChangeListener(this);
 
-        mGeofence = new GeofenceMarker(position, 60.0); //JAM TODO: Move this to resources file.
+        mGeofence = new GeofenceMarker(position, mStandardGeofenceRadius);
         mGeofence.addToMap(mMap);
     }
 
     private void UpdateGeofenceMarker(LatLng position) {
         Assert.assertNotNull(position);
-        //JAM TODO Check for null
-        mGeofence.updateMarker(position, 60.0); //JAM TODO: Move this to resources file.
+
+        mGeofence.updateMarker(position, mStandardGeofenceRadius);
     }
 }

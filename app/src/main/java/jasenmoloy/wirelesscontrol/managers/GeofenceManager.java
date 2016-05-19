@@ -116,7 +116,6 @@ public class GeofenceManager implements ResultCallback {
 
     public void onResult(Result result) {
         Debug.logVerbose(TAG, "onResult(): " + result.getStatus());
-        //JAM TODO: Implement me
     }
 
     /// ----------------------

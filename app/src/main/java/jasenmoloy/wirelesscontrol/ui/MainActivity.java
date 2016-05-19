@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_settings:
-                //JAM TODO Invoke the settings fragments.
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
                 return true;
@@ -110,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 if( grantResults[0] == PackageManager.PERMISSION_GRANTED &&
                         grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     //User has granted permission, inform the location manager we're good to go.
-                    //JAM TODO: Save a flag to know the user has already given permission
                     mPresenter.onAllPermissionsGranted();
                 }
                 else {

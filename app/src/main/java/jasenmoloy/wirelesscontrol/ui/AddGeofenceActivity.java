@@ -56,6 +56,8 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
 
     private GeofenceData mGeofenceSaveData;
 
+    private int mStandardGeofenceRadius; //JAM TODO: Should be moved to a global resources location
+
     /// ----------------------
     /// Public Methods
     /// ----------------------
@@ -162,6 +164,8 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mStandardGeofenceRadius = getResources().getInteger(R.integer.standard_geofence_radius);
+
         //Set up the activity's view
         setContentView(R.layout.activity_addgeofence);
 
@@ -245,7 +249,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
             //TODO Request permissions to access the user's location.
         }
         catch(Exception ex) {
-            //TODO Print out a log.
+            ex.printStackTrace();
         }
     }
 
@@ -253,13 +257,13 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         //Set the listener for our map.
         mMap.setOnCameraChangeListener(this);
 
-        mGeofence = new GeofenceMarker(position, 60.0); //JAM TODO: Move this to resources file.
+        mGeofence = new GeofenceMarker(position, mStandardGeofenceRadius);
         mGeofence.addToMap(mMap);
     }
 
     private void UpdateGeofenceMarker(LatLng position) {
         Assert.assertNotNull(position);
-        //JAM TODO Check for null
-        mGeofence.updateMarker(position, 60.0); //JAM TODO: Move this to resources file.
+
+        mGeofence.updateMarker(position, mStandardGeofenceRadius);
     }
 }

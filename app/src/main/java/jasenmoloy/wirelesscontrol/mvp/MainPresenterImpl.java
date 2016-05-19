@@ -152,11 +152,6 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public void onCardClicked(int position) {
-        //JAM TODO: Open up an "edit geofence" activity
-    }
-
-    @Override
     public void onAllPermissionsGranted() {
         Debug.logDebug(TAG, "onAllPermissionsGranted()");
 
