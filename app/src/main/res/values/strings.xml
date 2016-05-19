@@ -35,6 +35,10 @@
 
     <string name="geofence_transition_notification_text">Click notification to return to app</string>
 
+
+    <!-- App-specific File IO Strings -->
+    <string name="geofencedata_filename">GeofenceData.json</string>
+
     <!-- Error messages -->
     <string name="not_connected">GoogleApiClient no yet connected. Try again.</string>
     <string name="geofence_not_available">Geofence service is not available now</string>

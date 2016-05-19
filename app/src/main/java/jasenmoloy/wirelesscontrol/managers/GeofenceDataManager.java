@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataDeleteFinishedListener;
@@ -32,10 +33,6 @@ public class GeofenceDataManager {
     /// ----------------------
 
     private static final String TAG = "GeofenceDataManager";
-
-    //JAM TODO Move to resources file
-    private static final String FILENAME = "GeofenceData";
-
 
     /// ----------------------
     /// Object Fields
@@ -267,7 +264,7 @@ public class GeofenceDataManager {
     /// ----------------------
 
     private String getGeofenceDataFilename() {
-            return FILENAME + ".json";
+            return mContext.getString(R.string.geofencedata_filename);
     }
 
 }
