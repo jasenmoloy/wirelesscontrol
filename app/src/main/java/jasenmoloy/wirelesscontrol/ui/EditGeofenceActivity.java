@@ -43,7 +43,7 @@ public class EditGeofenceActivity extends AppCompatActivity implements
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "EditGeofenceActivity";
+    private static final String TAG = EditGeofenceActivity.class.getSimpleName();
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1; //JAM TODO: Fix this!
 
     /// ----------------------

@@ -23,7 +23,7 @@ public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyC
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "GeofenceMapFragment";
+    private static final String TAG = GeofenceMapFragment.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields

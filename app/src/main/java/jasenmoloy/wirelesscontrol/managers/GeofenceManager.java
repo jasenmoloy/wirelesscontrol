@@ -28,7 +28,7 @@ public class GeofenceManager implements ResultCallback {
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "GeofenceManager";
+    private static final String TAG = GeofenceManager.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields

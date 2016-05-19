@@ -40,13 +40,6 @@ public class AutonomousGeofenceHandlerService extends Service implements
     }
 
     public class ResponseReceiver extends BroadcastReceiver {
-        private static final String TAG = "AutonomousGeofenceHandlerService.ResponseReceiver";
-
-        // Prevents instantiation
-        private ResponseReceiver() {
-
-        }
-
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);
@@ -126,6 +119,11 @@ public class AutonomousGeofenceHandlerService extends Service implements
                     });
                     break;
             }
+        }
+
+        // Prevents instantiation
+        private ResponseReceiver() {
+
         }
     }
 

@@ -32,7 +32,7 @@ public class GeofenceData implements Parcelable {
                 }
             };
 
-    private static final String TAG = "GeofenceData";
+    private static final String TAG = GeofenceData.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields

@@ -30,7 +30,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "GeofenceTransitionsIntentService";
+    private static final String TAG = GeofenceTransitionsIntentService.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields

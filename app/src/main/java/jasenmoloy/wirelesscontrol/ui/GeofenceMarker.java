@@ -19,7 +19,7 @@ import jasenmoloy.wirelesscontrol.debug.Debug;
  * Created by jasenmoloy on 2/25/16.
  */
 public class GeofenceMarker {
-    private static final String TAG = "GeofenceMarker";
+    private static final String TAG = GeofenceMarker.class.getSimpleName();
 
     private Marker mMarker;
     private Circle mCircle;

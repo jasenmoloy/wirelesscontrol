@@ -31,7 +31,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "GeofenceCardAdapter";
+    private static final String TAG = GeofenceCardAdapter.class.getSimpleName();
 
     private static final int VIEWTYPE_GOOGLEMAP = 0;
     private static final int VIEWTYPE_BITMAP = 1;

@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     public static final int LOCATION_PERMISSIONS = 1;
 
-    public static final String TAG = "MainActivity";
+    public static final String TAG = MainActivity.class.getSimpleName();
     public static final String msGoogleMapsApiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
 
     /// ----------------------

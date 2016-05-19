@@ -38,7 +38,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "AddGeofenceActivity";
+    private static final String TAG = AddGeofenceActivity.class.getSimpleName();
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1;
 
     /// ----------------------

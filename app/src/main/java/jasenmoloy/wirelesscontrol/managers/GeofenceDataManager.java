@@ -32,7 +32,7 @@ public class GeofenceDataManager {
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "GeofenceDataManager";
+    private static final String TAG = GeofenceDataManager.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields

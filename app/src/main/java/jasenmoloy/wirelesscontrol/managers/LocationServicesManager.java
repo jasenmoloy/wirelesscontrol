@@ -37,7 +37,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "LocationServicesManager";
+    private static final String TAG = LocationServicesManager.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields

@@ -18,7 +18,7 @@ public class AddGeofenceModelImpl implements AddGeofenceModel {
     /// Class Fields
     /// ----------------------
 
-    public static final String TAG = "AddGeofenceModelImpl";
+    public static final String TAG = AddGeofenceModelImpl.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields

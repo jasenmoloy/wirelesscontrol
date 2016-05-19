@@ -17,7 +17,7 @@ public class EditGeofenceModelImpl implements EditGeofenceModel {
     /// Class Fields
     /// ----------------------
 
-    public static final String TAG = "EditGeofenceModelImpl";
+    public static final String TAG = EditGeofenceModelImpl.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields

@@ -18,15 +18,13 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "AddGeofencePresenterImpl";
+    private static final String TAG = AddGeofencePresenterImpl.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields
     /// ----------------------
 
     public class ResponseReceiver extends BroadcastReceiver {
-        private static final String TAG = "AddGeofencePresenterImpl.ResponseReceiver";
-
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_SAVED);

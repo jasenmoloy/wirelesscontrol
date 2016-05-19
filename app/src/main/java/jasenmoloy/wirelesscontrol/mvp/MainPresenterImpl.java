@@ -22,11 +22,9 @@ public class MainPresenterImpl implements MainPresenter {
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = "MainPresenterImpl";
+    private static final String TAG = MainPresenterImpl.class.getSimpleName();
 
     public class ResponseReceiver extends BroadcastReceiver {
-        private static final String TAG = "MainPresenterImpl.ResponseReceiver";
-
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);

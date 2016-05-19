@@ -22,13 +22,13 @@ public class EditGeofencePresenterImpl implements
     /// Class Fields
     /// ----------------------
 
+    private static final String TAG = EditGeofencePresenterImpl.class.getSimpleName();
+
     /// ----------------------
     /// Object Fields
     /// ----------------------
 
     public class ResponseReceiver extends BroadcastReceiver {
-        private static final String TAG = "EditGeofencePresenterImpl.ResponseReceiver";
-
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_UPDATED);
