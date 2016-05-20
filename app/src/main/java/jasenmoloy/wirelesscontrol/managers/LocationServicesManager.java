@@ -85,6 +85,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
         if(mGoogleApiClient == null)
             return;
 
+        mGoogleApiClient.unregisterConnectionCallbacks(this);
         mGoogleApiClient.disconnect();
     }
 
