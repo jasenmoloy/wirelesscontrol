@@ -98,6 +98,9 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
         startActivity(intent);
+
+        //We no longer have use for this activity to lets destroy it
+        finish();
     }
 
     @Override
