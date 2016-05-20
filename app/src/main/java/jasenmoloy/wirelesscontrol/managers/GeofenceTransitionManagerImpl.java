@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.wifi.WifiManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.TextUtils;
@@ -34,6 +35,7 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
     /// ----------------------
 
     private Context mContext;
+    private WifiManager mWifiManager;
 
     /// ----------------------
     /// Public Methods
@@ -71,6 +73,8 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
                 triggeredGeofences
         );
 
+        //JAM TODO: We should get the associated geofenceData with the triggered geofences and react according to the user's settings
+
         //Turn off Wifi
         switchWifi(false);
 
@@ -85,6 +89,7 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
 
     protected GeofenceTransitionManagerImpl() {
         mContext = BaseApp.get().getApplicationContext();
+        mWifiManager = (WifiManager)mContext.getSystemService(Context.WIFI_SERVICE);
     }
 
     /// ----------------------
@@ -92,9 +97,17 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
     /// ----------------------
 
     private void switchWifi(boolean turnOn) {
+        boolean isWifiEnabled = mWifiManager.isWifiEnabled();
 
 
-        //JAM TODO: Implement me
+        if(turnOn && !isWifiEnabled) { //Turn on WiFi only if it's actually off
+            Debug.logDebug(TAG, "Turning on Wifi!");
+            mWifiManager.setWifiEnabled(true);
+        }
+        else if(!turnOn && isWifiEnabled) { //Turn off WiFi only if it's actually on
+            Debug.logDebug(TAG, "Turning off Wifi!");
+            mWifiManager.setWifiEnabled(false);
+        }
     }
 
     /**
