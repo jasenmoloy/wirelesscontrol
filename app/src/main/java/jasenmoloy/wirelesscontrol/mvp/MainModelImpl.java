@@ -21,6 +21,7 @@ public class MainModelImpl implements MainModel {
 
     private Context mContext;
     private ArrayList<GeofenceData> mGeofenceData;
+    private boolean mIsGeofenceDataInitialized;
 
     /// ----------------------
     /// Public Methods
@@ -29,6 +30,12 @@ public class MainModelImpl implements MainModel {
     public MainModelImpl(Context context) {
         mContext = context;
         mGeofenceData = new ArrayList<>();
+        mIsGeofenceDataInitialized = false;
+    }
+
+    @Override
+    public boolean isGeofenceDataInitialized() {
+        return mIsGeofenceDataInitialized;
     }
 
     @Override
@@ -43,6 +50,7 @@ public class MainModelImpl implements MainModel {
 
         mGeofenceData.clear();
         mGeofenceData.addAll(data);
+        mIsGeofenceDataInitialized = true;
     }
 
     @Override

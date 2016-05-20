@@ -46,12 +46,26 @@ public class MainPresenterImpl implements MainPresenter {
                 case Constants.BROADCAST_ACTION_GEODATA_LOADED:
                     geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATALIST);
                     mModel.initGeofences(geoData);
-                    reloadGeofenceData(geoData);
+
+                    //Only reload the view's display if we're active, else the onStart() will handle it.
+                    switch(mViewState) {
+                        case RESUMED:
+                        case PAUSED:
+                            reloadGeofenceCards();
+                            break;
+                    }
                     break;
                 case Constants.BROADCAST_ACTION_GEODATA_DELIVERY:
                     geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATALIST);
                     mModel.initGeofences(geoData);
-                    reloadGeofenceData(geoData);
+
+                    //Only reload the view's display if we're active, else the onStart() will handle it.
+                    switch(mViewState) {
+                        case RESUMED:
+                        case PAUSED:
+                            reloadGeofenceCards();
+                            break;
+                    }
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSION_REQUESTED:
                     //JAM TODO: Handle when permissions are requested.
@@ -60,13 +74,27 @@ public class MainPresenterImpl implements MainPresenter {
                 case Constants.BROADCAST_ACTION_GEOFENCE_SAVED:
                     if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) ) {
                         mModel.addGeofence((GeofenceData) intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA));
-                        reloadGeofenceData(mModel.getGeofenceData());
+
+                        //Only reload the view's display if we're active, else the onStart() will handle it.
+                        switch(mViewState) {
+                            case RESUMED:
+                            case PAUSED:
+                                reloadGeofenceCards();
+                                break;
+                        }
                     }
                     break;
                 case Constants.BROADCAST_ACTION_GEOFENCE_UPDATED:
                     if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) ) {
                         mModel.updateGeofence(intent.getIntExtra(Constants.BROADCAST_EXTRA_KEY_GEOFENCE_ID, -1), (GeofenceData) intent.getParcelableExtra(Constants.BROADCAST_EXTRA_KEY_GEODATA));
-                        reloadGeofenceData(mModel.getGeofenceData());
+
+                        //Only reload the view's display if we're active, else the onStart() will handle it.
+                        switch(mViewState) {
+                            case RESUMED:
+                            case PAUSED:
+                                reloadGeofenceCards();
+                                break;
+                        }
                     }
                     break;
                 case Constants.BROADCAST_ACTION_GEOFENCE_DELETED:
@@ -87,12 +115,23 @@ public class MainPresenterImpl implements MainPresenter {
     /// Object Fields
     /// ----------------------
 
+    enum ViewState {
+        CREATED,
+        STARTED,
+        RESUMED,
+        PAUSED,
+        STOPPED,
+        DESTROYED
+    }
+
     MainModel mModel;
     MainView mView;
     ResponseReceiver mReceiver;
     LocalBroadcastManager mLocalBroadcastManager;
 
     Context mContext;
+
+    ViewState mViewState;
 
     /// ----------------------
     /// Public Methods
@@ -113,29 +152,31 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+        mViewState = ViewState.CREATED;
         mLocalBroadcastManager.registerReceiver(mReceiver, mReceiver.buildIntentFilter());
     }
 
     @Override
     public void onActivityStarted(Activity activity) {
-        //JAM TODO: Issue with this as the activity will current start before the card data is loaded.
-        //mView.loadGeofenceCards(mModel.getGeofenceData());
+        mViewState = ViewState.STARTED;
+
+        reloadGeofenceCards();
     }
 
     @Override
     public void onActivityResumed(Activity activity) {
-        Debug.logDebug(TAG, "JAM - onResume()");
+        mViewState = ViewState.RESUMED;
     }
 
     @Override
     public void onActivityPaused(Activity activity) {
-
+        mViewState = ViewState.PAUSED;
     }
 
     @Override
     public void onActivityStopped(Activity activity) {
-        //JAM TODO: Issue with this as the activity will current start before the card data is loaded so unloading it will cause problems.
-        //mView.unloadGeofenceCards();
+        mViewState = ViewState.STOPPED;
+        mView.unloadGeofenceCards();
     }
 
     @Override
@@ -145,7 +186,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        Debug.logDebug(TAG, "JAM - onDestroy()");
+        mViewState = ViewState.DESTROYED;
 
         mLocalBroadcastManager.unregisterReceiver(mReceiver);
         mView = null;
@@ -158,24 +199,6 @@ public class MainPresenterImpl implements MainPresenter {
         mLocalBroadcastManager.sendBroadcast(new Intent(Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED));
     }
 
-    @Override
-    public void onGeofenceDataLoadSuccess(ArrayList<GeofenceData> geofenceData) {
-        //Let the service know to set up geofences to track
-        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
-        Intent intent = new Intent(Constants.BROADCAST_ACTION_GEODATA_LOADED);
-        Bundle intentBundle = new Bundle();
-        intentBundle.putParcelableArrayList(Constants.BROADCAST_EXTRA_KEY_GEODATALIST, geofenceData);
-        intent.putExtras(intentBundle);
-        lbm.sendBroadcast(intent);
-
-        reloadGeofenceData(geofenceData);
-    }
-
-    @Override
-    public void onGeofenceDataLoadError() {
-
-    }
-
     /// ----------------------
     /// Protected Methods
     /// ----------------------
@@ -184,8 +207,9 @@ public class MainPresenterImpl implements MainPresenter {
     /// Private Methods
     /// ----------------------
 
-    private void reloadGeofenceData(ArrayList<GeofenceData> geofenceData) {
+    private void reloadGeofenceCards() {
         //Let the UI know the data is loaded.
-        mView.onCardDataLoaded(geofenceData);
+        if(mModel.isGeofenceDataInitialized())
+            mView.onCardDataLoaded(mModel.getGeofenceData());
     }
 }
