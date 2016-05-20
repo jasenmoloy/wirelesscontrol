@@ -49,7 +49,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     private LocationRequest mLocationRequest;
     private Context mContext;
 
-    GeofenceManager mGeofenceManager;
+    GoogleGeofenceManager mGoogleGeofenceManager;
     ArrayList<GeofenceData> tempData; //JAM TODO: This could be done better...
 
     /// ----------------------
@@ -115,7 +115,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
             return;
 
         if(mGoogleApiClient.isConnected())
-            mGeofenceManager.initGeofences(data);
+            mGoogleGeofenceManager.initGeofences(data);
         else
             tempData = data;
     }
@@ -128,7 +128,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
             return;
 
         if(mGoogleApiClient.isConnected())
-            mGeofenceManager.addGeofence(data);
+            mGoogleGeofenceManager.addGeofence(data);
         else
             Debug.logError(TAG, "Google API Client has not been connected yet! Disregarding geofence!");
     }
@@ -141,7 +141,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
             return;
 
         if(mGoogleApiClient.isConnected()) {
-            mGeofenceManager.updateGeofence(id, data);
+            mGoogleGeofenceManager.updateGeofence(id, data);
         }
         else
             Debug.logError(TAG, "Google API Client has not been connected yet! Disregarding geofence!");
@@ -155,7 +155,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
             return;
 
         if(mGoogleApiClient.isConnected()) {
-            mGeofenceManager.deleteGeofence(id);
+            mGoogleGeofenceManager.deleteGeofence(id);
         }
         else
             Debug.logError(TAG, "Google API Client has not been connected yet! Disregarding geofence!");
@@ -217,7 +217,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
             mGoogleApiClient = builder.build();
 
             //Initialize any location based services after we've created an API client
-            mGeofenceManager = new GeofenceManager(mContext, mGoogleApiClient);
+            mGoogleGeofenceManager = new GoogleGeofenceManager(mContext, mGoogleApiClient);
         }
     }
 

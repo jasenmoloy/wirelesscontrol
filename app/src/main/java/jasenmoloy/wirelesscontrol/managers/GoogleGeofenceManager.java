@@ -23,12 +23,12 @@ import jasenmoloy.wirelesscontrol.service.GeofenceTransitionsIntentService;
 /**
  * Created by jasenmoloy on 3/10/16.
  */
-public class GeofenceManager implements ResultCallback {
+public class GoogleGeofenceManager implements ResultCallback {
     /// ----------------------
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = GeofenceManager.class.getSimpleName();
+    private static final String TAG = GoogleGeofenceManager.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields
@@ -48,7 +48,7 @@ public class GeofenceManager implements ResultCallback {
     /// Public Methods
     /// ----------------------
 
-    public GeofenceManager(Context context, GoogleApiClient apiClient) {
+    public GoogleGeofenceManager(Context context, GoogleApiClient apiClient) {
         mGeofences = new ArrayList<>();
         mContext = context;
         mApiClient = apiClient;
