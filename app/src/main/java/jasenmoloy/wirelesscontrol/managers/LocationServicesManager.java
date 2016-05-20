@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -49,6 +50,8 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     private LocationRequest mLocationRequest;
     private Context mContext;
 
+    private GoogleApiClient.ConnectionCallbacks mConnectionCallback;
+
     GoogleGeofenceManager mGoogleGeofenceManager;
     ArrayList<GeofenceData> tempData; //JAM TODO: This could be done better...
 
@@ -71,14 +74,16 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
         return mGoogleApiClient.isConnected();
     }
 
-    public void connect(boolean blocking) {
+    public void connect(GoogleApiClient.ConnectionCallbacks callback) {
         if(mGoogleApiClient == null)
             initializeApi();
 
-        if(blocking)
+        if(callback == null)
             mGoogleApiClient.blockingConnect();
-        else
+        else {
+            mConnectionCallback = callback;
             mGoogleApiClient.connect();
+        }
     }
 
     public void disconnect() {
@@ -166,12 +171,14 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     /// Callback Methods
     /// ----------------------
 
-    public void onConnected(Bundle connectionHint) {
-
+    public void onConnected(@Nullable Bundle connectionHint) {
+        mConnectionCallback.onConnected(connectionHint);
+        mConnectionCallback = null;
     }
 
     public void onConnectionSuspended(int cause) {
-        //JAM TODO: Implement me
+        mConnectionCallback.onConnectionSuspended(cause);
+        mConnectionCallback = null;
     }
 
     public void onConnectionFailed(ConnectionResult result) {

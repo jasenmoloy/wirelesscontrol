@@ -8,7 +8,10 @@ import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 
@@ -213,18 +216,18 @@ public class AutonomousGeofenceHandlerService extends Service implements
 
     private void initializeLocationServices() {
         //Create a thread to wait until the blocking connect call is made
-        new Thread(new Runnable() {
-            public void run() {
-                mLocationServices.connect(true);
+        mLocationServices.connect(new GoogleApiClient.ConnectionCallbacks() {
+                                      @Override
+                                      public void onConnected(@Nullable Bundle bundle) {
+                                          //Load Geofence data
+                                          mGeofenceDataManager.loadSavedGeofences(AutonomousGeofenceHandlerService.this);
+                                      }
 
-                //Load Geofence data
-                loadGeofenceData();
-            }
-        }).start();
-    }
+                                      @Override
+                                      public void onConnectionSuspended(int i) {
 
-    private void loadGeofenceData() {
-        mGeofenceDataManager.loadSavedGeofences(this);
+                                      }
+                                  });
     }
 
     private void sendBroadcast(String action) {
