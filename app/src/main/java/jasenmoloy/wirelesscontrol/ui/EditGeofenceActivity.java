@@ -10,9 +10,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +31,7 @@ import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.helpers.UIHelper;
 import jasenmoloy.wirelesscontrol.mvp.EditGeofencePresenter;
 import jasenmoloy.wirelesscontrol.mvp.EditGeofencePresenterImpl;
 import jasenmoloy.wirelesscontrol.mvp.EditGeofenceView;
@@ -46,6 +50,28 @@ public class EditGeofenceActivity extends AppCompatActivity implements
     private static final String TAG = EditGeofenceActivity.class.getSimpleName();
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1; //JAM TODO: Move this to a global constants file
 
+    private class GeofenceNameTextWatcher implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            //Stubbed
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //Stubbed
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(s.length() > 0)
+                UIHelper.enableButton(mSaveButton);
+            else
+                UIHelper.disableButton(mSaveButton);
+        }
+    }
+
+
     /// ----------------------
     /// Object Fields
     /// ----------------------
@@ -56,6 +82,7 @@ public class EditGeofenceActivity extends AppCompatActivity implements
 
     private GeofenceMarker mGeofence;
     private EditText mGeofenceName;
+    Button mSaveButton;
 
     private EditGeofencePresenter mPresenter;
 
@@ -210,6 +237,13 @@ public class EditGeofenceActivity extends AppCompatActivity implements
 
         //Initialize any viewGroup related fields
         mGeofenceName = (EditText) findViewById(R.id.addgeofence_name);
+        mGeofenceName.addTextChangedListener(new GeofenceNameTextWatcher());
+
+        //Grab the "Save" button
+        mSaveButton = (Button) findViewById(R.id.addgeofence_savebutton);
+
+        //Start the button as not clickable we don't have a name to save just yet
+        UIHelper.disableButton(mSaveButton);
 
         //Set the toolbar according to the activity layout
         Toolbar myChildToolbar =
