@@ -11,7 +11,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -26,6 +29,7 @@ import junit.framework.Assert;
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.helpers.UIHelper;
 import jasenmoloy.wirelesscontrol.mvp.AddGeofencePresenter;
 import jasenmoloy.wirelesscontrol.mvp.AddGeofencePresenterImpl;
 import jasenmoloy.wirelesscontrol.mvp.AddGeofenceView;
@@ -41,22 +45,44 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     private static final String TAG = AddGeofenceActivity.class.getSimpleName();
     private static final int MY_PERMISSION_ACCESS_FINE_LOCATION = 1;
 
+    private class GeofenceNameTextWatcher implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            //Stubbed
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //Stubbed
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if(s.length() > 0)
+                UIHelper.enableButton(mSaveButton);
+            else
+                UIHelper.disableButton(mSaveButton);
+        }
+    }
+
     /// ----------------------
     /// Object Fields
     /// ----------------------
 
-    private GoogleMap mMap;
-    private LocationManager mLocationManager;
-    private Location mLocation;
+    GoogleMap mMap;
+    LocationManager mLocationManager;
+    Location mLocation;
 
-    private GeofenceMarker mGeofence;
-    private EditText mGeofenceName;
+    GeofenceMarker mGeofence;
+    EditText mGeofenceName;
+    Button mSaveButton;
 
-    private AddGeofencePresenter mPresenter;
+    AddGeofencePresenter mPresenter;
 
-    private GeofenceData mGeofenceSaveData;
+    GeofenceData mGeofenceSaveData;
 
-    private int mStandardGeofenceRadius; //JAM TODO: Should be moved to a global resources location
+    int mStandardGeofenceRadius; //JAM TODO: Should be moved to a global resources location
 
     /// ----------------------
     /// Public Methods
@@ -79,6 +105,8 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         );
 
         //JAM TODO: Verify data is correct before attempting to save
+        //JAM Validate data the user as entered
+        //JAM Convert data
 
         //JAM Clean and format the map before taking a snapshot
         try {
@@ -174,6 +202,13 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
 
         //Initialize any viewGroup related fields
         mGeofenceName = (EditText) findViewById(R.id.addgeofence_name);
+        mGeofenceName.addTextChangedListener(new GeofenceNameTextWatcher());
+
+        //Grab the "Save" button
+        mSaveButton = (Button) findViewById(R.id.addgeofence_savebutton);
+
+        //Start the button as not clickable we don't have a name to save just yet
+        UIHelper.disableButton(mSaveButton);
 
         //Set the toolbar according to the activity layout
         Toolbar myChildToolbar =
@@ -187,7 +222,6 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.addgeofence_geofencemap);
         mapFragment.getMapAsync(this);
-
 
         mPresenter = new AddGeofencePresenterImpl(this, this);
         mPresenter.onCreate();
