@@ -113,10 +113,16 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         //JAM Clean and format the map before taking a snapshot
         try {
             mMap.setMyLocationEnabled(false);
-            //mMap.moveCamera(CameraUpdateFactory.zoomTo(mMap.getMaxZoomLevel() * 0.5f));
+            mMap.moveCamera(CameraUpdateFactory.zoomTo(mMap.getMaxZoomLevel() * 0.8f));
+
+            //JAM wait a moment until the location marker disappears from the map before taking a snapshot
+            Thread.sleep(200L); //JAM TODO Resources file?
         }
         catch(SecurityException secEx) {
             Debug.logError(TAG, secEx.getMessage());
+        }
+        catch(InterruptedException ex) {
+            Debug.logWarn(TAG, ex.getMessage());
         }
 
         //JAM Grab screenshot of the map
@@ -135,8 +141,6 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
 
     @Override
     public void onGeofenceSaveError() {
-        Debug.logWarn(TAG, "onGeofenceSaveError() - Called but not implemented!");
-
         //Notify the user that an error has occurred
         Debug.showDebugOkDialog(this, "Save Error", "An error occurred while saving. Please try again.");
 
@@ -148,9 +152,9 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         mMap = googleMap;
 
         //Initialize map to begin in Los Angeles to start.
-        mMap.animateCamera(
+        mMap.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
-                        new LatLng(34.0500, -118.2500), mMap.getMaxZoomLevel() * 0.6f)
+                        new LatLng(34.0500, -118.2500), mMap.getMaxZoomLevel() * 0.8f)
         );
 
         //Initialize new geofence marker that will be placed
