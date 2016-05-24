@@ -59,7 +59,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
 
         @Override
         public void afterTextChanged(Editable s) {
-            if(s.length() > 0)
+            if(validateUserNameInput(s.toString()))
                 UIHelper.enableButton(mSaveButton);
             else
                 UIHelper.disableButton(mSaveButton);
@@ -98,15 +98,17 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     }
 
     public void onSaveButtonClick(View view) {
+        String displayName = mGeofenceName.getText().toString();
+
+        //JAM Convert user's input into something better for IDs and filenames
+        String formattedName = createFormattedName(displayName);
+
         mGeofenceSaveData = new GeofenceData(
-                mGeofenceName.getText().toString(),
+                displayName,
+                formattedName,
                 mGeofence.getPosition(),
                 mGeofence.getRadius()
         );
-
-        //JAM TODO: Verify data is correct before attempting to save
-        //JAM Validate data the user as entered
-        //JAM Convert data
 
         //JAM Clean and format the map before taking a snapshot
         try {
@@ -302,5 +304,16 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         Assert.assertNotNull(position);
 
         mGeofence.updateMarker(position, mStandardGeofenceRadius);
+    }
+
+    private boolean validateUserNameInput(String userInput) {
+        if(userInput.length() == 0 || userInput.length() > 100)
+            return false;
+
+        return true;
+    }
+
+    private String createFormattedName(String str) {
+        return str.replaceAll("[^a-zA-Z0-9-]", "_");
     }
 }

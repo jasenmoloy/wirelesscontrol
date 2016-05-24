@@ -82,7 +82,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         }
 
         public void setCard(int position, GeofenceData data) {
-            mName.setText(data.name);
+            mName.setText(data.displayName);
 
             mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f", //JAM TODO: Need to get access to context to get resources
                     data.position.latitude,
@@ -192,7 +192,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
             //Set the new data on the CardView
             mCardView.setData(position, data);
 
-            mName.setText(data.name);
+            mName.setText(data.displayName);
 
             mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f", //JAM TODO: Need to get access to context to get resources
                     data.position.latitude,

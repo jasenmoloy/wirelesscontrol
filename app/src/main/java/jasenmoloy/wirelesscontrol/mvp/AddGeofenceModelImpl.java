@@ -35,6 +35,7 @@ public class AddGeofenceModelImpl implements AddGeofenceModel {
 
     @Override
     public void save(GeofenceData data, OnGeofenceSaveFinishedListener listener) {
+        Debug.logVerbose(TAG, "GeofenceData data.displayName: " + data.displayName);
         Debug.logVerbose(TAG, "GeofenceData data.name: " + data.name);
         Debug.logVerbose(TAG, "GeofenceData data.lat:" + data.position.latitude + " data.long:" + data.position.longitude);
         Debug.logVerbose(TAG, "GeofenceData data.radius: " + data.radius);

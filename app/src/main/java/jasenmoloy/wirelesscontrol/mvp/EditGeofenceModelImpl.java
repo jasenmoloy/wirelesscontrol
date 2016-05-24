@@ -34,6 +34,7 @@ public class EditGeofenceModelImpl implements EditGeofenceModel {
 
     @Override
     public void updateGeofence(int id, GeofenceData data) {
+        Debug.logVerbose(TAG, "Updated GeofenceData data.displayName: " + data.displayName);
         Debug.logVerbose(TAG, "Updated GeofenceData data.name: " + data.name);
         Debug.logVerbose(TAG, "Updated GeofenceData data.lat:" + data.position.latitude + " data.long:" + data.position.longitude);
         Debug.logVerbose(TAG, "Updated GeofenceData data.radius: " + data.radius);

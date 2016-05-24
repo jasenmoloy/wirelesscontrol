@@ -39,6 +39,9 @@ public class GeofenceData implements Parcelable {
     /// ----------------------
 
     @JsonField
+    public String displayName;
+
+    @JsonField
     public String name;
 
     @JsonField(typeConverter = LatLngTypeConverter.class)
@@ -60,7 +63,8 @@ public class GeofenceData implements Parcelable {
     /// Public Methods
     /// ----------------------
 
-    public GeofenceData(String name, LatLng pos, int radius) {
+    public GeofenceData(String displayName, String name, LatLng pos, int radius) {
+        this.displayName = displayName;
         this.name = name;
         this.position = pos;
         this.radius = radius;
@@ -79,12 +83,13 @@ public class GeofenceData implements Parcelable {
     public GeofenceData(Parcel in) {
         Debug.logDebug(TAG, "GeofenceData()");
 
-
+        displayName = in.readString();
         name = in.readString();
         position = new LatLng(in.readDouble(), in.readDouble());
         radius = in.readInt();
         screenshotFileName = in.readString();
 
+        Debug.logDebug(TAG, "GeofenceData() - displayName: " + displayName);
         Debug.logDebug(TAG, "GeofenceData() - name: " + name);
         Debug.logDebug(TAG, "GeofenceData() - position: " + position);
         Debug.logDebug(TAG, "GeofenceData() - radius: " + radius);
@@ -100,6 +105,7 @@ public class GeofenceData implements Parcelable {
     public void writeToParcel(Parcel out, int flags) {
         Debug.logDebug(TAG, "writeToParcel()");
 
+        out.writeString(displayName);
         out.writeString(name);
         out.writeDouble(position.latitude);
         out.writeDouble(position.longitude);
@@ -122,6 +128,7 @@ public class GeofenceData implements Parcelable {
     //Created primarily for LoganSquare Serialization
     //JAM TODO: Create a GeofenceDataTypeConverter class to write our own implementation
     protected GeofenceData() {
+        this.displayName = "";
         this.name = "";
         this.position = new LatLng(0d, 0d);
         this.radius = 0;
