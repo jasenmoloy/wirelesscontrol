@@ -44,13 +44,15 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     /// Object Fields
     /// ----------------------
 
-    private GoogleApiClient mGoogleApiClient;
+    GoogleApiClient mGoogleApiClient;
 
-    private Location mLastLocation;
-    private LocationRequest mLocationRequest;
-    private Context mContext;
+    Location mLastLocation;
+    LocationRequest mLocationRequest;
+    Context mContext;
+    boolean mAreLocationsSettingsApproved;
+    boolean mIsLocationTrackingActive;
 
-    private GoogleApiClient.ConnectionCallbacks mConnectionCallback;
+    GoogleApiClient.ConnectionCallbacks mConnectionCallback;
 
     GoogleGeofenceManager mGoogleGeofenceManager;
     ArrayList<GeofenceData> tempData; //JAM TODO: This could be done better...
@@ -65,6 +67,8 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
 
     public LocationServicesManager(Context context) {
         mContext = context;
+        mAreLocationsSettingsApproved = false;
+        mIsLocationTrackingActive = false;
     }
 
     public boolean isConnected() {
@@ -104,13 +108,55 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
         catch(SecurityException secEx) {
             Debug.logWarn(TAG, secEx.getMessage());
 
-            LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
             Intent intent = new Intent(Constants.BROADCAST_ACTION_PERMISSION_REQUESTED);
-            lbm.sendBroadcast(intent);
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
         catch(Exception ex) {
             Debug.logError(TAG, ex.getMessage());
         }
+    }
+
+    public boolean areGeofencesActive() {
+        if(mGoogleApiClient != null && mGoogleApiClient.isConnected())
+            return mGoogleGeofenceManager.areGeofencesActive();
+        else
+            Debug.logWarn(TAG, "Google API Client has not been connected yet!");
+
+        return false;
+    }
+
+    public void disableGeofences() {
+        if(mGoogleApiClient != null && mGoogleApiClient.isConnected())
+            mGoogleGeofenceManager.disableAll();
+        else
+            Debug.logWarn(TAG, "Google API Client has not been connected yet!");
+    }
+
+    public void enableGeofences() {
+        if(mGoogleApiClient != null && mGoogleApiClient.isConnected())
+            mGoogleGeofenceManager.enableAll();
+        else
+            Debug.logWarn(TAG, "Google API Client has not been connected yet!");
+    }
+
+    public void disableLocationUpdates() {
+        if(!mIsLocationTrackingActive)
+            return;
+
+        if(mGoogleApiClient != null && mGoogleApiClient.isConnected())
+            removeLocationUpdates();
+        else
+            Debug.logWarn(TAG, "Google API Client has not been connected yet!");
+    }
+
+    public void enableLocationUpdates() {
+        if(mIsLocationTrackingActive)
+            return;
+
+        if(mGoogleApiClient != null && mGoogleApiClient.isConnected())
+            addLocationsUpdates();
+        else
+            Debug.logWarn(TAG, "Google API Client has not been connected yet!");
     }
 
     public void initGeofenceData(ArrayList<GeofenceData> data) {
@@ -191,9 +237,11 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
 
         switch(status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
+                mAreLocationsSettingsApproved = true;
+
                 //Now that we can successfully set locations settings, set up periodic locationsupdates.
-                //JAM TODO: Might need to create a flag to see if the user has turned on locations updates or not and save it app-wide.
                 LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+                mIsLocationTrackingActive = true;
                 break;
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                 LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
@@ -248,6 +296,22 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
                 LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
 
         result.setResultCallback(this);
+    }
+
+    private void addLocationsUpdates() {
+        if(mLocationRequest == null)
+            buildLocationSettings();
+        else if(mAreLocationsSettingsApproved) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            mIsLocationTrackingActive = true;
+        }
+        else
+            Debug.logWarn(TAG, "Attempting to add location updates while the user hasn't approved the current location settings.");
+    }
+
+    private void removeLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+        mIsLocationTrackingActive = false;
     }
 
     private void setLastLocation(Location lastLocation) {
