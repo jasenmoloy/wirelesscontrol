@@ -45,7 +45,6 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
     public void onTransitionEnter(List<Geofence> triggeredGeofences) {
         // Get the transition details as a String.
         String geofenceTransitionDetails = getGeofenceTransitionDetails(
-                mContext,
                 mContext.getString(R.string.geofence_transition_entered),
                 triggeredGeofences
         );
@@ -68,7 +67,6 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
     public void onTransitionExit(List<Geofence> triggeredGeofences) {
         // Get the transition details as a String.
         String geofenceTransitionDetails = getGeofenceTransitionDetails(
-                mContext,
                 mContext.getString(R.string.geofence_transition_exited),
                 triggeredGeofences
         );
@@ -159,13 +157,11 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
     /**
      * Gets transition details and returns them as a formatted string.
      *
-     * @param context                   The app context.
      * @param geofenceTransitionText    The prefix to display to the user (typically Entered, Dwelling, Exited, etc.)
      * @param triggeringGeofences       The geofence(s) triggered.
      * @return                          The transition details formatted as String.
      */
     private String getGeofenceTransitionDetails(
-            Context context,
             String geofenceTransitionText,
             List<Geofence> triggeringGeofences) {
 
