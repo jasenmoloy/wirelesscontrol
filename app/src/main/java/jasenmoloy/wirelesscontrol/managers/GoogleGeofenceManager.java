@@ -40,9 +40,8 @@ public class GoogleGeofenceManager implements ResultCallback {
     Geofence.Builder mGeofenceBuilder;
     PendingIntent mGeofencePendingIntent;
 
-    /// ----------------------
-    /// Getters / Setters
-    /// ----------------------
+    boolean mEnabled;
+    final Object mLock = new Object();
 
     /// ----------------------
     /// Public Methods
@@ -53,61 +52,114 @@ public class GoogleGeofenceManager implements ResultCallback {
         mContext = context;
         mApiClient = apiClient;
         mGeofencePendingIntent = null;
+        mEnabled = true; //Start this system enabled.
+    }
+
+    public boolean areGeofencesActive() {
+        return mEnabled;
+    }
+
+    public void enableAll() {
+        synchronized (mLock) {
+            if(mEnabled)
+                return; //If we're enabled already, geofences are already active in the API
+
+            deliverToApi(mGeofences);
+            mEnabled = true;
+        }
+    }
+
+    public void disableAll() {
+        synchronized (mLock) {
+            if(!mEnabled)
+                return;
+
+            List<String> requestIds = new ArrayList<>(mGeofences.size());
+
+            for(Geofence g : mGeofences) {
+                requestIds.add(g.getRequestId());
+            }
+
+            removeFromApi(requestIds);
+            mEnabled = false;
+        }
     }
 
     public void initGeofences(ArrayList<GeofenceData> data) {
-        //Set up all geofence data
-        if(mGeofenceBuilder == null)
-            mGeofenceBuilder = new Geofence.Builder();
+        Assert.assertNotNull(data);
 
-        for(GeofenceData geoData : data) {
-            mGeofences.add(buildGeofence(mGeofenceBuilder, geoData));
+        synchronized (mLock) {
+            if (mGeofenceBuilder == null)
+                mGeofenceBuilder = new Geofence.Builder();
+
+            //Clear out any old geofences since we're initializing
+            mGeofences.clear();
+
+            //Initialize with all new data
+            for (GeofenceData geoData : data) {
+                mGeofences.add(buildGeofence(mGeofenceBuilder, geoData));
+            }
+
+            if (mEnabled)
+                deliverToApi(mGeofences);
         }
-
-        deliverGeofences(mGeofences);
     }
 
     public void addGeofence(GeofenceData data) {
-        if(mGeofenceBuilder == null)
-            mGeofenceBuilder = new Geofence.Builder();
+        Assert.assertNotNull(data);
 
-        ArrayList<Geofence> newGeofences = new ArrayList<>(1);
-        newGeofences.add(buildGeofence(mGeofenceBuilder, data));
-        mGeofences.addAll(newGeofences);
-        deliverGeofences(newGeofences);
+        synchronized (mLock) {
+            if (mGeofenceBuilder == null)
+                mGeofenceBuilder = new Geofence.Builder();
+
+            //Create a new geofence and add it to the list.
+            Geofence newGeofence = buildGeofence(mGeofenceBuilder, data);
+            mGeofences.add(newGeofence);
+
+            //Set up a list to be delivered
+            if (mEnabled) {
+                ArrayList<Geofence> newGeofences = new ArrayList<>(1);
+                newGeofences.add(newGeofence);
+                deliverToApi(newGeofences);
+            }
+        }
     }
 
     public void updateGeofence(int id, GeofenceData data) {
-        if(mGeofenceBuilder == null)
-            mGeofenceBuilder = new Geofence.Builder();
-
-        Assert.assertFalse(id < 0);
+        Assert.assertTrue(id >= 0 && id < mGeofences.size());
         Assert.assertNotNull(data);
 
-        //get old geofence request ID to remove it from location services
-        String requestId = mGeofences.get(id).getRequestId();
-        ArrayList<String> ids = new ArrayList<>(1);
-        ids.add(requestId);
-        removeGeofences(ids);
+        synchronized (mLock) {
+            if (mGeofenceBuilder == null)
+                mGeofenceBuilder = new Geofence.Builder();
 
-        //Create the new geofence data and reaplce our old data
-        Geofence geofence = buildGeofence(mGeofenceBuilder, data);
-        mGeofences.set(id, geofence);
+            //get old geofence request ID to remove it from location services
+            String requestId = mGeofences.get(id).getRequestId();
+            ArrayList<String> ids = new ArrayList<>(1);
+            ids.add(requestId);
+            removeFromApi(ids);
 
-        //Add it to our list and add it to LocationServices
-        ArrayList<Geofence> geofences = new ArrayList<Geofence>(1);
-        geofences.add(mGeofences.get(id));
-        deliverGeofences(geofences);
+            //Create the new geofence data and reaplce our old data
+            Geofence geofence = buildGeofence(mGeofenceBuilder, data);
+            mGeofences.set(id, geofence);
+
+            //Add it to our list and add it to LocationServices
+            ArrayList<Geofence> geofences = new ArrayList<Geofence>(1);
+            geofences.add(mGeofences.get(id));
+            deliverToApi(geofences);
+        }
     }
 
     public void deleteGeofence(int id) {
-        Assert.assertFalse(id < 0);
+        Assert.assertTrue(id >= 0 && id < mGeofences.size());
 
-        //get old geofence request ID to remove it from location services
-        String requestId = mGeofences.get(id).getRequestId();
-        ArrayList<String> ids = new ArrayList<>(1);
-        ids.add(requestId);
-        removeGeofences(ids);
+        synchronized (mLock) {
+            //get old geofence request ID to remove it from location services
+            String requestId = mGeofences.get(id).getRequestId();
+            ArrayList<String> ids = new ArrayList<>(1);
+            ids.add(requestId);
+            removeFromApi(ids);
+        }
     }
 
     /// ----------------------
@@ -182,39 +234,32 @@ public class GoogleGeofenceManager implements ResultCallback {
 
     /**
      *
-     * @param geofences
+     * @param geofences         List of geofences that are to be delivered to Google API.
      */
-    private void deliverGeofences(List<Geofence> geofences) {
+    private void deliverToApi(List<Geofence> geofences) {
         try {
-            Debug.logVerbose(TAG, "deliverGeofences() - mGeofences.size:" + geofences.size());
-            Debug.logVerbose(TAG, "deliverGeofences() - Adding Geofences (RequestsIds: " + geofences.toString() + " to LocationServices...");
-
-
-            PendingIntent pIntent = getGeofencePendingIntent();
-
-            pIntent.send();
+            Debug.logVerbose(TAG, "deliverToApi() - mGeofences.size:" + geofences.size());
+            Debug.logVerbose(TAG, "deliverToApi() - Adding Geofences (RequestsIds: " + geofences.toString() + ") to LocationServices...");
 
             LocationServices.GeofencingApi.addGeofences(
                     mApiClient,
                     buildGeofencingRequest(geofences),
-                    pIntent
+                    getGeofencePendingIntent()
             ).setResultCallback(this);
         }
         catch(SecurityException secEx) {
             Debug.logWarn(TAG, secEx.getMessage());
             //TODO Request permissions to access the user's location.
         }
-        catch(PendingIntent.CanceledException canEx) {
-            Debug.logWarn(TAG, canEx.getMessage());
-        }
     }
 
     /**
      *
+     * @param requestIds        List of request IDs associated to geofences that are to be removed
      */
-    private void removeGeofences(List<String> requestIds) {
+    private void removeFromApi(List<String> requestIds) {
         try {
-            Debug.logVerbose(TAG, "removeGeofences() - Removing Geofence (RequestIds:" + requestIds.toString() + " from LocationServices...");
+            Debug.logVerbose(TAG, "removeFromApi() - Removing Geofence (RequestIds:" + requestIds.toString() + ") from LocationServices...");
 
             LocationServices.GeofencingApi.removeGeofences(
                     mApiClient,
