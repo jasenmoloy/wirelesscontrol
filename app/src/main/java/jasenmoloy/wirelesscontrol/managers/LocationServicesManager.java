@@ -38,7 +38,15 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = LocationServicesManager.class.getSimpleName();
+    static final String TAG = LocationServicesManager.class.getSimpleName();
+
+    enum LocationUpdateState {
+        NOT_INITIALIZED,
+        DISABLE_ON_INIT,
+        ENABLE_ON_INIT,
+        ENABLED,
+        DISABLED
+    }
 
     /// ----------------------
     /// Object Fields
@@ -50,7 +58,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     LocationRequest mLocationRequest;
     Context mContext;
     boolean mAreLocationsSettingsApproved;
-    boolean mIsLocationTrackingActive;
+    LocationUpdateState mLocationUpdateState;
 
     GoogleApiClient.ConnectionCallbacks mConnectionCallback;
 
@@ -68,7 +76,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     public LocationServicesManager(Context context) {
         mContext = context;
         mAreLocationsSettingsApproved = false;
-        mIsLocationTrackingActive = false;
+        mLocationUpdateState = LocationUpdateState.NOT_INITIALIZED;
     }
 
     public boolean isConnected() {
@@ -140,7 +148,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     }
 
     public void disableLocationUpdates() {
-        if(!mIsLocationTrackingActive)
+        if(mLocationUpdateState == LocationUpdateState.DISABLED)
             return;
 
         if(mGoogleApiClient != null && mGoogleApiClient.isConnected())
@@ -150,7 +158,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     }
 
     public void enableLocationUpdates() {
-        if(mIsLocationTrackingActive)
+        if(mLocationUpdateState == LocationUpdateState.ENABLED)
             return;
 
         if(mGoogleApiClient != null && mGoogleApiClient.isConnected())
@@ -239,9 +247,16 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
             case LocationSettingsStatusCodes.SUCCESS:
                 mAreLocationsSettingsApproved = true;
 
-                //Now that we can successfully set locations settings, set up periodic locationsupdates.
-                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-                mIsLocationTrackingActive = true;
+                //Now that we can successfully set locations settings,
+                //set up periodic locations updates.
+                if(mLocationUpdateState == LocationUpdateState.NOT_INITIALIZED ||
+                        mLocationUpdateState == LocationUpdateState.ENABLE_ON_INIT) {
+                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+                    mLocationUpdateState = LocationUpdateState.ENABLED;
+                }
+                else if(mLocationUpdateState == LocationUpdateState.DISABLE_ON_INIT) {
+                    mLocationUpdateState = LocationUpdateState.DISABLED;
+                }
                 break;
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
                 LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(mContext);
@@ -299,19 +314,26 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     }
 
     private void addLocationsUpdates() {
-        if(mLocationRequest == null)
+        if(mLocationRequest == null) {
+            mLocationUpdateState = LocationUpdateState.ENABLE_ON_INIT;
             buildLocationSettings();
+        }
         else if(mAreLocationsSettingsApproved) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            mIsLocationTrackingActive = true;
+            mLocationUpdateState = LocationUpdateState.ENABLED;
         }
         else
             Debug.logWarn(TAG, "Attempting to add location updates while the user hasn't approved the current location settings.");
     }
 
     private void removeLocationUpdates() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-        mIsLocationTrackingActive = false;
+        if(mLocationUpdateState == LocationUpdateState.NOT_INITIALIZED) {
+            mLocationUpdateState = LocationUpdateState.DISABLE_ON_INIT;
+        }
+        else if(mLocationUpdateState == LocationUpdateState.ENABLED) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+            mLocationUpdateState = LocationUpdateState.DISABLED;
+        }
     }
 
     private void setLastLocation(Location lastLocation) {

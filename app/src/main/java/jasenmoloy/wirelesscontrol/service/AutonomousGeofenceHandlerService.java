@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Bundle;
@@ -272,6 +271,9 @@ public class AutonomousGeofenceHandlerService extends Service implements
                                       public void onConnected(@Nullable Bundle bundle) {
                                           //Load Geofence data
                                           mGeofenceDataManager.loadSavedGeofences(AutonomousGeofenceHandlerService.this);
+
+                                          //Determine if we should turn on location updates
+                                          determineLocationUpdates();
                                       }
 
                                       @Override
@@ -304,5 +306,14 @@ public class AutonomousGeofenceHandlerService extends Service implements
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 
         mNewGeofence = null;
+    }
+
+    private void determineLocationUpdates() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+        if(networkInfo.isConnected()) {
+            mLocationServices.disableLocationUpdates();
+        }
     }
 }
