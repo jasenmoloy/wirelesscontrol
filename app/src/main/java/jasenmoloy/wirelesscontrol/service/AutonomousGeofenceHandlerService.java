@@ -5,6 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -42,7 +46,47 @@ public class AutonomousGeofenceHandlerService extends Service implements
         }
     }
 
-    public class ResponseReceiver extends BroadcastReceiver {
+    public class GlobalResponseReceiver extends BroadcastReceiver {
+        public IntentFilter buildIntentFilter() {
+            IntentFilter intentFilter = new IntentFilter();
+//            intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+            intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+            return intentFilter;
+        }
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
+
+            switch(intent.getAction()) {
+                case WifiManager.NETWORK_STATE_CHANGED_ACTION:
+                    NetworkInfo networkInfo = intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+                    if(networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                        switch(networkInfo.getDetailedState()) {
+                            case CONNECTED:
+                                if(networkInfo.isConnected())
+                                    Debug.logVerbose(TAG, networkInfo.getTypeName() + " is connected. Disabling location updates.");
+                                    mLocationServices.disableLocationUpdates();
+                                break;
+                            case DISCONNECTED:
+                                if(!networkInfo.isConnected()) {
+                                    Debug.logVerbose(TAG, networkInfo.getTypeName() + " is disconnected. Enabling location updates.");
+                                    mLocationServices.enableLocationUpdates();
+                                }
+                                break;
+                        }
+                    }
+                    break;
+            }
+        }
+
+        // Prevents instantiation
+        private GlobalResponseReceiver() {
+
+        }
+    }
+
+    public class LocalResponseReceiver extends BroadcastReceiver {
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);
@@ -125,7 +169,7 @@ public class AutonomousGeofenceHandlerService extends Service implements
         }
 
         // Prevents instantiation
-        private ResponseReceiver() {
+        private LocalResponseReceiver() {
 
         }
     }
@@ -134,7 +178,8 @@ public class AutonomousGeofenceHandlerService extends Service implements
     /// Object Fields
     /// ----------------------
 
-    ResponseReceiver mReceiver;
+    GlobalResponseReceiver mGlobalReceiver;
+    LocalResponseReceiver mLocalReceiver;
     LocationServicesManager mLocationServices;
     GeofenceDataManager mGeofenceDataManager;
 
@@ -150,7 +195,8 @@ public class AutonomousGeofenceHandlerService extends Service implements
     /// ----------------------
 
     public AutonomousGeofenceHandlerService() {
-        mReceiver = new ResponseReceiver();
+        mGlobalReceiver = new GlobalResponseReceiver();
+        mLocalReceiver = new LocalResponseReceiver();
         mLocationServices = new LocationServicesManager(this);
         mGeofenceDataManager = new GeofenceDataManager(this);
     }
@@ -170,12 +216,17 @@ public class AutonomousGeofenceHandlerService extends Service implements
         Debug.logDebug(TAG, "onCreate()");
 
         //Register the receivers
-        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, mReceiver.buildIntentFilter());
+        registerReceiver(mGlobalReceiver, mGlobalReceiver.buildIntentFilter());
+        LocalBroadcastManager.getInstance(this).registerReceiver(mLocalReceiver, mLocalReceiver.buildIntentFilter());
     }
 
     @Override
     public void onDestroy() {
         Debug.logDebug(TAG, "onDestroy()");
+
+        //Unregister all receivers
+        unregisterReceiver(mGlobalReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mLocalReceiver);
 
         mLocationServices.disconnect();
         super.onDestroy();
