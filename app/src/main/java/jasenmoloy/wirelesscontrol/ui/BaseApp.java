@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.squareup.leakcanary.LeakCanary;
 
 import jasenmoloy.wirelesscontrol.debug.Debug;
-import jasenmoloy.wirelesscontrol.service.AutonomousGeofenceHandlerService;
+import jasenmoloy.wirelesscontrol.service.GeofenceHandlerService;
 
 /**
  * Created by jasenmoloy on 5/17/16.
@@ -54,7 +54,7 @@ public class BaseApp extends Application {
      * Start the autonomous geofence handler service which loads and tracks geofences
      */
     private void initializeBackgroundService() {
-        Intent intent = new Intent(this, AutonomousGeofenceHandlerService.class);
+        Intent intent = new Intent(this, GeofenceHandlerService.class);
         startService(intent);
     }
 }

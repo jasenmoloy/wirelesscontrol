@@ -111,7 +111,7 @@
         </activity>
 
         <!-- Main Service -->
-        <service android:name=".service.AutonomousGeofenceHandlerService" />
+        <service android:name=".service.GeofenceHandlerService" />
 
         <!-- Geofence Transition Service -->
         <service android:name=".service.GeofenceTransitionsIntentService" />

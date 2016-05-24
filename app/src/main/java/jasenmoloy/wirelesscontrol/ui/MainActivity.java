@@ -29,7 +29,7 @@ import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenter;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;
 import jasenmoloy.wirelesscontrol.mvp.MainView;
-import jasenmoloy.wirelesscontrol.service.AutonomousGeofenceHandlerService;
+import jasenmoloy.wirelesscontrol.service.GeofenceHandlerService;
 
 public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         mPresenter.onActivityCreated(this, savedInstanceState);
 
         //Bind to our background service
-        bindService(new Intent(this, AutonomousGeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
+        bindService(new Intent(this, GeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
