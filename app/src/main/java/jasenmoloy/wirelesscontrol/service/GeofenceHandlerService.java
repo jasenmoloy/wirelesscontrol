@@ -15,12 +15,10 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.Geofence;
 
 import java.util.ArrayList;
 
@@ -57,7 +55,6 @@ public class GeofenceHandlerService extends Service implements
     public class GlobalResponseReceiver extends BroadcastReceiver {
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
-//            intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
             intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
             return intentFilter;
         }
@@ -289,22 +286,27 @@ public class GeofenceHandlerService extends Service implements
     /// ----------------------
 
     private void initializeLocationServices() {
+        GoogleApiClient.ConnectionCallbacks callback = new GoogleApiClient.ConnectionCallbacks() {
+            @Override
+            public void onConnected(@Nullable Bundle bundle) {
+                //Load Geofence data
+                mGeofenceDataManager.loadSavedGeofences(GeofenceHandlerService.this);
+
+                //Determine if we should turn on location updates
+                determineLocationUpdates();
+            }
+
+            @Override
+            public void onConnectionSuspended(int i) {
+
+            }
+        };
+
         //Create a thread to wait until the blocking connect call is made
-        mLocationServices.connect(new GoogleApiClient.ConnectionCallbacks() {
-                                      @Override
-                                      public void onConnected(@Nullable Bundle bundle) {
-                                          //Load Geofence data
-                                          mGeofenceDataManager.loadSavedGeofences(GeofenceHandlerService.this);
-
-                                          //Determine if we should turn on location updates
-                                          determineLocationUpdates();
-                                      }
-
-                                      @Override
-                                      public void onConnectionSuspended(int i) {
-
-                                      }
-                                  });
+        if(!mLocationServices.isConnected())
+            mLocationServices.connect(callback);
+        else
+            callback.onConnected(null);
     }
 
     private void sendBroadcast(String action) {
