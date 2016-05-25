@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.net.wifi.WifiManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 
 import com.google.android.gms.location.Geofence;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jasenmoloy.wirelesscontrol.R;
+import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.ui.BaseApp;
 import jasenmoloy.wirelesscontrol.ui.MainActivity;
@@ -54,7 +56,7 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
         //JAM TODO: Implement me
 
         // Send notification and log the transition details.
-        sendNotification(geofenceTransitionDetails);
+        updateForegroundNotification(geofenceTransitionDetails);
         Debug.logVerbose(TAG, geofenceTransitionDetails);
     }
 
@@ -77,7 +79,7 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
         switchWifi(false);
 
         // Send notification and log the transition details.
-        sendNotification(geofenceTransitionDetails);
+        updateForegroundNotification(geofenceTransitionDetails);
         Debug.logVerbose(TAG, geofenceTransitionDetails);
     }
 
@@ -106,6 +108,12 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
             Debug.logDebug(TAG, "Turning off Wifi!");
             mWifiManager.setWifiEnabled(false);
         }
+    }
+
+    private void updateForegroundNotification(String details) {
+        Intent intent = new Intent(Constants.ACTION_NOTIFICATION_UPDATE);
+        intent.putExtra(Constants.EXTRA_NOTIFICATION_CONTENT, details);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
     }
 
     /**

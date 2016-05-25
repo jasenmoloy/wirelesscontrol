@@ -1,5 +1,8 @@
 package jasenmoloy.wirelesscontrol.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,12 +15,16 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.NotificationCompat;
 
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.Geofence;
 
 import java.util.ArrayList;
 
+import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
@@ -27,6 +34,7 @@ import jasenmoloy.wirelesscontrol.io.OnGeofenceDataUpdateFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
 import jasenmoloy.wirelesscontrol.managers.GeofenceDataManager;
 import jasenmoloy.wirelesscontrol.managers.LocationServicesManager;
+import jasenmoloy.wirelesscontrol.ui.MainActivity;
 
 /**
  * Created by jasenmoloy on 3/14/16.
@@ -38,6 +46,7 @@ public class GeofenceHandlerService extends Service implements
     /// ----------------------
 
     private static final String TAG = GeofenceHandlerService.class.getSimpleName();
+    private static final int APP_NOTIFICATION_ID = 55;
 
     public class ServiceBinder extends Binder {
         public GeofenceHandlerService getService() {
@@ -94,6 +103,7 @@ public class GeofenceHandlerService extends Service implements
             intentFilter.addAction(Constants.BROADCAST_ACTION_SAVE_GEOFENCE);
             intentFilter.addAction(Constants.BROADCAST_ACTION_UPDATE_GEOFENCE);
             intentFilter.addAction(Constants.BROADCAST_ACTION_DELETE_GEOFENCE);
+            intentFilter.addAction(Constants.ACTION_NOTIFICATION_UPDATE);
             return intentFilter;
         }
 
@@ -164,6 +174,10 @@ public class GeofenceHandlerService extends Service implements
                         }
                     });
                     break;
+                case Constants.ACTION_NOTIFICATION_UPDATE:
+                    String notificationContent = intent.getStringExtra(Constants.EXTRA_NOTIFICATION_CONTENT);
+                    UpdateNotification(notificationContent);
+                    break;
             }
         }
 
@@ -209,6 +223,8 @@ public class GeofenceHandlerService extends Service implements
         return START_STICKY;
     }
 
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -217,6 +233,14 @@ public class GeofenceHandlerService extends Service implements
         //Register the receivers
         registerReceiver(mGlobalReceiver, mGlobalReceiver.buildIntentFilter());
         LocalBroadcastManager.getInstance(this).registerReceiver(mLocalReceiver, mLocalReceiver.buildIntentFilter());
+
+        Notification notification = buildNotification("Initialized");
+
+        //JAM TODO: Set up the task stack for the user to enter the app through the notification
+        Intent notifIntent = new Intent(getApplicationContext(), MainActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, notifIntent, 0);
+
+        startForeground(APP_NOTIFICATION_ID, notification);
     }
 
     @Override
@@ -315,5 +339,19 @@ public class GeofenceHandlerService extends Service implements
         if(networkInfo.isConnected()) {
             mLocationServices.disableLocationUpdates();
         }
+    }
+
+    private void UpdateNotification(String content) {
+        NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notifManager.notify(APP_NOTIFICATION_ID, buildNotification(content));
+    }
+
+    private Notification buildNotification(String content) {
+        return new NotificationCompat.Builder(this)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(content)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setPriority(NotificationCompat.PRIORITY_MIN)
+                .build();
     }
 }

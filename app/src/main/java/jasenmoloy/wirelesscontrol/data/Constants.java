@@ -18,6 +18,8 @@ public final class Constants {
     public static final String BROADCAST_ACTION_GEODATA_LOADED = "com.jasenmoloy.wirelesscontrol.service.GeofenceHandlerService.GEODATA_LOADED";
     public static final String BROADCAST_ACTION_GEODATA_REQUEST = "com.jasenmoloy.wirelesscontrol.service.GeofenceHandlerService.GEODATA_REQUEST";
     public static final String BROADCAST_ACTION_GEODATA_DELIVERY = "com.jasenmoloy.wirelesscontrol.service.GeofenceHandlerService.GEODATA_DELIVERY";
+    public static final String ACTION_NOTIFICATION_UPDATE = "com.jasenmoloy.wirelesscontrol.service.GeofenceHandlerService.NOTIFICATION_UPDATE";
+
     public static final String BROADCAST_ACTION_SAVE_GEOFENCE = "com.jasenmoloy.wirelesscontrol.MainActivity.SAVE_GEOFENCE";
     public static final String BROADCAST_ACTION_UPDATE_GEOFENCE = "com.jasenmoloy.wirelesscontrol.MainActivity.UPDATE_GEOFENCE";
     public static final String BROADCAST_ACTION_DELETE_GEOFENCE = "com.jasenmoloy.wirelesscontrol.MainActivity.DELETE_GEOFENCE";
@@ -33,6 +35,7 @@ public final class Constants {
     public static final String BROADCAST_EXTRA_KEY_GEODATA = "GEODATA";
     public static final String BROADCAST_EXTRA_KEY_GEODATALIST = "GEODATALIST";
     public static final String BROADCAST_EXTRA_KEY_BOOLEAN = "BOOLEAN";
+    public static final String EXTRA_NOTIFICATION_CONTENT = "NOTIFICATION_CONTENT";
 
     /**
      * Prevents instantiation
