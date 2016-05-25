@@ -3,14 +3,17 @@ package jasenmoloy.wirelesscontrol.ui;
 import android.Manifest;
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private RecyclerView.LayoutManager mLayoutManager;
 
     private MainPresenter mPresenter;
+
+    private SharedPreferences mSharedPreferences;
 
     //Services
     private Service mService;
@@ -160,6 +165,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
         PreferenceManager.setDefaultValues(this, R.xml.settings_wifi, false);
         PreferenceManager.setDefaultValues(this, R.xml.settings_bluetooth, false);
 
+        //Get preferences
+        mSharedPreferences = getPreferences(MODE_PRIVATE);
+
         //Set up the activity's view
         setContentView(R.layout.activity_main);
 
@@ -192,6 +200,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         //Bind to our background service
         bindService(new Intent(this, GeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
+
+        //Determine if we should show the user the intro dialog.
+        //-5 and -4 is used for now to represent the app's "version". This will be used to display introduction/updates.
+        if(mSharedPreferences.getInt(getString(R.string.mainactivity_pref_key_introduction_flag), -5) < -4) {
+            int versionToSave = showIntroDialog();
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.putInt(getString(R.string.mainactivity_pref_key_introduction_flag), versionToSave);
+            editor.apply();
+        }
     }
 
     @Override
@@ -266,5 +283,21 @@ public class MainActivity extends AppCompatActivity implements MainView {
         else {
             requestPermissions();
         }
+    }
+
+    private int showIntroDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.introduction_dialog_title)
+                .setMessage(R.string.introduction_dialog_message)
+                .setCancelable(false)
+                .setPositiveButton(R.string.introduction_dialog_button_text, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .show();
+
+        return -4; //-4 as it is one above the default (-5)
     }
 }

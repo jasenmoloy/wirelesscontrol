@@ -4,17 +4,27 @@
     <string name="action_addgeofence">Add Geofence</string>
     <string name="action_deletegeofence">Delete</string>
 
-    <!-- Preference Strings -->
-    <string name="settings_general_gpstick_title">GPS Tick Interval (in minutes)</string>
-    <string name="settings_general_gpstick_summary">Blah Blah Blah</string>
-    <string name="settings_wifi_notification_name">
-        Send a notification when new WiFi connection is established
+    <!-- Introduction Dialog -->
+    <string name="introduction_dialog_title">Introduction</string>
+    <string name="introduction_dialog_message">
+        Welcome to Wireless Control!\n
+        \n
+        This app is designed to manage your Wifi (and more soon!) while you\'re moving about.\n
+        \n
+        Set up some geofences on areas where you normally have Wifi and
+        Wireless Control will toggle your Wifi on/off for you when you enter or leave that area automatically!\n
+        \n
+        This will stop your Wifi from constantly looking for new networks and in turn, save some battery.\n
+        \n
+        Note: App is still in beta and under development.\n
+        \n
+        If you spot any issues or have a cool feature idea, please write a review!\n
+        \n
     </string>
-    <string name="settings_wifi_notification_summary">Blah Blah Blah</string>
-    <string name="settings_bt_notification_name">
-        Send a notification when new Bluetooth connection is established
-    </string>
-    <string name="settings_bt_notification_summary">Blah Blah Blah</string>
+    <string name="introduction_dialog_button_text">Got it</string>
+
+    <!-- Main Activity -->
+    <string name="mainactivity_pref_key_introduction_flag">introduction_flag</string>
 
     <!-- Add Geofence Activity -->
     <string name="title_activity_addgeofence">Add Geofence</string>
@@ -44,12 +54,23 @@
 
     <string name="geofence_transition_notification_text">Click notification to return to app</string>
 
+    <!-- Preference Strings -->
+    <string name="settings_general_gpstick_title">GPS Tick Interval (in minutes)</string>
+    <string name="settings_general_gpstick_summary">Blah Blah Blah</string>
+    <string name="settings_wifi_notification_name">
+        Send a notification when new WiFi connection is established
+    </string>
+    <string name="settings_wifi_notification_summary">Blah Blah Blah</string>
+    <string name="settings_bt_notification_name">
+        Send a notification when new Bluetooth connection is established
+    </string>
+    <string name="settings_bt_notification_summary">Blah Blah Blah</string>
 
     <!-- App-specific File IO Strings -->
     <string name="geofencedata_filename">GeofenceData.json</string>
 
     <!-- Error messages -->
-    <string name="not_connected">GoogleApiClient no yet connected. Try again.</string>
+    <string name="not_connected">GoogleApiClient not yet connected. Try again.</string>
     <string name="geofence_not_available">Geofence service is not available now</string>
     <string name="geofence_too_many_geofences">Your app has registered too many geofences</string>
     <string name="geofence_too_many_pending_intents">
