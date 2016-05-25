@@ -20,10 +20,19 @@
     <string name="title_activity_addgeofence">Add Geofence</string>
     <string name="title_geofence_default_name">Name (e.g. Home)</string>
     <string name="text_addgeofence_savebutton">Save</string>
+    <string name="addgeofence_toast_successful">Geofence Saved!</string>
+    <string name="addgeofence_error_dialog_title">Save Error</string>
+    <string name="addgeofence_error_dialog_body">An error occurred while saving.</string>
 
     <!-- Edit Geofence Activity -->
     <string name="title_activity_editgeofence">Edit Geofence</string>
     <string name="text_editgeofence_savebutton">Save</string>
+    <string name="editgeofence_toast_successful">Geofence Updated!</string>
+    <string name="editgeofence_toast_deleted">Geofence Deleted!</string>
+    <string name="editgeofence_update_error_dialog_title">Update Error</string>
+    <string name="editgeofence_update_error_dialog_body">An error occurred while updating.</string>
+    <string name="editgeofence_delete_error_dialog_title">Delete Error</string>
+    <string name="editgeofence_delete_error_dialog_body">An error occurred while deleting.</string>
 
     <!-- Geofence Map Fragment -->
     <string name="title_fragment_geofence_map">Geofence Map</string>

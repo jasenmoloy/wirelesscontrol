@@ -6,4 +6,6 @@ package jasenmoloy.wirelesscontrol.mvp;
 public interface EditGeofenceView {
     void onEditSuccess();
     void onEditFailure();
+    void onDeleteSuccess();
+    void onDeleteFailure();
 }

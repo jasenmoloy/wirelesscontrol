@@ -16,6 +16,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -137,13 +138,15 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
 
         //We no longer have use for this activity to lets destroy it
         finish();
+
+        //Display a toast to the user to inform them the save was successful!
+        UIHelper.displayToast(this, Toast.LENGTH_SHORT, getString(R.string.addgeofence_toast_successful));
     }
 
     @Override
     public void onGeofenceSaveError() {
         //Notify the user that an error has occurred
-        Debug.showDebugOkDialog(this, "Save Error", "An error occurred while saving. Please try again.");
-
+        Debug.showDebugOkDialog(this, getString(R.string.addgeofence_error_dialog_title), getString(R.string.addgeofence_error_dialog_body));
         //JAM TODO: Depending on the error, stay on the current screen and attempt to have the user save again (if possible).
     }
 

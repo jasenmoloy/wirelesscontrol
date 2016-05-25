@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -160,19 +161,25 @@ public class EditGeofenceActivity extends AppCompatActivity implements
 
     @Override
     public void onEditSuccess() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
-        startActivity(intent);
-
-        //We no longer have use for this activity to lets destroy it
-        finish();
+        closeActivity(getString(R.string.editgeofence_toast_successful));
     }
 
     @Override
     public void onEditFailure() {
         //Notify the user that an error has occurred
-        Debug.showDebugOkDialog(this, "Save Error", "An error occurred while saving. Please try again.");
+        Debug.showDebugOkDialog(this, getString(R.string.editgeofence_update_error_dialog_title), getString(R.string.editgeofence_update_error_dialog_body));
+        //JAM TODO: Depending on the error, stay on the current screen and attempt to have the user save again (if possible).
+    }
 
+    @Override
+    public void onDeleteSuccess() {
+        closeActivity(getString(R.string.editgeofence_toast_deleted));
+    }
+
+    @Override
+    public void onDeleteFailure() {
+        //Notify the user that an error has occurred
+        Debug.showDebugOkDialog(this, getString(R.string.editgeofence_delete_error_dialog_title), getString(R.string.editgeofence_delete_error_dialog_body));
         //JAM TODO: Depending on the error, stay on the current screen and attempt to have the user save again (if possible).
     }
 
@@ -352,5 +359,17 @@ public class EditGeofenceActivity extends AppCompatActivity implements
 
     private String createFormattedName(String str) {
         return str.trim().replaceAll("[^a-zA-Z0-9-]", "_");
+    }
+
+    private void closeActivity(String toastMsg) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
+        startActivity(intent);
+
+        //We no longer have use for this activity to lets destroy it
+        finish();
+
+        //Display a toast to the user to inform them the save was successful!
+        UIHelper.displayToast(this, Toast.LENGTH_SHORT, toastMsg);
     }
 }

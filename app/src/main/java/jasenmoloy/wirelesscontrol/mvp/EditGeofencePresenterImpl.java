@@ -48,9 +48,9 @@ public class EditGeofencePresenterImpl implements
                     break;
                 case Constants.BROADCAST_ACTION_GEOFENCE_DELETED:
                     if( intent.getBooleanExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, false) )
-                        EditGeofencePresenterImpl.this.onGeofenceUpdateSuccess();
+                        EditGeofencePresenterImpl.this.onGeofenceDeleteSuccess();
                     else
-                        EditGeofencePresenterImpl.this.onGeofenceUpdateError();
+                        EditGeofencePresenterImpl.this.onGeofenceDeleteError();
                     break;
             }
         }
@@ -104,6 +104,15 @@ public class EditGeofencePresenterImpl implements
     public void onGeofenceUpdateError() {
         //JAM TODO: Determine the issue and notify the view with the appropriate action.
         mView.onEditFailure();
+    }
+
+    public void onGeofenceDeleteSuccess() {
+        mView.onDeleteSuccess();
+    }
+
+    public void onGeofenceDeleteError() {
+        //JAM TODO: Determine the issue and notify the view with the appropriate action.
+        mView.onDeleteFailure();
     }
 
     @Override
