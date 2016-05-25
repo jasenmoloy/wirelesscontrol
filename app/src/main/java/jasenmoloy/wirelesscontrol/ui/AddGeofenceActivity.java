@@ -98,7 +98,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     }
 
     public void onSaveButtonClick(View view) {
-        String displayName = mGeofenceName.getText().toString();
+        String displayName = mGeofenceName.getText().toString().trim(); //Trim any trailing whitespace.
 
         //JAM Convert user's input into something better for IDs and filenames
         String formattedName = createFormattedName(displayName);
@@ -318,6 +318,6 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     }
 
     private String createFormattedName(String str) {
-        return str.replaceAll("[^a-zA-Z0-9-]", "_");
+        return str.trim().replaceAll("[^a-zA-Z0-9-]", "_");
     }
 }
