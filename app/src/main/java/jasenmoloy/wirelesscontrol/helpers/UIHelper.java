@@ -1,6 +1,8 @@
 package jasenmoloy.wirelesscontrol.helpers;
 
+import android.content.Context;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * Created by jasenmoloy on 5/20/16.
@@ -23,5 +25,9 @@ public class UIHelper {
     public static void disableButton(Button button) {
         button.setAlpha(0.25f); //Make the button transparent to visually show the button is disabled.
         button.setClickable(false);
+    }
+
+    public static void displayToast(Context context, int duration, String text) {
+        Toast.makeText(context, text, duration).show();
     }
 }
