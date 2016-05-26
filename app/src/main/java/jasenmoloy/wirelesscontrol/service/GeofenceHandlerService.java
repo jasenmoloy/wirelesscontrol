@@ -15,6 +15,7 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.NotificationCompat;
 
@@ -196,6 +197,8 @@ public class GeofenceHandlerService extends Service implements
     //JAM TODO Find a better way to handle this
     GeofenceData mNewGeofence;
 
+    PendingIntent mNotificationPendingIntent;
+
     /// ----------------------
     /// Getters / Setters
     /// ----------------------
@@ -231,11 +234,13 @@ public class GeofenceHandlerService extends Service implements
         registerReceiver(mGlobalReceiver, mGlobalReceiver.buildIntentFilter());
         LocalBroadcastManager.getInstance(this).registerReceiver(mLocalReceiver, mLocalReceiver.buildIntentFilter());
 
-        Notification notification = buildNotification("Initialized");
+        //Build a pending intent that will be used to invoke the app from the notification
+        Intent notifIntent = new Intent(this, MainActivity.class);
+        mNotificationPendingIntent = TaskStackBuilder.create(this)
+        .addNextIntent(notifIntent)
+        .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //JAM TODO: Set up the task stack for the user to enter the app through the notification
-        Intent notifIntent = new Intent(getApplicationContext(), MainActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, notifIntent, 0);
+        Notification notification = buildForegroundNotification(getString(R.string.notification_content_initialized), mNotificationPendingIntent);
 
         startForeground(APP_NOTIFICATION_ID, notification);
     }
@@ -323,7 +328,7 @@ public class GeofenceHandlerService extends Service implements
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    private void sendGeofenceSaveBroadcast(boolean success) {;
+    private void sendGeofenceSaveBroadcast(boolean success) {
         Intent intent = new Intent(Constants.BROADCAST_ACTION_GEOFENCE_SAVED);
         Bundle intentBundle = new Bundle();
         intentBundle.putBoolean(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, success);
@@ -345,13 +350,14 @@ public class GeofenceHandlerService extends Service implements
 
     private void UpdateNotification(String content) {
         NotificationManager notifManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notifManager.notify(APP_NOTIFICATION_ID, buildNotification(content));
+        notifManager.notify(APP_NOTIFICATION_ID, buildForegroundNotification(content, mNotificationPendingIntent));
     }
 
-    private Notification buildNotification(String content) {
+    private Notification buildForegroundNotification(String content, PendingIntent contentIntent) {
         return new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(content)
+                .setContentIntent(contentIntent)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .build();
