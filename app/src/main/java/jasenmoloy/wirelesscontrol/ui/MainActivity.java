@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private TextView mEmptyMessage;
 
     private MainPresenter mPresenter;
 
@@ -135,22 +138,26 @@ public class MainActivity extends AppCompatActivity implements MainView {
      * @param geofenceData Saved Geofence data created by the user
      */
     @Override
-    public void onCardDataLoaded(List<GeofenceData> geofenceData) {
+    public void loadGeofenceCards(ArrayList<GeofenceData> geofenceData) {
         Debug.logVerbose(TAG, "cardData.length:" + geofenceData.size());
 
-        //Specify target adapter to use to populate each card
-        mAdapter = new GeofenceCardAdapter(getApplication(), geofenceData);
-        mRecyclerView.setAdapter(mAdapter);
-    }
+        if(geofenceData.size() == 0) { //Display a message to the user that we don't have any to load
+            mEmptyMessage.setVisibility(View.VISIBLE);
+            mRecyclerView.setVisibility(View.GONE);
+        }
+        else {
+            mEmptyMessage.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.VISIBLE);
 
-    @Override
-    public void loadGeofenceCards(ArrayList<GeofenceData> geofenceData) {
-        //JAM TODO: Load all geofence cards
+            //Specify target adapter to use to populate each card
+            mAdapter = new GeofenceCardAdapter(getApplication(), geofenceData);
+            mRecyclerView.setAdapter(mAdapter);
+        }
     }
 
     @Override
     public void unloadGeofenceCards() {
-        //JAM TODO: Unload the adapter to relieve resources
+        mRecyclerView.setAdapter(null);
     }
 
     /// ----------------------
@@ -181,6 +188,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         //Use a linear layout for geofence cards
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mEmptyMessage = (TextView) findViewById(R.id.main_empty_geofence_container);
 
         //Set the active toolbar
         Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);

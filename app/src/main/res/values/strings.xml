@@ -28,6 +28,11 @@
 
     <!-- Main Activity -->
     <string name="mainactivity_pref_key_introduction_flag">introduction_flag</string>
+    <string name="mainactivity_empty_container_message">
+        No geofences to display :(\n
+        \n
+        Add one using the \'+\' below.
+    </string>
 
     <!-- Add Geofence Activity -->
     <string name="title_activity_addgeofence">Add Geofence</string>

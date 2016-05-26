@@ -27,7 +27,18 @@
         android:id="@+id/list_geofences"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/main_empty_geofence_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="visible"
+        android:text="@string/mainactivity_empty_container_message"
+        android:textSize="8pt"
+        android:textStyle="bold"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_main"

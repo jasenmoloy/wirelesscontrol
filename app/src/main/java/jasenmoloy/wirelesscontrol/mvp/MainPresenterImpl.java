@@ -210,6 +210,6 @@ public class MainPresenterImpl implements MainPresenter {
     private void reloadGeofenceCards() {
         //Let the UI know the data is loaded.
         if(mModel.isGeofenceDataInitialized())
-            mView.onCardDataLoaded(mModel.getGeofenceData());
+            mView.loadGeofenceCards(mModel.getGeofenceData());
     }
 }
