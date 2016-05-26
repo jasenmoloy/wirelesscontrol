@@ -14,8 +14,8 @@
         \n
         This app is designed to manage your Wifi (and more soon!) while you\'re moving about.\n
         \n
-        Set up some geofences on areas where you normally have Wifi and
-        Wireless Control will toggle your Wifi on/off for you when you enter or leave that area automatically!\n
+        Set up some perimeters on areas where you normally have Wifi and
+        Wireless Control will toggle your Wifi on/off for you when you enter and leave automatically!\n
         \n
         This will stop your Wifi from constantly looking for new networks and in turn, save some battery.\n
         \n
@@ -55,6 +55,9 @@
 
     <!-- Geofence Map Fragment -->
     <string name="title_fragment_geofence_map">Geofence Map</string>
+
+    <!-- Notification strings -->
+    <string name="notification_content_initialized">Initialized</string>
 
     <!-- Transition type strings -->
     <string name="geofence_transition_entered">Entered</string>
