@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Wireless Control</string>
     <string name="action_settings">Settings</string>
-    <string name="action_addgeofence">Add Geofence</string>
+    <string name="action_addgeofence">Add Perimeter</string>
     <string name="action_deletegeofence">Delete</string>
 
     <!-- General/Multi-use text -->
@@ -29,32 +29,32 @@
     <!-- Main Activity -->
     <string name="mainactivity_pref_key_introduction_flag">introduction_flag</string>
     <string name="mainactivity_empty_container_message">
-        No geofences to display :(\n
+        No perimeters to display :(\n
         \n
         Add one using the \'+\' below.
     </string>
-    <string name="mainactivity_toast_max_geofence_limit">Max limit of %1$d geofences of reached</string>
+    <string name="mainactivity_toast_max_geofence_limit">Max limit of %1$d perimeters reached</string>
 
     <!-- Add Geofence Activity -->
-    <string name="title_activity_addgeofence">Add Geofence</string>
+    <string name="title_activity_addgeofence">Add Perimeter</string>
     <string name="title_geofence_default_name">Name (e.g. Home)</string>
     <string name="text_addgeofence_savebutton">Save</string>
-    <string name="addgeofence_toast_successful">Geofence Saved!</string>
+    <string name="addgeofence_toast_successful">Perimeter Saved</string>
     <string name="addgeofence_error_dialog_title">Save Error</string>
     <string name="addgeofence_error_dialog_body">An error occurred while saving.</string>
 
     <!-- Edit Geofence Activity -->
-    <string name="title_activity_editgeofence">Edit Geofence</string>
+    <string name="title_activity_editgeofence">Edit Perimeter</string>
     <string name="text_editgeofence_savebutton">Save</string>
-    <string name="editgeofence_toast_successful">Geofence Updated!</string>
-    <string name="editgeofence_toast_deleted">Geofence Deleted!</string>
+    <string name="editgeofence_toast_successful">Perimeter Updated</string>
+    <string name="editgeofence_toast_deleted">Perimeter Deleted</string>
     <string name="editgeofence_update_error_dialog_title">Update Error</string>
     <string name="editgeofence_update_error_dialog_body">An error occurred while updating.</string>
     <string name="editgeofence_delete_error_dialog_title">Delete Error</string>
     <string name="editgeofence_delete_error_dialog_body">An error occurred while deleting.</string>
 
     <!-- Geofence Map Fragment -->
-    <string name="title_fragment_geofence_map">Geofence Map</string>
+    <string name="title_fragment_geofence_map">Perimeter Map</string>
 
     <!-- Notification strings -->
     <string name="notification_content_initialized">Initialized</string>
