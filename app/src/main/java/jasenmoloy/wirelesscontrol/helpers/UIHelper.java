@@ -1,8 +1,12 @@
 package jasenmoloy.wirelesscontrol.helpers;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 import android.widget.Toast;
+
+import jasenmoloy.wirelesscontrol.R;
 
 /**
  * Created by jasenmoloy on 5/20/16.
@@ -29,5 +33,16 @@ public class UIHelper {
 
     public static void displayToast(Context context, int duration, String text) {
         Toast.makeText(context, text, duration).show();
+    }
+
+    public static void displayOkDialog(Context context, int titleId,
+                                       int messageId, int okTextId,
+                                       boolean cancelable, DialogInterface.OnClickListener callback) {
+        new AlertDialog.Builder(context)
+                .setTitle(titleId)
+                .setMessage(messageId)
+                .setCancelable(cancelable)
+                .setPositiveButton(okTextId, callback)
+                .show();
     }
 }

@@ -29,6 +29,7 @@ import java.util.List;
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.helpers.UIHelper;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenter;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;
 import jasenmoloy.wirelesscontrol.mvp.MainView;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final String msGoogleMapsApiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
+    public static final int STARTING_DIALOG_VERISON = -5;
+    public static final int INTRODUCTION_DIALOG_VERSION = -4;
 
     /// ----------------------
     /// Object Fields
@@ -200,15 +203,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         //Bind to our background service
         bindService(new Intent(this, GeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
-
-        //Determine if we should show the user the intro dialog.
-        //-5 and -4 is used for now to represent the app's "version". This will be used to display introduction/updates.
-        if(mSharedPreferences.getInt(getString(R.string.mainactivity_pref_key_introduction_flag), -5) < -4) {
-            int versionToSave = showIntroDialog();
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.putInt(getString(R.string.mainactivity_pref_key_introduction_flag), versionToSave);
-            editor.apply();
-        }
     }
 
     @Override
@@ -217,6 +211,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
         Debug.logDebug(TAG, "JAM - onStart()");
 
         mPresenter.onActivityStarted(this);
+
+        //Determine if we should show the user the intro dialog.
+        //Hardcoded values are used to represent the app's "version". Rudimentary way display different introduction/updates.
+        if(mSharedPreferences.getInt(getString(R.string.mainactivity_pref_key_introduction_flag), STARTING_DIALOG_VERISON) < INTRODUCTION_DIALOG_VERSION) {
+            showIntroDialog();
+        }
     }
 
     @Override
@@ -285,19 +285,19 @@ public class MainActivity extends AppCompatActivity implements MainView {
         }
     }
 
-    private int showIntroDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.introduction_dialog_title)
-                .setMessage(R.string.introduction_dialog_message)
-                .setCancelable(false)
-                .setPositiveButton(R.string.introduction_dialog_button_text, new DialogInterface.OnClickListener() {
+    private void showIntroDialog() {
+        UIHelper.displayOkDialog(this,
+                R.string.introduction_dialog_title,
+                R.string.introduction_dialog_message,
+                R.string.introduction_dialog_button_text,
+                false,
+                new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        SharedPreferences.Editor editor = mSharedPreferences.edit();
+                        editor.putInt(getString(R.string.mainactivity_pref_key_introduction_flag), INTRODUCTION_DIALOG_VERSION); //INTRODUCTION_DIALOG_VERSION (-4) is greater than STARTING_DIALOG_VERISON (-5)
+                        editor.apply();
                     }
-                })
-                .show();
-
-        return -4; //-4 as it is one above the default (-5)
+                });
     }
 }
