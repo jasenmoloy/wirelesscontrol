@@ -146,7 +146,13 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     @Override
     public void onGeofenceSaveError() {
         //Notify the user that an error has occurred
-        Debug.showDebugOkDialog(this, getString(R.string.addgeofence_error_dialog_title), getString(R.string.addgeofence_error_dialog_body));
+        UIHelper.displayOkDialog(this,
+                R.string.addgeofence_error_dialog_title,
+                R.string.addgeofence_error_dialog_body,
+                R.string.general_button_text_error,
+                true,
+                null);
+
         //JAM TODO: Depending on the error, stay on the current screen and attempt to have the user save again (if possible).
     }
 

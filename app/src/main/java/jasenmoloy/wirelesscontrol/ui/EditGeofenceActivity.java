@@ -167,7 +167,12 @@ public class EditGeofenceActivity extends AppCompatActivity implements
     @Override
     public void onEditFailure() {
         //Notify the user that an error has occurred
-        Debug.showDebugOkDialog(this, getString(R.string.editgeofence_update_error_dialog_title), getString(R.string.editgeofence_update_error_dialog_body));
+        UIHelper.displayOkDialog(this,
+                R.string.editgeofence_update_error_dialog_title,
+                R.string.editgeofence_update_error_dialog_body,
+                R.string.general_button_text_error,
+                true,
+                null);
         //JAM TODO: Depending on the error, stay on the current screen and attempt to have the user save again (if possible).
     }
 
@@ -179,7 +184,12 @@ public class EditGeofenceActivity extends AppCompatActivity implements
     @Override
     public void onDeleteFailure() {
         //Notify the user that an error has occurred
-        Debug.showDebugOkDialog(this, getString(R.string.editgeofence_delete_error_dialog_title), getString(R.string.editgeofence_delete_error_dialog_body));
+        UIHelper.displayOkDialog(this,
+                R.string.editgeofence_delete_error_dialog_title,
+                R.string.editgeofence_delete_error_dialog_body,
+                R.string.general_button_text_error,
+                true,
+                null);
         //JAM TODO: Depending on the error, stay on the current screen and attempt to have the user save again (if possible).
     }
 

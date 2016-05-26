@@ -4,6 +4,9 @@
     <string name="action_addgeofence">Add Geofence</string>
     <string name="action_deletegeofence">Delete</string>
 
+    <!-- General/Multi-use text -->
+    <string name="general_button_text_error">Doh!</string>
+
     <!-- Introduction Dialog -->
     <string name="introduction_dialog_title">Introduction</string>
     <string name="introduction_dialog_message">
