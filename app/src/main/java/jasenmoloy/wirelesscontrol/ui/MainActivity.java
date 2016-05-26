@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private RecyclerView mRecyclerView;
     private TextView mEmptyMessage;
+    private ProgressBar mProgressBar;
 
     private SharedPreferences mSharedPreferences;
 
@@ -141,10 +143,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
         Debug.logVerbose(TAG, "cardData.length:" + geofenceData.size());
 
         if(geofenceData.size() == 0) { //Display a message to the user that we don't have any to load
+            mProgressBar.setVisibility(View.GONE);
             mEmptyMessage.setVisibility(View.VISIBLE);
             mRecyclerView.setVisibility(View.GONE);
         }
         else {
+            mProgressBar.setVisibility(View.GONE);
             mEmptyMessage.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
 
@@ -155,6 +159,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void unloadGeofenceCards() {
+        mEmptyMessage.setVisibility(View.GONE);
+        mRecyclerView.setVisibility(View.GONE);
+        mProgressBar.setVisibility(View.VISIBLE); //Show the loading bar again when we reload our data
         mRecyclerView.setAdapter(null);
     }
 
@@ -185,8 +192,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         //Use a linear layout for geofence cards
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         mEmptyMessage = (TextView) findViewById(R.id.main_empty_geofence_container);
+        mProgressBar = (ProgressBar) findViewById(R.id.main_geofence_container_progressbar);
 
         //Set the active toolbar
         Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);

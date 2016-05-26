@@ -35,10 +35,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="visible"
+        android:visibility="gone"
         android:text="@string/mainactivity_empty_container_message"
         android:textSize="8pt"
         android:textStyle="bold"/>
+
+    <ProgressBar
+        android:id="@+id/main_geofence_container_progressbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleX="0.20"
+        android:scaleY="0.20"
+        android:foregroundGravity="center"
+        android:indeterminate="true"
+        android:visibility="visible" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_main"
