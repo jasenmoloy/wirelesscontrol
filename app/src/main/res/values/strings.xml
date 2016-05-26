@@ -33,6 +33,7 @@
         \n
         Add one using the \'+\' below.
     </string>
+    <string name="mainactivity_toast_max_geofence_limit">Max limit of %1$d geofences of reached</string>
 
     <!-- Add Geofence Activity -->
     <string name="title_activity_addgeofence">Add Geofence</string>

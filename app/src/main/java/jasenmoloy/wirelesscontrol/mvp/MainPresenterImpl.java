@@ -146,6 +146,13 @@ public class MainPresenterImpl implements MainPresenter {
         mLocalBroadcastManager = LocalBroadcastManager.getInstance(mContext);
     }
 
+    public boolean allowNewGeofence() {
+        if(mModel.getGeofenceData().size() < MAX_ALLOWABLE_GEOFENCES)
+            return true;
+
+        return false;
+    }
+
     /// ----------------------
     /// Callback Methods
     /// ----------------------

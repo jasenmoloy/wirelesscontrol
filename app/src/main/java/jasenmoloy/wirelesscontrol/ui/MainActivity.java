@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
             default:
                 break;
         }
-        return;
     }
 
     /**
@@ -197,9 +197,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), AddGeofenceActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
-                startActivity(intent);
+                if(mPresenter.allowNewGeofence()) {
+                    Intent intent = new Intent(v.getContext(), AddGeofenceActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); //Prevents reinstantiation if the activity already exists
+                    startActivity(intent);
+                }
+                else {
+                    //Display a toast informing the user they've reach the max allowablelimit
+                    UIHelper.displayToast(MainActivity.this, Toast.LENGTH_SHORT, getString(R.string.mainactivity_toast_max_geofence_limit, MainPresenter.MAX_ALLOWABLE_GEOFENCES));
+                }
             }
         });
 
