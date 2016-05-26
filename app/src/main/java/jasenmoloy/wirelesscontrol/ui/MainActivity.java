@@ -54,13 +54,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
     private TextView mEmptyMessage;
 
-    private MainPresenter mPresenter;
-
     private SharedPreferences mSharedPreferences;
+
+    private MainPresenter mPresenter;
 
     //Services
     private Service mService;
@@ -150,8 +148,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             mRecyclerView.setVisibility(View.VISIBLE);
 
             //Specify target adapter to use to populate each card
-            mAdapter = new GeofenceCardAdapter(getApplication(), geofenceData);
-            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setAdapter(new GeofenceCardAdapter(getApplication(), geofenceData));
         }
     }
 
@@ -186,8 +183,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
         mRecyclerView.setHasFixedSize(true); //Improves performance if you know the layout size does not change.
 
         //Use a linear layout for geofence cards
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mEmptyMessage = (TextView) findViewById(R.id.main_empty_geofence_container);
 
