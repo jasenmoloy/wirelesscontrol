@@ -200,7 +200,7 @@ public class GoogleGeofenceManager implements ResultCallback {
      * @return
      */
     private Geofence buildGeofence(Geofence.Builder builder, GeofenceData data) {
-        builder.setRequestId(data.name);
+        builder.setRequestId(data.displayName); //JAM TODO: This should not using the display name. This should use a proper ID. Currently patched for now in order to properly display the correct name in the notification.
         builder.setCircularRegion(data.position.latitude,
                 data.position.longitude,
                 (float) data.radius);
