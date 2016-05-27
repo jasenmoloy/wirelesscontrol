@@ -214,16 +214,10 @@ public class GeofenceHandlerService extends Service implements
         mGeofenceDataManager = new GeofenceDataManager(this);
     }
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
     }
-
-
 
     @Override
     public void onCreate() {

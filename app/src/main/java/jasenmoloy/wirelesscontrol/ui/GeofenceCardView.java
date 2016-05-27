@@ -55,10 +55,6 @@ public class GeofenceCardView extends CardView implements GestureDetector.OnGest
         mData = data;
     }
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
     /**
      * Handle an user's touch response to open an edit geofence activity.
      * @param ev
@@ -69,8 +65,6 @@ public class GeofenceCardView extends CardView implements GestureDetector.OnGest
         mGestureDectector.onTouchEvent(ev);
         return true;
     }
-
-
 
     /**
      * Intecept all touch events heading to the children to be handled here.
@@ -89,7 +83,7 @@ public class GeofenceCardView extends CardView implements GestureDetector.OnGest
 
     @Override
     public void onShowPress(MotionEvent e) {
-
+        //Stubbed
     }
 
     @Override
@@ -110,7 +104,7 @@ public class GeofenceCardView extends CardView implements GestureDetector.OnGest
 
     @Override
     public void onLongPress(MotionEvent e) {
-
+        //Stubbed
     }
 
     @Override
@@ -125,6 +119,7 @@ public class GeofenceCardView extends CardView implements GestureDetector.OnGest
     /// ----------------------
     /// Private Methods
     /// ----------------------
+
     private void init() {
         mGestureDectector = new GestureDetector(getContext(), this);
         mGestureDectector.setIsLongpressEnabled(false);

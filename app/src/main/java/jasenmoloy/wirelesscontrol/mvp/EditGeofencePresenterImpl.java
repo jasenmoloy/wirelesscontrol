@@ -93,28 +93,6 @@ public class EditGeofencePresenterImpl implements
         mModel.deleteGeofence(id);
     }
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
-    public void onGeofenceUpdateSuccess() {
-        mView.onEditSuccess();
-    }
-
-    public void onGeofenceUpdateError() {
-        //JAM TODO: Determine the issue and notify the view with the appropriate action.
-        mView.onEditFailure();
-    }
-
-    public void onGeofenceDeleteSuccess() {
-        mView.onDeleteSuccess();
-    }
-
-    public void onGeofenceDeleteError() {
-        //JAM TODO: Determine the issue and notify the view with the appropriate action.
-        mView.onDeleteFailure();
-    }
-
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         registerReceiver(LocalBroadcastManager.getInstance(activity));
@@ -153,6 +131,24 @@ public class EditGeofencePresenterImpl implements
     /// ----------------------
     /// Protected Methods
     /// ----------------------
+
+    protected void onGeofenceUpdateSuccess() {
+        mView.onEditSuccess();
+    }
+
+    protected void onGeofenceUpdateError() {
+        //JAM TODO: Determine the issue and notify the view with the appropriate action.
+        mView.onEditFailure();
+    }
+
+    protected void onGeofenceDeleteSuccess() {
+        mView.onDeleteSuccess();
+    }
+
+    protected void onGeofenceDeleteError() {
+        //JAM TODO: Determine the issue and notify the view with the appropriate action.
+        mView.onDeleteFailure();
+    }
 
     /// ----------------------
     /// Private Methods

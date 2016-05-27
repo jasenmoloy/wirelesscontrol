@@ -100,10 +100,6 @@ public class EditGeofenceActivity extends AppCompatActivity implements
     /// Public Methods
     /// ----------------------
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
     @Override
     public void onCameraChange(CameraPosition cameraPos) {
         UpdateGeofenceMarker(cameraPos.target);

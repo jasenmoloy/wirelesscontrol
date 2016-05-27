@@ -38,20 +38,6 @@ public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyC
     /// Public Methods
     /// ----------------------
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_geofence_map);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-    }
-
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -71,6 +57,16 @@ public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyC
     /// ----------------------
     /// Protected Methods
     /// ----------------------
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_geofence_map);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
 
     /// ----------------------
     /// Private Methods

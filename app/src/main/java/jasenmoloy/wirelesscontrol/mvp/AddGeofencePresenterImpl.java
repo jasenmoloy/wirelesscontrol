@@ -84,14 +84,12 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
         mBroadcastManager.unregisterReceiver(mReceiver);
     }
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
+    @Override
     public void onGeofenceSaveSuccess() {
         mView.onGeofenceSaveSuccess();
     }
 
+    @Override
     public void onGeofenceSaveError() {
         //JAM TODO: Determine the issue and notify the view with the appropriate action.
         mView.onGeofenceSaveError();

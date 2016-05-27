@@ -248,11 +248,6 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
             return VIEWTYPE_GOOGLEMAP;
     }
 
-
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
     /**
      * Create new views (this is invoked by the layout manager)
      * @param parent

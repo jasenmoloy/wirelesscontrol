@@ -60,10 +60,6 @@ public class EditGeofenceModelImpl implements EditGeofenceModel {
     }
 
     /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
-    /// ----------------------
     /// Protected Methods
     /// ----------------------
 

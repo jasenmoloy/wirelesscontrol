@@ -50,10 +50,6 @@ public class AddGeofenceModelImpl implements AddGeofenceModel {
     }
 
     /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
-    /// ----------------------
     /// Protected Methods
     /// ----------------------
 

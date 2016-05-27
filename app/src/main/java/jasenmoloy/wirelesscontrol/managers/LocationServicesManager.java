@@ -221,24 +221,24 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
             Debug.logError(TAG, "Google API Client has not been connected yet! Disregarding geofence!");
     }
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
+    @Override
     public void onConnected(@Nullable Bundle connectionHint) {
         mConnectionCallback.onConnected(connectionHint);
         mConnectionCallback = null;
     }
 
+    @Override
     public void onConnectionSuspended(int cause) {
         mConnectionCallback.onConnectionSuspended(cause);
         mConnectionCallback = null;
     }
 
+    @Override
     public void onConnectionFailed(ConnectionResult result) {
         //JAM TODO: Implement me
     }
 
+    @Override
     public void onResult(LocationSettingsResult result) {
         Status status = result.getStatus();
         LocationSettingsStates states = result.getLocationSettingsStates();
@@ -269,6 +269,7 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
         }
     }
 
+    @Override
     public void onLocationChanged(Location loc) {
         setLastLocation(loc);
     }

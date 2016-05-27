@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public static final int LOCATION_PERMISSIONS = 1;
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    public static final String msGoogleMapsApiKey = "AIzaSyCwLIuxHEE5Dly9nrkyxl_8kiGjgJ8jmDk";
     public static final int STARTING_DIALOG_VERISON = -5;
     public static final int INTRODUCTION_DIALOG_VERSION = -4;
 
@@ -61,8 +60,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private MainPresenter mPresenter;
 
-    //Services
-    private Service mService;
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -78,10 +75,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     /// ----------------------
     /// Public Methods
-    /// ----------------------
-
-    /// ----------------------
-    /// Callback Methods
     /// ----------------------
 
     @Override
@@ -193,6 +186,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
         //Use a linear layout for geofence cards
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        //Grab the message and progress bar that are placeholders for the recyclerView
         mEmptyMessage = (TextView) findViewById(R.id.main_empty_geofence_container);
         mProgressBar = (ProgressBar) findViewById(R.id.main_geofence_container_progressbar);
 

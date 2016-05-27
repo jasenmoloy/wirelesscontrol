@@ -67,10 +67,6 @@ public class MainModelImpl implements MainModel {
     }
 
     /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
-    /// ----------------------
     /// Protected Methods
     /// ----------------------
 

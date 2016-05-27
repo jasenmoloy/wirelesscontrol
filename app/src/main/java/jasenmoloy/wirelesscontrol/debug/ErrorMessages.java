@@ -42,10 +42,6 @@ public class ErrorMessages {
     }
 
     /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
-    /// ----------------------
     /// Protected Methods
     /// ----------------------
 

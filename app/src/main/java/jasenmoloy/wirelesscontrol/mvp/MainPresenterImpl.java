@@ -153,10 +153,6 @@ public class MainPresenterImpl implements MainPresenter {
         return false;
     }
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         mViewState = ViewState.CREATED;

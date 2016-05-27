@@ -76,10 +76,6 @@ public class GeofenceData implements Parcelable {
         screenshotFileName = String.valueOf(hashCode) + ".png";
     }
 
-    public void addBitmap(Bitmap mapScreenshot) {
-        this.mapScreenshot = mapScreenshot;
-    }
-
     public GeofenceData(Parcel in) {
         Debug.logDebug(TAG, "GeofenceData()");
 
@@ -93,6 +89,10 @@ public class GeofenceData implements Parcelable {
         Debug.logDebug(TAG, "GeofenceData() - name: " + name);
         Debug.logDebug(TAG, "GeofenceData() - position: " + position);
         Debug.logDebug(TAG, "GeofenceData() - radius: " + radius);
+    }
+
+    public void addBitmap(Bitmap mapScreenshot) {
+        this.mapScreenshot = mapScreenshot;
     }
 
     @Override
@@ -112,10 +112,6 @@ public class GeofenceData implements Parcelable {
         out.writeInt(radius);
         out.writeString(screenshotFileName);
     }
-
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
 
     /// ----------------------
     /// Protected Methods

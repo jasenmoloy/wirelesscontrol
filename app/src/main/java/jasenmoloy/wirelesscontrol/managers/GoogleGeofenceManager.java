@@ -162,10 +162,6 @@ public class GoogleGeofenceManager implements ResultCallback {
         }
     }
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
     public void onResult(Result result) {
         Debug.logVerbose(TAG, "onResult(): " + result.getStatus());
     }

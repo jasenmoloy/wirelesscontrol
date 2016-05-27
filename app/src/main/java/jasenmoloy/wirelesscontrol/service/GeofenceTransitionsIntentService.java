@@ -50,21 +50,21 @@ public class GeofenceTransitionsIntentService extends IntentService {
         super(TAG);
     }
 
-    /// ----------------------
-    /// Callback Methods
-    /// ----------------------
-
     @Override
     public void onCreate() {
         super.onCreate();
     }
+
+    /// ----------------------
+    /// Protected Methods
+    /// ----------------------
 
     @Override
     protected void onHandleIntent(Intent intent) {
         Debug.logVerbose(TAG, "--- onHandleIntent() ---");
 
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-        
+
         if (geofencingEvent.hasError()) {
             String errorMessage = ErrorMessages.getGeofenceErrorString(this,
                     geofencingEvent.getErrorCode());
@@ -99,10 +99,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
                 break;
         }
     }
-
-    /// ----------------------
-    /// Protected Methods
-    /// ----------------------
 
     /// ----------------------
     /// Private Methods
