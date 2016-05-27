@@ -14,8 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.TextViewCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
@@ -99,15 +96,19 @@ public class MainActivity extends AppCompatActivity implements MainView {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                //JAM User action not recognized. Invoke the super class instead.
-                return super.onOptionsItemSelected(item);
-        }
+
+        //JAM Disabled for now.
+//        switch (item.getItemId()) {
+//            case R.id.action_settings:
+//                Intent intent = new Intent(this, SettingsActivity.class);
+//                startActivity(intent);
+//                return true;
+//            default:
+//                //JAM User action not recognized. Invoke the super class instead.
+//                return super.onOptionsItemSelected(item);
+//        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

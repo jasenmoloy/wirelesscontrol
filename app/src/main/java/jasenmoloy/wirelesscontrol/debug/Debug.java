@@ -2,6 +2,7 @@ package jasenmoloy.wirelesscontrol.debug;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.appcompat.BuildConfig;
 import android.util.Log;
 
 /**
@@ -15,6 +16,9 @@ public class Debug {
      * @param msg
      */
     public static void logDebug(String tag, String msg) {
+        if(!BuildConfig.DEBUG)
+            return;
+
         if(msg != null)
             Log.d(tag, msg);
         else
@@ -51,6 +55,9 @@ public class Debug {
      * @param msg
      */
     public static void logVerbose(String tag, String msg) {
+        if(!BuildConfig.DEBUG)
+            return;
+
         if (msg != null)
             Log.v(tag, msg);
         else

@@ -53,7 +53,6 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
 
         //Turn on Wifi
         switchWifi(true);
-        //JAM TODO: Implement me
 
         // Send notification and log the transition details.
         updateForegroundNotification(geofenceTransitionDetails);
@@ -98,7 +97,6 @@ public class GeofenceTransitionManagerImpl extends GeofenceTransitionManager {
 
     private void switchWifi(boolean turnOn) {
         boolean isWifiEnabled = mWifiManager.isWifiEnabled();
-
 
         if(turnOn && !isWifiEnabled) { //Turn on WiFi only if it's actually off
             Debug.logDebug(TAG, "Turning on Wifi!");
