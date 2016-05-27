@@ -15,6 +15,7 @@ import jasenmoloy.wirelesscontrol.debug.Debug;
  */
 @JsonObject
 public class GeofenceData implements Parcelable {
+
     /// ----------------------
     /// Class Fields
     /// ----------------------
@@ -54,10 +55,6 @@ public class GeofenceData implements Parcelable {
     public String screenshotFileName;
 
     public Bitmap mapScreenshot;
-
-    /// ----------------------
-    /// Getters / Setters
-    /// ----------------------
 
     /// ----------------------
     /// Public Methods
@@ -117,12 +114,10 @@ public class GeofenceData implements Parcelable {
     /// Protected Methods
     /// ----------------------
 
-    /// ----------------------
-    /// Private Methods
-    /// ----------------------
-
-    //Created primarily for LoganSquare Serialization
-    //JAM TODO: Create a GeofenceDataTypeConverter class to write our own implementation
+    /**
+     * Created primarily for LoganSquare Serialization
+     * JAM TODO: Create a GeofenceDataTypeConverter class to write our own implementation
+     */
     protected GeofenceData() {
         this.displayName = "";
         this.name = "";
@@ -130,4 +125,8 @@ public class GeofenceData implements Parcelable {
         this.radius = 0;
         this.screenshotFileName = "";
     }
+
+    /// ----------------------
+    /// Private Methods
+    /// ----------------------
 }

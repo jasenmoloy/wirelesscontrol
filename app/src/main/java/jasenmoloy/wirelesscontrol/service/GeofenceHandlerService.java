@@ -44,16 +44,13 @@ public class GeofenceHandlerService extends Service implements
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = GeofenceHandlerService.class.getSimpleName();
-    private static final int APP_NOTIFICATION_ID = 55;
-
-    public class ServiceBinder extends Binder {
+    private class ServiceBinder extends Binder {
         public GeofenceHandlerService getService() {
             return GeofenceHandlerService.this;
         }
     }
 
-    public class GlobalResponseReceiver extends BroadcastReceiver {
+    private class GlobalResponseReceiver extends BroadcastReceiver {
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
@@ -92,7 +89,7 @@ public class GeofenceHandlerService extends Service implements
         }
     }
 
-    public class LocalResponseReceiver extends BroadcastReceiver {
+    private class LocalResponseReceiver extends BroadcastReceiver {
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);
@@ -185,19 +182,22 @@ public class GeofenceHandlerService extends Service implements
         }
     }
 
+    private static final String TAG = GeofenceHandlerService.class.getSimpleName();
+    private static final int APP_NOTIFICATION_ID = 55;
+
     /// ----------------------
     /// Object Fields
     /// ----------------------
 
-    GlobalResponseReceiver mGlobalReceiver;
-    LocalResponseReceiver mLocalReceiver;
-    LocationServicesManager mLocationServices;
-    GeofenceDataManager mGeofenceDataManager;
+    private GlobalResponseReceiver mGlobalReceiver;
+    private LocalResponseReceiver mLocalReceiver;
+    private LocationServicesManager mLocationServices;
+    private GeofenceDataManager mGeofenceDataManager;
 
     //JAM TODO Find a better way to handle this
-    GeofenceData mNewGeofence;
+    private GeofenceData mNewGeofence;
 
-    PendingIntent mNotificationPendingIntent;
+    private PendingIntent mNotificationPendingIntent;
 
     /// ----------------------
     /// Getters / Setters
@@ -306,11 +306,6 @@ public class GeofenceHandlerService extends Service implements
             mLocationServices.connect(callback);
         else
             callback.onConnected(null);
-    }
-
-    private void sendBroadcast(String action) {
-        Intent intent = new Intent(action);
-        LocalBroadcastManager.getInstance(GeofenceHandlerService.this).sendBroadcast(intent);
     }
 
     private void sendGeofenceLoadBroadcast(ArrayList<GeofenceData> geofenceData) {

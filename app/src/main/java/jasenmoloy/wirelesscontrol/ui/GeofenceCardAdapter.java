@@ -50,8 +50,16 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
     public class ViewHolderGoogleMap extends GeofenceCardAdapter.ViewHolder implements
             OnMapReadyCallback, Application.ActivityLifecycleCallbacks, ComponentCallbacks {
 
+        /// ----------------------
+        /// Class Fields
+        /// ----------------------
+
+        /// ----------------------
+        /// Object Fields
+        /// ----------------------
+
         private GeofenceMarker mMarker;
-        boolean mIsCardRecycled;
+        private boolean mIsCardRecycled;
 
         //UI Elements
         private GeofenceCardView mCardView;
@@ -60,6 +68,10 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         private TextView mName;
         private TextView mLocation;
         private TextView mRadius;
+
+        /// ----------------------
+        /// Public Methods
+        /// ----------------------
 
         public ViewHolderGoogleMap(GeofenceCardView v) {
             super(v);
@@ -76,11 +88,13 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         /**
          * Remove any "intensive" resources from this view as we're being recycled.
          */
+        @Override
         public void onViewRecycled() {
             mMapView.onPause();
             mIsCardRecycled = true;
         }
 
+        @Override
         public void setCard(int position, GeofenceData data) {
             mName.setText(data.displayName);
 
@@ -123,41 +137,58 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
             displayMarkerOnMap();
         }
 
+        @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
             mMapView.onCreate(savedInstanceState);
         }
 
+        @Override
         public void onActivityStarted(Activity activity) {
             //Stubbed
         }
 
+        @Override
         public void onActivityResumed(Activity activity) {
             mMapView.onResume();
         }
 
+        @Override
         public void onActivityPaused(Activity activity) {
             mMapView.onPause();
         }
 
+        @Override
         public void onActivityStopped(Activity activity) {
             //Stubbed
         }
 
+        @Override
         public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
             mMapView.onSaveInstanceState(outState);
         }
 
+        @Override
         public void onActivityDestroyed(Activity activity) {
             mMapView.onDestroy();
         }
 
+        @Override
         public void onLowMemory() {
             mMapView.onLowMemory();
         }
 
+        @Override
         public void onConfigurationChanged(Configuration config) {
             //Stubbed
         }
+
+        /// ----------------------
+        /// Protected Methods
+        /// ----------------------
+
+        /// ----------------------
+        /// Private Methods
+        /// ----------------------
 
         private void displayMarkerOnMap() {
             Assert.assertNotNull(mMap);
@@ -168,11 +199,23 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
     }
 
     public class ViewHolderBitmap extends GeofenceCardAdapter.ViewHolder {
+        /// ----------------------
+        /// Class Fields
+        /// ----------------------
+
+        /// ----------------------
+        /// Object Fields
+        /// ----------------------
+
         private GeofenceCardView mCardView;
         private ImageView mImageView;
         private TextView mName;
         private TextView mLocation;
         private TextView mRadius;
+
+        /// ----------------------
+        /// Public Methods
+        /// ----------------------
 
         public ViewHolderBitmap(GeofenceCardView v) {
             super(v);
@@ -184,10 +227,12 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
             mImageView = (ImageView) mCardView.findViewById(R.id.card_savedgeofence_image);
         }
 
+        @Override
         public void onViewRecycled() {
             mCardView.setData(-1, null);
         }
 
+        @Override
         public void setCard(int position, GeofenceData data) {
             //Set the new data on the CardView
             mCardView.setData(position, data);
@@ -203,6 +248,14 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
 
             mImageView.setImageBitmap(data.mapScreenshot);
         }
+
+        /// ----------------------
+        /// Protected Methods
+        /// ----------------------
+
+        /// ----------------------
+        /// Private Methods
+        /// ----------------------
     }
 
     /// ----------------------

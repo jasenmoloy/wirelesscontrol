@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
 
     public static final int LOCATION_PERMISSIONS = 1;
-
-    public static final String TAG = MainActivity.class.getSimpleName();
     public static final int STARTING_DIALOG_VERISON = -5;
     public static final int INTRODUCTION_DIALOG_VERSION = -4;
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields

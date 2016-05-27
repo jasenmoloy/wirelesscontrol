@@ -72,7 +72,6 @@ public class EditGeofenceActivity extends AppCompatActivity implements
         }
     }
 
-
     /// ----------------------
     /// Object Fields
     /// ----------------------
@@ -83,7 +82,7 @@ public class EditGeofenceActivity extends AppCompatActivity implements
 
     private GeofenceMarker mGeofence;
     private EditText mGeofenceName;
-    Button mSaveButton;
+    private Button mSaveButton;
 
     private EditGeofencePresenter mPresenter;
 
@@ -91,10 +90,6 @@ public class EditGeofenceActivity extends AppCompatActivity implements
     private GeofenceData mGeofenceSaveData;
 
     private int mStandardGeofenceRadius; //JAM TODO: Should be moved to a global resources location
-
-    /// ----------------------
-    /// Getters / Setters
-    /// ----------------------
 
     /// ----------------------
     /// Public Methods

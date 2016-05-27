@@ -71,19 +71,19 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     /// Object Fields
     /// ----------------------
 
-    GoogleMap mMap;
-    LocationManager mLocationManager;
-    Location mLocation;
+    private GoogleMap mMap;
+    private LocationManager mLocationManager;
+    private Location mLocation;
 
-    GeofenceMarker mGeofence;
-    EditText mGeofenceName;
-    Button mSaveButton;
+    private GeofenceMarker mGeofence;
+    private EditText mGeofenceName;
+    private Button mSaveButton;
 
-    AddGeofencePresenter mPresenter;
+    private AddGeofencePresenter mPresenter;
 
-    GeofenceData mGeofenceSaveData;
+    private GeofenceData mGeofenceSaveData;
 
-    int mStandardGeofenceRadius; //JAM TODO: Should be moved to a global resources location
+    private int mStandardGeofenceRadius; //JAM TODO: Should be moved to a global resources location
 
     /// ----------------------
     /// Public Methods

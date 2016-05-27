@@ -38,9 +38,9 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     /// Class Fields
     /// ----------------------
 
-    static final String TAG = LocationServicesManager.class.getSimpleName();
+    private static final String TAG = LocationServicesManager.class.getSimpleName();
 
-    enum LocationUpdateState {
+    private enum LocationUpdateState {
         NOT_INITIALIZED,
         DISABLE_ON_INIT,
         ENABLE_ON_INIT,
@@ -52,22 +52,18 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
     /// Object Fields
     /// ----------------------
 
-    GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient mGoogleApiClient;
 
-    Location mLastLocation;
-    LocationRequest mLocationRequest;
-    Context mContext;
-    boolean mAreLocationsSettingsApproved;
-    LocationUpdateState mLocationUpdateState;
+    private Location mLastLocation;
+    private LocationRequest mLocationRequest;
+    private Context mContext;
+    private boolean mAreLocationsSettingsApproved;
+    private LocationUpdateState mLocationUpdateState;
 
-    GoogleApiClient.ConnectionCallbacks mConnectionCallback;
+    private GoogleApiClient.ConnectionCallbacks mConnectionCallback;
 
-    GoogleGeofenceManager mGoogleGeofenceManager;
-    ArrayList<GeofenceData> tempData; //JAM TODO: This could be done better...
-
-    /// ----------------------
-    /// Getters / Setters
-    /// ----------------------
+    private GoogleGeofenceManager mGoogleGeofenceManager;
+    private ArrayList<GeofenceData> tempData; //JAM TODO: This could be done better...
 
     /// ----------------------
     /// Public Methods

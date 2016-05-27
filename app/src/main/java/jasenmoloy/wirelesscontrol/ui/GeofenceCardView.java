@@ -22,14 +22,10 @@ public class GeofenceCardView extends CardView implements GestureDetector.OnGest
     /// Object Fields
     /// ----------------------
 
-    GestureDetector mGestureDectector;
+    private GestureDetector mGestureDectector;
 
-    int mPosition;
-    GeofenceData mData;
-
-    /// ----------------------
-    /// Getters / Setters
-    /// ----------------------
+    private int mPosition;
+    private GeofenceData mData;
 
     /// ----------------------
     /// Public Methods

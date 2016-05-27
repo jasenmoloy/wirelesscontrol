@@ -24,11 +24,7 @@ public class EditGeofencePresenterImpl implements
 
     private static final String TAG = EditGeofencePresenterImpl.class.getSimpleName();
 
-    /// ----------------------
-    /// Object Fields
-    /// ----------------------
-
-    public class ResponseReceiver extends BroadcastReceiver {
+    private class ResponseReceiver extends BroadcastReceiver {
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_UPDATED);
@@ -61,15 +57,15 @@ public class EditGeofencePresenterImpl implements
         }
     }
 
-    EditGeofenceModel mModel;
-    EditGeofenceView mView;
-
-    LocalBroadcastManager mBroadcastManager;
-    ResponseReceiver mReceiver;
-
     /// ----------------------
-    /// Getters / Setters
+    /// Object Fields
     /// ----------------------
+
+    private EditGeofenceModel mModel;
+    private EditGeofenceView mView;
+
+    private LocalBroadcastManager mBroadcastManager;
+    private ResponseReceiver mReceiver;
 
     /// ----------------------
     /// Public Methods

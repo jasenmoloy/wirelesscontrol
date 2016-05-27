@@ -20,11 +20,7 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
 
     private static final String TAG = AddGeofencePresenterImpl.class.getSimpleName();
 
-    /// ----------------------
-    /// Object Fields
-    /// ----------------------
-
-    public class ResponseReceiver extends BroadcastReceiver {
+    private class ResponseReceiver extends BroadcastReceiver {
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEOFENCE_SAVED);
@@ -50,11 +46,15 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
         }
     }
 
-    AddGeofenceModel mModel;
-    AddGeofenceView mView;
+    /// ----------------------
+    /// Object Fields
+    /// ----------------------
 
-    LocalBroadcastManager mBroadcastManager;
-    ResponseReceiver mReceiver;
+    private AddGeofenceModel mModel;
+    private AddGeofenceView mView;
+
+    private LocalBroadcastManager mBroadcastManager;
+    private ResponseReceiver mReceiver;
 
     /// ----------------------
     /// Public Methods
@@ -66,20 +66,24 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
         mReceiver = new ResponseReceiver();
     }
 
+    @Override
     public void registerReceiver(LocalBroadcastManager broadcastManager) {
         mBroadcastManager = broadcastManager;
         mBroadcastManager.registerReceiver(mReceiver, mReceiver.buildIntentFilter());
     }
 
+    @Override
     public void saveGeofence(GeofenceData data) {
         mModel.save(data, this);
         //JAM TODO: Tell the model to save out the data and let me know when it's done.
         //JAM TODO: Once the model is done saving, let the view know to send the user back to the main screen.
     }
 
+    @Override
     public void onCreate() {
     }
 
+    @Override
     public void onDestroy() {
         mBroadcastManager.unregisterReceiver(mReceiver);
     }

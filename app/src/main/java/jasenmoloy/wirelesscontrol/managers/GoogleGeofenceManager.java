@@ -3,6 +3,7 @@ package jasenmoloy.wirelesscontrol.managers;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Result;
@@ -34,14 +35,15 @@ public class GoogleGeofenceManager implements ResultCallback {
     /// Object Fields
     /// ----------------------
 
-    Context mContext;
-    GoogleApiClient mApiClient;
-    ArrayList<Geofence> mGeofences;
-    Geofence.Builder mGeofenceBuilder;
-    PendingIntent mGeofencePendingIntent;
+    private final Object LOCK = new Object();
 
-    boolean mEnabled;
-    final Object mLock = new Object();
+    private Context mContext;
+    private GoogleApiClient mApiClient;
+    private ArrayList<Geofence> mGeofences;
+    private Geofence.Builder mGeofenceBuilder;
+    private PendingIntent mGeofencePendingIntent;
+
+    private boolean mEnabled;
 
     /// ----------------------
     /// Public Methods
@@ -60,7 +62,7 @@ public class GoogleGeofenceManager implements ResultCallback {
     }
 
     public void enableAll() {
-        synchronized (mLock) {
+        synchronized (LOCK) {
             if(mEnabled)
                 return; //If we're enabled already, geofences are already active in the API
 
@@ -70,7 +72,7 @@ public class GoogleGeofenceManager implements ResultCallback {
     }
 
     public void disableAll() {
-        synchronized (mLock) {
+        synchronized (LOCK) {
             if(!mEnabled)
                 return;
 
@@ -88,7 +90,7 @@ public class GoogleGeofenceManager implements ResultCallback {
     public void initGeofences(ArrayList<GeofenceData> data) {
         Assert.assertNotNull(data);
 
-        synchronized (mLock) {
+        synchronized (LOCK) {
             if (mGeofenceBuilder == null)
                 mGeofenceBuilder = new Geofence.Builder();
 
@@ -108,7 +110,7 @@ public class GoogleGeofenceManager implements ResultCallback {
     public void addGeofence(GeofenceData data) {
         Assert.assertNotNull(data);
 
-        synchronized (mLock) {
+        synchronized (LOCK) {
             if (mGeofenceBuilder == null)
                 mGeofenceBuilder = new Geofence.Builder();
 
@@ -129,7 +131,7 @@ public class GoogleGeofenceManager implements ResultCallback {
         Assert.assertTrue(id >= 0 && id < mGeofences.size());
         Assert.assertNotNull(data);
 
-        synchronized (mLock) {
+        synchronized (LOCK) {
             if (mGeofenceBuilder == null)
                 mGeofenceBuilder = new Geofence.Builder();
 
@@ -153,7 +155,7 @@ public class GoogleGeofenceManager implements ResultCallback {
     public void deleteGeofence(int id) {
         Assert.assertTrue(id >= 0 && id < mGeofences.size());
 
-        synchronized (mLock) {
+        synchronized (LOCK) {
             //get old geofence request ID to remove it from location services
             String requestId = mGeofences.get(id).getRequestId();
             ArrayList<String> ids = new ArrayList<>(1);
@@ -162,7 +164,7 @@ public class GoogleGeofenceManager implements ResultCallback {
         }
     }
 
-    public void onResult(Result result) {
+    public void onResult(@NonNull Result result) {
         Debug.logVerbose(TAG, "onResult(): " + result.getStatus());
     }
 

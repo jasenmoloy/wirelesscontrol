@@ -34,11 +34,7 @@ public class GeofenceDataManager {
 
     private static final String TAG = GeofenceDataManager.class.getSimpleName();
 
-    /// ----------------------
-    /// Object Fields
-    /// ----------------------
-
-    class LoadTask extends AsyncTask<String, Void, ArrayList<GeofenceData>> {
+    private class LoadTask extends AsyncTask<String, Void, ArrayList<GeofenceData>> {
         @Override
         protected ArrayList<GeofenceData> doInBackground(String... params) {
             File f = new File(mContext.getFilesDir() + "/" + params[0]);
@@ -119,7 +115,7 @@ public class GeofenceDataManager {
         }
     }
 
-    class SaveTask extends AsyncTask<String, Void, Integer> {
+    private class SaveTask extends AsyncTask<String, Void, Integer> {
         @Override
         protected Integer doInBackground(String... params) {
             try {
@@ -194,24 +190,20 @@ public class GeofenceDataManager {
         }
     }
 
-    Context mContext;
-    ArrayList<GeofenceData> mGeofenceData;
-
-    OnGeofenceDataLoadFinishedListener mLoadListener;
-    OnGeofenceSaveFinishedListener mSaveListener;
-
-    OnGeofenceDataUpdateFinishedListener mUpdateListener;
-    int mUpdatePosition;
-
-    OnGeofenceDataDeleteFinishedListener mDeleteListener;
-
     /// ----------------------
-    /// Getters / Setters
+    /// Object Fields
     /// ----------------------
 
-    public ArrayList<GeofenceData> getGeofenceData() {
-        return mGeofenceData;
-    }
+    private Context mContext;
+    private ArrayList<GeofenceData> mGeofenceData;
+
+    private OnGeofenceDataLoadFinishedListener mLoadListener;
+    private OnGeofenceSaveFinishedListener mSaveListener;
+
+    private OnGeofenceDataUpdateFinishedListener mUpdateListener;
+    private int mUpdatePosition;
+
+    private OnGeofenceDataDeleteFinishedListener mDeleteListener;
 
     /// ----------------------
     /// Public Methods
@@ -220,6 +212,10 @@ public class GeofenceDataManager {
     public GeofenceDataManager(Context context) {
         mContext = context;
         mGeofenceData = new ArrayList<>();
+    }
+
+    public ArrayList<GeofenceData> getGeofenceData() {
+        return mGeofenceData;
     }
 
     public void addGeofence(GeofenceData data, OnGeofenceSaveFinishedListener listener) {

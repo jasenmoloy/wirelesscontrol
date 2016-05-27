@@ -28,10 +28,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
     /// ----------------------
 
     /// ----------------------
-    /// Getters / Setters
-    /// ----------------------
-
-    /// ----------------------
     /// Public Methods
     /// ----------------------
 

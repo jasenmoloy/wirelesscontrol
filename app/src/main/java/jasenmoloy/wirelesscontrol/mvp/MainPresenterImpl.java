@@ -22,8 +22,6 @@ public class MainPresenterImpl implements MainPresenter {
     /// Class Fields
     /// ----------------------
 
-    private static final String TAG = MainPresenterImpl.class.getSimpleName();
-
     public class ResponseReceiver extends BroadcastReceiver {
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
@@ -111,11 +109,7 @@ public class MainPresenterImpl implements MainPresenter {
         }
     }
 
-    /// ----------------------
-    /// Object Fields
-    /// ----------------------
-
-    enum ViewState {
+    private enum ViewState {
         CREATED,
         STARTED,
         RESUMED,
@@ -124,14 +118,20 @@ public class MainPresenterImpl implements MainPresenter {
         DESTROYED
     }
 
-    MainModel mModel;
-    MainView mView;
-    ResponseReceiver mReceiver;
-    LocalBroadcastManager mLocalBroadcastManager;
+    private static final String TAG = MainPresenterImpl.class.getSimpleName();
 
-    Context mContext;
+    /// ----------------------
+    /// Object Fields
+    /// ----------------------
 
-    ViewState mViewState;
+    private MainModel mModel;
+    private MainView mView;
+    private ResponseReceiver mReceiver;
+    private LocalBroadcastManager mLocalBroadcastManager;
+
+    private Context mContext;
+
+    private ViewState mViewState;
 
     /// ----------------------
     /// Public Methods
