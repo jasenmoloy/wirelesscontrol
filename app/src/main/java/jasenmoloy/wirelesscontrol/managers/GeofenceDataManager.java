@@ -100,6 +100,7 @@ public class GeofenceDataManager {
                 if(geofenceData.size() > 0) {
                     try {
                         mGeofenceData = geofenceData;
+                        mIsDataLoaded = true;
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -196,6 +197,8 @@ public class GeofenceDataManager {
 
     private Context mContext;
     private ArrayList<GeofenceData> mGeofenceData;
+    private boolean mIsDataLoaded;
+
 
     private OnGeofenceDataLoadFinishedListener mLoadListener;
     private OnGeofenceSaveFinishedListener mSaveListener;
@@ -212,6 +215,11 @@ public class GeofenceDataManager {
     public GeofenceDataManager(Context context) {
         mContext = context;
         mGeofenceData = new ArrayList<>();
+        mIsDataLoaded = false;
+    }
+
+    public boolean isDataLoaded() {
+        return mIsDataLoaded;
     }
 
     public ArrayList<GeofenceData> getGeofenceData() {

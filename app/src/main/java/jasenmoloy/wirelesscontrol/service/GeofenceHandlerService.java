@@ -92,7 +92,6 @@ public class GeofenceHandlerService extends Service implements
     private class LocalResponseReceiver extends BroadcastReceiver {
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_LOADED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_REQUEST);
             intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_SAVE_GEOFENCE);
@@ -108,11 +107,6 @@ public class GeofenceHandlerService extends Service implements
             int id;
 
             switch(intent.getAction()) {
-                case Constants.BROADCAST_ACTION_GEODATA_LOADED:
-                    mLocationServices.performLocationServices();
-                    ArrayList<GeofenceData> geoData = intent.getParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATALIST);
-                    mLocationServices.initGeofenceData(geoData);
-                    break;
                 case Constants.BROADCAST_ACTION_GEODATA_REQUEST:
                     Intent newIntent = new Intent(Constants.BROADCAST_ACTION_GEODATA_DELIVERY);
                     newIntent.putParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATALIST, mGeofenceDataManager.getGeofenceData());
@@ -258,22 +252,25 @@ public class GeofenceHandlerService extends Service implements
 
     @Override
     public void onGeofenceDataLoadSuccess(ArrayList<GeofenceData> geofenceData) {
-        sendGeofenceLoadBroadcast(geofenceData);
+        sendGeofenceLoadedBroadcast(geofenceData);
+
+        mLocationServices.performLocationServices();
+        mLocationServices.initGeofenceData(geofenceData);
     }
 
     @Override
     public void onGeofenceDataLoadError() {
-        sendGeofenceLoadBroadcast(null);
+        sendGeofenceLoadedBroadcast(null);
     }
 
     @Override
     public void onGeofenceSaveSuccess() {
-        sendGeofenceSaveBroadcast(true);
+        sendGeofenceSavedBroadcast(true);
     }
 
     @Override
     public void onGeofenceSaveError() {
-        sendGeofenceSaveBroadcast(false);
+        sendGeofenceSavedBroadcast(false);
     }
 
     /// ----------------------
@@ -288,8 +285,13 @@ public class GeofenceHandlerService extends Service implements
         GoogleApiClient.ConnectionCallbacks callback = new GoogleApiClient.ConnectionCallbacks() {
             @Override
             public void onConnected(@Nullable Bundle bundle) {
-                //Load Geofence data
-                mGeofenceDataManager.loadSavedGeofences(GeofenceHandlerService.this);
+                if(!mGeofenceDataManager.isDataLoaded()) {
+                    //Load Geofence data
+                    mGeofenceDataManager.loadSavedGeofences(GeofenceHandlerService.this);
+                }
+                else {
+                    sendGeofenceLoadedBroadcast(mGeofenceDataManager.getGeofenceData());
+                }
 
                 //Determine if we should turn on location updates
                 determineLocationUpdates();
@@ -308,7 +310,7 @@ public class GeofenceHandlerService extends Service implements
             callback.onConnected(null);
     }
 
-    private void sendGeofenceLoadBroadcast(ArrayList<GeofenceData> geofenceData) {
+    private void sendGeofenceLoadedBroadcast(ArrayList<GeofenceData> geofenceData) {
         //Let the service know to set up geofences to track
         Intent intent = new Intent(Constants.BROADCAST_ACTION_GEODATA_LOADED);
         Bundle intentBundle = new Bundle();
@@ -317,7 +319,7 @@ public class GeofenceHandlerService extends Service implements
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
-    private void sendGeofenceSaveBroadcast(boolean success) {
+    private void sendGeofenceSavedBroadcast(boolean success) {
         Intent intent = new Intent(Constants.BROADCAST_ACTION_GEOFENCE_SAVED);
         Bundle intentBundle = new Bundle();
         intentBundle.putBoolean(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, success);
