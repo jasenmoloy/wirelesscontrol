@@ -113,8 +113,7 @@ public class GeofenceMarker {
 
         mCircleOps.center(position);
         mCircleOps.radius(radius);
-        mCircleOps.fillColor(Color.argb(50, 0, 0, 255));
-        mCircleOps.strokeWidth(4.0f);
-        mCircleOps.radius(radius);
+        mCircleOps.fillColor(Color.argb(50, 0, 0, 255)); //JAM TODO: Move values to resources file
+        mCircleOps.strokeWidth(0.0f); //JAM TODO: Move values to resources file
     }
 }

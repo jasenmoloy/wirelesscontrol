@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="standard_geofence_radius">60</integer>
-
+    <integer name="standard_geofence_radius">80</integer>
     <item name="geofence_default_zoom_percentage" type="integer" format="float">0.7</item>
 </resources>
