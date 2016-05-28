@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -48,6 +49,29 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private class InitTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            while(!mIsServiceConnected || !mIntroDialogSeen) {
+                try {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            //Now that the service is connected and the user has seen the intro dialog,
+            //lets present the required permissions.
+            checkPermissions();
+        }
+    }
+
     /// ----------------------
     /// Object Fields
     /// ----------------------
@@ -63,15 +87,17 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            //Once we're connected to our service, ask the user about permissions
-            checkPermissions();
+            mIsServiceConnected = true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-            //Stubbed
+            mIsServiceConnected = false;
         }
     };
+
+    private volatile boolean mIsServiceConnected = false;
+    private volatile boolean mIntroDialogSeen = false;
 
     /// ----------------------
     /// Public Methods
@@ -216,6 +242,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
         mPresenter = new MainPresenterImpl(this, this);
         mPresenter.onActivityCreated(this, savedInstanceState);
 
+
+
+        //Create the loader thread which watches until the the service is up and the user has seen
+        //the dialog screen
+        new InitTask().execute();
+
         //Bind to our background service
         bindService(new Intent(this, GeofenceHandlerService.class), mServiceConnection, BIND_AUTO_CREATE);
     }
@@ -231,6 +263,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
         //Hardcoded values are used to represent the app's "version". Rudimentary way display different introduction/updates.
         if(mSharedPreferences.getInt(getString(R.string.mainactivity_pref_key_introduction_flag), STARTING_DIALOG_VERISON) < INTRODUCTION_DIALOG_VERSION) {
             showIntroDialog();
+        }
+        else {
+            mIntroDialogSeen = true;
         }
     }
 
@@ -312,6 +347,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
                         SharedPreferences.Editor editor = mSharedPreferences.edit();
                         editor.putInt(getString(R.string.mainactivity_pref_key_introduction_flag), INTRODUCTION_DIALOG_VERSION); //INTRODUCTION_DIALOG_VERSION (-4) is greater than STARTING_DIALOG_VERISON (-5)
                         editor.apply();
+
+                        //Set the flag that the user has seen the intro dialog
+                        mIntroDialogSeen = true;
                     }
                 });
     }
