@@ -120,6 +120,10 @@ public class LocationServicesManager implements GoogleApiClient.ConnectionCallba
         }
     }
 
+    public Location getLastLocation() {
+        return mLastLocation;
+    }
+
     public boolean areGeofencesActive() {
         if(mGoogleApiClient != null && mGoogleApiClient.isConnected())
             return mGoogleGeofenceManager.areGeofencesActive();

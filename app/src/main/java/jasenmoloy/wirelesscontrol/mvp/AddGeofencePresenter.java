@@ -11,6 +11,8 @@ import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
 public interface AddGeofencePresenter extends OnGeofenceSaveFinishedListener {
     void registerReceiver(LocalBroadcastManager broadcastManager);
 
+    void initializeMapPosition();
+
     void saveGeofence(GeofenceData geofenceData);
 
     void onCreate();

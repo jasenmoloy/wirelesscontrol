@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.support.v4.content.LocalBroadcastManager;
 
 import jasenmoloy.wirelesscontrol.data.Constants;
@@ -27,6 +28,7 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
             return intentFilter;
         }
 
+        @Override
         public void onReceive(Context context, Intent intent) {
             Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
 
@@ -73,6 +75,21 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
     }
 
     @Override
+    public void initializeMapPosition() {
+        mModel.acquireLastKnownLocation(new AddGeofenceModel.Callback() {
+            @Override
+            public void onSuccess(Object acquiredObject) {
+                mView.initializeMyLocationOnMap((Location) acquiredObject);
+            }
+
+            @Override
+            public void onFailure(int errorCode) {
+                mView.displayLocationNotFoundToast();
+            }
+        });
+    }
+
+    @Override
     public void saveGeofence(GeofenceData data) {
         mModel.save(data, this);
         //JAM TODO: Tell the model to save out the data and let me know when it's done.
@@ -86,6 +103,7 @@ public class AddGeofencePresenterImpl implements AddGeofencePresenter {
     @Override
     public void onDestroy() {
         mBroadcastManager.unregisterReceiver(mReceiver);
+        mModel.onDestroy();
     }
 
     @Override

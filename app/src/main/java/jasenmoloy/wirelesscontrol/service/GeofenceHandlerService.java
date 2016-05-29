@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -93,6 +94,7 @@ public class GeofenceHandlerService extends Service implements
         public IntentFilter buildIntentFilter() {
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(Constants.BROADCAST_ACTION_GEODATA_REQUEST);
+            intentFilter.addAction(Constants.ACTION_LOCATION_REQUEST);
             intentFilter.addAction(Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED);
             intentFilter.addAction(Constants.BROADCAST_ACTION_SAVE_GEOFENCE);
             intentFilter.addAction(Constants.BROADCAST_ACTION_UPDATE_GEOFENCE);
@@ -105,11 +107,27 @@ public class GeofenceHandlerService extends Service implements
         public void onReceive(Context context, Intent intent) {
             Debug.logDebug(TAG, "onReceive() - action:" + intent.getAction());
             int id;
+            Intent newIntent;
 
             switch(intent.getAction()) {
                 case Constants.BROADCAST_ACTION_GEODATA_REQUEST:
-                    Intent newIntent = new Intent(Constants.BROADCAST_ACTION_GEODATA_DELIVERY);
+                    newIntent = new Intent(Constants.BROADCAST_ACTION_GEODATA_DELIVERY);
                     newIntent.putParcelableArrayListExtra(Constants.BROADCAST_EXTRA_KEY_GEODATALIST, mGeofenceDataManager.getGeofenceData());
+                    LocalBroadcastManager.getInstance(GeofenceHandlerService.this).sendBroadcast(newIntent);
+                    break;
+                case Constants.ACTION_LOCATION_REQUEST:
+                    newIntent = new Intent(Constants.ACTION_LOCATION_DELIVERY);
+                    Location location = mLocationServices.getLastLocation();
+
+                    newIntent.putExtra(Constants.BROADCAST_EXTRA_KEY_BOOLEAN, location != null); //return true if location is not null
+
+                    if(location != null) {
+                        newIntent.putExtra(Constants.EXTRA_KEY_LOCATION, location);
+                    }
+                    else {
+                        newIntent.putExtra(Constants.EXTRA_KEY_ERROR_CODE, 0); //JAM TODO: Provide a proper error code
+                    }
+
                     LocalBroadcastManager.getInstance(GeofenceHandlerService.this).sendBroadcast(newIntent);
                     break;
                 case Constants.BROADCAST_ACTION_PERMISSIONS_GRANTED:

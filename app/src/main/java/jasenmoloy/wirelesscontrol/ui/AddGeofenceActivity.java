@@ -3,6 +3,7 @@ package jasenmoloy.wirelesscontrol.ui;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -171,7 +172,7 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
                     MY_PERMISSION_ACCESS_FINE_LOCATION);
         }
         else {
-            initMyLocationOnMap();
+            mPresenter.initializeMapPosition();
         }
     }
 
@@ -196,6 +197,39 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
         //Let presenter know we're ready to save the data
         mPresenter.saveGeofence(mGeofenceSaveData);
         mGeofenceSaveData = null;
+    }
+
+    public void initializeMyLocationOnMap(Location lastKnownLocation)
+    {
+        try {
+            mMap.setMyLocationEnabled(true);
+
+            if( mLocationManager == null ) {
+                mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+                mLocation = lastKnownLocation;
+            }
+
+            //Get the user's current position
+            LatLng currentPos = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentPos, mMap.getMaxZoomLevel() * 0.8f);
+
+            //Update the marker to that position before the users see the map animation
+            UpdateGeofenceMarker(currentPos);
+
+            //Update the camera to point to where the user is located and zoom in a bit.
+            mMap.animateCamera(cameraUpdate);
+        }
+        catch(SecurityException secEx) {
+            //TODO Request permissions to access the user's location.
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void displayLocationNotFoundToast() {
+        UIHelper.displayToast(this, Toast.LENGTH_SHORT, getString(R.string.addgeofence_toast_location_not_found));
     }
 
     /// ----------------------
@@ -272,34 +306,6 @@ public class AddGeofenceActivity extends AppCompatActivity implements AddGeofenc
     /// ----------------------
     /// Private Methods
     /// ----------------------
-
-    private void initMyLocationOnMap()
-    {
-        try {
-            mMap.setMyLocationEnabled(true);
-
-            if( mLocationManager == null ) {
-                mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-                mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            }
-
-            //Get the user's current position
-            LatLng currentPos = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentPos, mMap.getMaxZoomLevel() * 0.8f);
-
-            //Update the marker to that position before the users see the map animation
-            UpdateGeofenceMarker(currentPos);
-
-            //Update the camera to point to where the user is located and zoom in a bit.
-            mMap.animateCamera(cameraUpdate);
-        }
-        catch(SecurityException secEx) {
-            //TODO Request permissions to access the user's location.
-        }
-        catch(Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
     private void initGeofenceMarker(LatLng position) {
         //Set the listener for our map.

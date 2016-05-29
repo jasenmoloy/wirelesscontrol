@@ -42,6 +42,7 @@
     <string name="addgeofence_toast_successful">Perimeter Saved</string>
     <string name="addgeofence_error_dialog_title">Save Error</string>
     <string name="addgeofence_error_dialog_body">An error occurred while saving.</string>
+    <string name="addgeofence_toast_location_not_found">Location could not be acquired</string>
 
     <!-- Edit Geofence Activity -->
     <string name="title_activity_editgeofence">Edit Perimeter</string>
