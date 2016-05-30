@@ -1,10 +1,6 @@
 package jasenmoloy.wirelesscontrol.presentation.ui;
 
-import android.app.Activity;
 import android.app.Application;
-import android.content.ComponentCallbacks;
-import android.content.res.Configuration;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -12,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -48,7 +45,7 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
 
     //Providing a reference to the views that are contained within each card
     public class ViewHolderGoogleMap extends GeofenceCardAdapter.ViewHolder implements
-            OnMapReadyCallback, Application.ActivityLifecycleCallbacks, ComponentCallbacks {
+            OnMapReadyCallback {
 
         /// ----------------------
         /// Class Fields
@@ -59,7 +56,6 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         /// ----------------------
 
         private GeofenceMarker mMarker;
-        private boolean mIsCardRecycled;
 
         //UI Elements
         private GeofenceCardView mCardView;
@@ -77,7 +73,6 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
             super(v);
             mCardView = v;
             mMap = null;
-            mIsCardRecycled = false;
 
             mName = (TextView) mCardView.findViewById(R.id.card_savedgeofence_name);
             mLocation = (TextView) mCardView.findViewById(R.id.card_savedgeofence_location);
@@ -91,27 +86,24 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
         @Override
         public void onViewRecycled() {
             mMapView.onPause();
-            mIsCardRecycled = true;
         }
 
         @Override
         public void setCard(int position, GeofenceData data) {
+            //Set the new data on the CardView
+            mCardView.setData(position, data);
+
             mName.setText(data.displayName);
 
-            mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f", //JAM TODO: Need to get access to context to get resources
+            mLocation.setText(String.format("Latitude:%1$.4f\nLongitude:%2$.4f", //JAM TODO: Need to get access to context to get resources
                     data.position.latitude,
                     data.position.longitude));
-
-            mRadius.setText(String.format("Radius: %1$.0f meters", //JAM TODO: Need to get access to context to get resources
-                    data.radius));
+//
+//            mRadius.setText(String.format("Radius: %1$d meters", //JAM TODO: Need to get access to context to get resources
+//                    data.radius));
 
             //If we already have one created, just update the marker
             if(mMarker != null && mMap != null) {
-                if( mIsCardRecycled ) {
-                    mMapView.onResume();
-                    mIsCardRecycled = false;
-                }
-
                 //reset our existing marker and add it to the map.
                 mMarker.reset(data.position, data.radius);
                 displayMarkerOnMap();
@@ -124,6 +116,8 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
                 mMapView.onCreate(null);
                 mMapView.getMapAsync(this);
             }
+
+            mMapView.onResume();
         }
 
         @Override
@@ -133,53 +127,15 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
             //Disable the map toolbar as we have no need for it in this context.
             mMap.getUiSettings().setMapToolbarEnabled(false);
 
+            try {
+                mMap.setMyLocationEnabled(true);
+            }
+            catch(SecurityException ex) {
+                ex.printStackTrace();
+            }
+
             //Set the marker we have now that the map has loaded
             displayMarkerOnMap();
-        }
-
-        @Override
-        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-            mMapView.onCreate(savedInstanceState);
-        }
-
-        @Override
-        public void onActivityStarted(Activity activity) {
-            //Stubbed
-        }
-
-        @Override
-        public void onActivityResumed(Activity activity) {
-            mMapView.onResume();
-        }
-
-        @Override
-        public void onActivityPaused(Activity activity) {
-            mMapView.onPause();
-        }
-
-        @Override
-        public void onActivityStopped(Activity activity) {
-            //Stubbed
-        }
-
-        @Override
-        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-            mMapView.onSaveInstanceState(outState);
-        }
-
-        @Override
-        public void onActivityDestroyed(Activity activity) {
-            mMapView.onDestroy();
-        }
-
-        @Override
-        public void onLowMemory() {
-            mMapView.onLowMemory();
-        }
-
-        @Override
-        public void onConfigurationChanged(Configuration config) {
-            //Stubbed
         }
 
         /// ----------------------
@@ -239,12 +195,12 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
 
             mName.setText(data.displayName);
 
-            mLocation.setText(String.format("Lat:%1$.4f Long:%2$.4f", //JAM TODO: Need to get access to context to get resources
+            mLocation.setText(String.format("Latitude:%1$.4f\nLongitude:%2$.4f", //JAM TODO: Need to get access to context to get resources
                     data.position.latitude,
                     data.position.longitude));
 
-            mRadius.setText(String.format("Radius: %1$d meters", //JAM TODO: Need to get access to context to get resources
-                    data.radius));
+//            mRadius.setText(String.format("Radius: %1$d meters", //JAM TODO: Need to get access to context to get resources
+//                    data.radius));
 
             mImageView.setImageBitmap(data.mapScreenshot);
         }
@@ -263,7 +219,6 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
     /// ----------------------
 
     private List<GeofenceData> mDataset;
-    private Application mApplication;
 
     /// ----------------------
     /// Public Methods
@@ -271,11 +226,9 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
 
     /**
      * Providing a constructor to create this dataset
-     * @param globalApplication
      * @param dataset
      */
-    public GeofenceCardAdapter(Application globalApplication, List<GeofenceData> dataset) {
-        mApplication = globalApplication;
+    public GeofenceCardAdapter(List<GeofenceData> dataset) {
         mDataset = dataset;
     }
 
@@ -327,15 +280,8 @@ public class GeofenceCardAdapter extends RecyclerView.Adapter<GeofenceCardAdapte
                 cardView = (GeofenceCardView) LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.card_geofence, parent, false);
 
-                //Create the view holder container
-                ViewHolderGoogleMap vhGoogleMap = new ViewHolderGoogleMap(cardView);
-
-                //Set callbacks for this holder as MapView requires knowledge of the Activity's lifecycle
-                mApplication.registerActivityLifecycleCallbacks(vhGoogleMap);
-                mApplication.registerComponentCallbacks(vhGoogleMap);
-
                 //Set the viewHolder to be returned
-                vh = vhGoogleMap;
+                vh = new ViewHolderGoogleMap(cardView);
                 break;
         }
 

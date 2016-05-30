@@ -61,12 +61,12 @@ public class GeofenceMarker {
     }
 
     public void animateCameraOnMarker(GoogleMap map) {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), map.getMaxZoomLevel() * 0.7f); //JAM TODO: Need to get access to context to get resources
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), map.getMaxZoomLevel() * 0.75f); //JAM TODO: Need to get access to context to get resources
         map.animateCamera(cameraUpdate);
     }
 
     public void moveCameraOnMarker(GoogleMap map) {
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), map.getMaxZoomLevel() * 0.7f); //JAM TODO: Need to get access to context to get resources
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMarker.getPosition(), map.getMaxZoomLevel() * 0.75f); //JAM TODO: Need to get access to context to get resources
         map.moveCamera(cameraUpdate);
 }
 

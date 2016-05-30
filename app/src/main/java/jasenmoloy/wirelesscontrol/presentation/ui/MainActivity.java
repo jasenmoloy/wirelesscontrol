@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             mRecyclerView.setVisibility(View.VISIBLE);
 
             //Specify target adapter to use to populate each card
-            mRecyclerView.setAdapter(new GeofenceCardAdapter(getApplication(), geofenceData));
+            mRecyclerView.setAdapter(new GeofenceCardAdapter(geofenceData));
         }
     }
 

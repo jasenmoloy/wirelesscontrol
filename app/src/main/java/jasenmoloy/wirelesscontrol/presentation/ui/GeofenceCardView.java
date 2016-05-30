@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.debug.Debug;
 
 /**
  * Created by jasenmoloy on 4/26/16.
@@ -17,6 +18,8 @@ public class GeofenceCardView extends CardView implements GestureDetector.OnGest
     /// ----------------------
     /// Class Fields
     /// ----------------------
+
+    private static final String TAG = GeofenceCardView.class.getSimpleName();
 
     /// ----------------------
     /// Object Fields
