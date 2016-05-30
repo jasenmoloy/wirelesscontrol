@@ -22,7 +22,7 @@
 
     <application
         android:allowBackup="true"
-        android:name=".ui.BaseApp"
+        android:name=".presentation.ui.BaseApp"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -42,7 +42,7 @@
 
         <!-- Main Activity -->
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".presentation.ui.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait">
@@ -55,9 +55,9 @@
 
         <!-- Add Geofence Activity -->
         <activity
-            android:name=".ui.AddGeofenceActivity"
+            android:name=".presentation.ui.AddGeofenceActivity"
             android:label="@string/title_activity_addgeofence"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName=".presentation.ui.MainActivity"
             android:screenOrientation="sensorPortrait">
 
             <intent-filter>
@@ -69,14 +69,14 @@
             <!-- Parent activity meta-data to support 4.0 (14) and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value=".presentation.ui.MainActivity" />
         </activity>
 
         <!-- Edit Geofence Activity -->
         <activity
-            android:name=".ui.EditGeofenceActivity"
+            android:name=".presentation.ui.EditGeofenceActivity"
             android:label="@string/title_activity_editgeofence"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName=".presentation.ui.MainActivity"
             android:screenOrientation="sensorPortrait">
 
             <intent-filter>
@@ -88,14 +88,14 @@
             <!-- Parent activity meta-data to support 4.0 (14) and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value=".presentation.ui.MainActivity" />
         </activity>
 
         <!-- Settings Activity -->
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name=".presentation.ui.SettingsActivity"
             android:label="@string/action_settings"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName=".presentation.ui.MainActivity"
             android:screenOrientation="sensorPortrait">
 
             <intent-filter>
@@ -107,14 +107,14 @@
             <!-- Parent activity meta-data to support 4.0 (14) and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
+                android:value=".presentation.ui.MainActivity" />
         </activity>
 
         <!-- Main Service -->
-        <service android:name=".service.GeofenceHandlerService" />
+        <service android:name=".presentation.service.GeofenceHandlerService" />
 
         <!-- Geofence Transition Service -->
-        <service android:name=".service.GeofenceTransitionsIntentService" />
+        <service android:name=".presentation.service.GeofenceTransitionsIntentService" />
     </application>
 
 </manifest>

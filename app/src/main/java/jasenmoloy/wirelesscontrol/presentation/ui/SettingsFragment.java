@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.ui;
+package jasenmoloy.wirelesscontrol.presentation.ui;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;

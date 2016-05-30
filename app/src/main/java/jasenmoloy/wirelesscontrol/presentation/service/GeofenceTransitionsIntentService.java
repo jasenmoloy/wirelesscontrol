@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.service;
+package jasenmoloy.wirelesscontrol.presentation.service;
 
 import android.app.IntentService;
 import android.content.Intent;

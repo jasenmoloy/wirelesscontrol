@@ -1,9 +1,8 @@
-package jasenmoloy.wirelesscontrol.ui;
+package jasenmoloy.wirelesscontrol.presentation.ui;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;

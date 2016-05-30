@@ -20,8 +20,8 @@ import java.util.List;
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.debug.Debug;
-import jasenmoloy.wirelesscontrol.ui.BaseApp;
-import jasenmoloy.wirelesscontrol.ui.MainActivity;
+import jasenmoloy.wirelesscontrol.presentation.ui.BaseApp;
+import jasenmoloy.wirelesscontrol.presentation.ui.MainActivity;
 
 /**
  * Created by jasenmoloy on 5/20/16.

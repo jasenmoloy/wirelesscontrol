@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.ui;
+package jasenmoloy.wirelesscontrol.presentation.ui;
 
 import android.app.Application;
 import android.content.Intent;
@@ -6,7 +6,7 @@ import android.content.Intent;
 import com.squareup.leakcanary.LeakCanary;
 
 import jasenmoloy.wirelesscontrol.debug.Debug;
-import jasenmoloy.wirelesscontrol.service.GeofenceHandlerService;
+import jasenmoloy.wirelesscontrol.presentation.service.GeofenceHandlerService;
 
 /**
  * Created by jasenmoloy on 5/17/16.

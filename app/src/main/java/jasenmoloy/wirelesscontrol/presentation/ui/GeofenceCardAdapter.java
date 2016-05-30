@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.ui;
+package jasenmoloy.wirelesscontrol.presentation.ui;
 
 import android.app.Activity;
 import android.app.Application;

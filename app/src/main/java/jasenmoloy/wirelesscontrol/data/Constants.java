@@ -14,14 +14,14 @@ public final class Constants {
     public static final String BROADCAST_ACTION_LOCATIONSERVICES_CONNECTED = "com.jasenmoloy.wirelesscontrol.MainActivity.LOCATIONSERVICES_CONNECTED";
     public static final String BROADCAST_ACTION_PERMISSION_REQUESTED = "com.jasenmoloy.wirelesscontrol.MainActivity.PERMISSION_REQUESTED";
 
-    public static final String BROADCAST_ACTION_PERMISSIONS_GRANTED = "com.jasenmoloy.wirelesscontrol.service.GeofenceHandlerService.PERMISSIONS_GRANTED";
-    public static final String BROADCAST_ACTION_GEODATA_LOADED = "com.jasenmoloy.wirelesscontrol.service.GeofenceHandlerService.GEODATA_LOADED";
-    public static final String BROADCAST_ACTION_GEODATA_REQUEST = "com.jasenmoloy.wirelesscontrol.service.GeofenceHandlerService.GEODATA_REQUEST";
-    public static final String BROADCAST_ACTION_GEODATA_DELIVERY = "com.jasenmoloy.wirelesscontrol.service.GeofenceHandlerService.GEODATA_DELIVERY";
-    public static final String ACTION_LOCATION_REQUEST = "com.jasenmoloy.wirelesscontrol.service.GeofenceHandlerService.LOCATION_REQUEST";
-    public static final String ACTION_NOTIFICATION_UPDATE = "com.jasenmoloy.wirelesscontrol.service.GeofenceHandlerService.NOTIFICATION_UPDATE";
+    public static final String BROADCAST_ACTION_PERMISSIONS_GRANTED = "com.jasenmoloy.wirelesscontrol.presentation.service.GeofenceHandlerService.PERMISSIONS_GRANTED";
+    public static final String BROADCAST_ACTION_GEODATA_LOADED = "com.jasenmoloy.wirelesscontrol.presentation.service.GeofenceHandlerService.GEODATA_LOADED";
+    public static final String BROADCAST_ACTION_GEODATA_REQUEST = "com.jasenmoloy.wirelesscontrol.presentation.service.GeofenceHandlerService.GEODATA_REQUEST";
+    public static final String BROADCAST_ACTION_GEODATA_DELIVERY = "com.jasenmoloy.wirelesscontrol.presentation.service.GeofenceHandlerService.GEODATA_DELIVERY";
+    public static final String ACTION_LOCATION_REQUEST = "com.jasenmoloy.wirelesscontrol.presentation.service.GeofenceHandlerService.LOCATION_REQUEST";
+    public static final String ACTION_NOTIFICATION_UPDATE = "com.jasenmoloy.wirelesscontrol.presentation.service.GeofenceHandlerService.NOTIFICATION_UPDATE";
 
-    public static final String ACTION_LOCATION_DELIVERY = "com.jasenmoloy.wirelesscontrol.ui.AddGeofenceActivity.LOCATION_DELIVERY";
+    public static final String ACTION_LOCATION_DELIVERY = "com.jasenmoloy.wirelesscontrol.presentation.ui.AddGeofenceActivity.LOCATION_DELIVERY";
 
     public static final String BROADCAST_ACTION_SAVE_GEOFENCE = "com.jasenmoloy.wirelesscontrol.MainActivity.SAVE_GEOFENCE";
     public static final String BROADCAST_ACTION_UPDATE_GEOFENCE = "com.jasenmoloy.wirelesscontrol.MainActivity.UPDATE_GEOFENCE";

@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.service;
+package jasenmoloy.wirelesscontrol.presentation.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -34,7 +34,7 @@ import jasenmoloy.wirelesscontrol.io.OnGeofenceDataUpdateFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
 import jasenmoloy.wirelesscontrol.managers.GeofenceDataManager;
 import jasenmoloy.wirelesscontrol.managers.LocationServicesManager;
-import jasenmoloy.wirelesscontrol.ui.MainActivity;
+import jasenmoloy.wirelesscontrol.presentation.ui.MainActivity;
 
 /**
  * Created by jasenmoloy on 3/14/16.

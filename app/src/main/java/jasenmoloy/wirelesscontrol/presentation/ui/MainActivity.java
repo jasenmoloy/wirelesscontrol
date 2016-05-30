@@ -1,7 +1,6 @@
-package jasenmoloy.wirelesscontrol.ui;
+package jasenmoloy.wirelesscontrol.presentation.ui;
 
 import android.Manifest;
-import android.app.Service;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -36,7 +35,7 @@ import jasenmoloy.wirelesscontrol.helpers.UIHelper;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenter;
 import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;
 import jasenmoloy.wirelesscontrol.mvp.MainView;
-import jasenmoloy.wirelesscontrol.service.GeofenceHandlerService;
+import jasenmoloy.wirelesscontrol.presentation.service.GeofenceHandlerService;
 
 public class MainActivity extends AppCompatActivity implements MainView {
     /// ----------------------
