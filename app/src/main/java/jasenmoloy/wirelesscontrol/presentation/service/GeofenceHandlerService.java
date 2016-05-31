@@ -367,7 +367,7 @@ public class GeofenceHandlerService extends Service implements
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(content)
                 .setContentIntent(contentIntent)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_stat_standard)
                 .setPriority(NotificationCompat.PRIORITY_MIN)
                 .build();
     }
