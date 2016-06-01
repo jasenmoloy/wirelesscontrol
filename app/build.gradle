@@ -9,8 +9,8 @@ android {
         applicationId "jasenmoloy.wirelesscontrol"
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        versionCode 50
+        versionName "0.5.0"
     }
     buildTypes {
         release {
