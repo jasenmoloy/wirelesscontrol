@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import junit.framework.Assert;
 
-import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.application.debug.Debug;
 
 /**
  * Created by jasenmoloy on 2/25/16.

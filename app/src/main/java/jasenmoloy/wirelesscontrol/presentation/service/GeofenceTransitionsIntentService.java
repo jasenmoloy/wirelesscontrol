@@ -9,8 +9,8 @@ import com.google.android.gms.location.GeofencingEvent;
 import java.util.List;
 
 import jasenmoloy.wirelesscontrol.R;
-import jasenmoloy.wirelesscontrol.debug.Debug;
-import jasenmoloy.wirelesscontrol.debug.ErrorMessages;
+import jasenmoloy.wirelesscontrol.application.debug.Debug;
+import jasenmoloy.wirelesscontrol.application.debug.ErrorMessages;
 import jasenmoloy.wirelesscontrol.application.managers.GeofenceTransitionManager;
 
 /**

@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import com.squareup.leakcanary.LeakCanary;
 
-import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.application.debug.Debug;
 import jasenmoloy.wirelesscontrol.presentation.service.GeofenceHandlerService;
 
 /**

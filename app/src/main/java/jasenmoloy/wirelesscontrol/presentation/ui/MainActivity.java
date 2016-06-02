@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
-import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.application.debug.Debug;
 import jasenmoloy.wirelesscontrol.adapters.MainPresenter;
 import jasenmoloy.wirelesscontrol.adapters.MainPresenterImpl;
 import jasenmoloy.wirelesscontrol.adapters.MainView;

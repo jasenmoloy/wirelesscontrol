@@ -8,7 +8,7 @@ import com.bluelinelabs.logansquare.annotation.JsonField;
 import com.bluelinelabs.logansquare.annotation.JsonObject;
 import com.google.android.gms.maps.model.LatLng;
 
-import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.application.debug.Debug;
 
 /**
  * Created by jasenmoloy on 2/25/16.

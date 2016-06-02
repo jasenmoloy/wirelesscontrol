@@ -19,7 +19,7 @@ import java.util.List;
 
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.Constants;
-import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.application.debug.Debug;
 import jasenmoloy.wirelesscontrol.presentation.ui.BaseApp;
 import jasenmoloy.wirelesscontrol.presentation.ui.MainActivity;
 

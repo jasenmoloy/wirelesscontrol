@@ -31,7 +31,7 @@ import junit.framework.Assert;
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
-import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.application.debug.Debug;
 import jasenmoloy.wirelesscontrol.adapters.EditGeofencePresenter;
 import jasenmoloy.wirelesscontrol.adapters.EditGeofencePresenterImpl;
 import jasenmoloy.wirelesscontrol.adapters.EditGeofenceView;

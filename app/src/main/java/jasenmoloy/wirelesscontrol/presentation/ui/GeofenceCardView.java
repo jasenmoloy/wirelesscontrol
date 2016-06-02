@@ -9,7 +9,6 @@ import android.view.MotionEvent;
 
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
-import jasenmoloy.wirelesscontrol.debug.Debug;
 
 /**
  * Created by jasenmoloy on 4/26/16.

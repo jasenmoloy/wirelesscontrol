@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
-import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.application.debug.Debug;
 import jasenmoloy.wirelesscontrol.presentation.service.GeofenceTransitionsIntentService;
 
 /**

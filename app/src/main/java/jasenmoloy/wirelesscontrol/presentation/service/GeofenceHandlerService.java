@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
-import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.application.debug.Debug;
 import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceDataDeleteFinishedListener;
 import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceDataLoadFinishedListener;
 import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceDataUpdateFinishedListener;

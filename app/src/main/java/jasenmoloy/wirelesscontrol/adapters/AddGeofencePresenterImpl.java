@@ -9,7 +9,7 @@ import android.support.v4.content.LocalBroadcastManager;
 
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
-import jasenmoloy.wirelesscontrol.debug.Debug;
+import jasenmoloy.wirelesscontrol.application.debug.Debug;
 
 /**
  * Created by jasenmoloy on 2/25/16.

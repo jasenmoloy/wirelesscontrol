@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.debug;
+package jasenmoloy.wirelesscontrol.application.debug;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;

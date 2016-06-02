@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.debug;
+package jasenmoloy.wirelesscontrol.application.debug;
 
 import android.content.Context;
 import android.content.res.Resources;
