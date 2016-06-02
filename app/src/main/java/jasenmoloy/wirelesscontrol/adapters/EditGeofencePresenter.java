@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.mvp;
+package jasenmoloy.wirelesscontrol.adapters;
 
 import android.app.Application;
 

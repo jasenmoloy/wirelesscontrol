@@ -1,19 +1,10 @@
-package jasenmoloy.wirelesscontrol.mvp;
+package jasenmoloy.wirelesscontrol.adapters;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Location;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.service.carrier.CarrierMessagingService;
 import android.support.v4.content.LocalBroadcastManager;
-
-import com.google.android.gms.common.api.Result;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 
 import junit.framework.Assert;
 

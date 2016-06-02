@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.mvp;
+package jasenmoloy.wirelesscontrol.adapters;
 
 /**
  * Created by jasenmoloy on 5/13/16.

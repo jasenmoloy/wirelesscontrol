@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.mvp;
+package jasenmoloy.wirelesscontrol.adapters;
 
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 

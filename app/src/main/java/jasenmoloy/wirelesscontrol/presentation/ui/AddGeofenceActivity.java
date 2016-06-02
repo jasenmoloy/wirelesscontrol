@@ -31,9 +31,9 @@ import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.helpers.UIHelper;
-import jasenmoloy.wirelesscontrol.mvp.AddGeofencePresenter;
-import jasenmoloy.wirelesscontrol.mvp.AddGeofencePresenterImpl;
-import jasenmoloy.wirelesscontrol.mvp.AddGeofenceView;
+import jasenmoloy.wirelesscontrol.adapters.AddGeofencePresenter;
+import jasenmoloy.wirelesscontrol.adapters.AddGeofencePresenterImpl;
+import jasenmoloy.wirelesscontrol.adapters.AddGeofenceView;
 
 /**
  * Created by jasenmoloy on 2/17/16.

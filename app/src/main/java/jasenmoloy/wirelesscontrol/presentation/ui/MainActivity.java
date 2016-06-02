@@ -32,9 +32,9 @@ import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.helpers.UIHelper;
-import jasenmoloy.wirelesscontrol.mvp.MainPresenter;
-import jasenmoloy.wirelesscontrol.mvp.MainPresenterImpl;
-import jasenmoloy.wirelesscontrol.mvp.MainView;
+import jasenmoloy.wirelesscontrol.adapters.MainPresenter;
+import jasenmoloy.wirelesscontrol.adapters.MainPresenterImpl;
+import jasenmoloy.wirelesscontrol.adapters.MainView;
 import jasenmoloy.wirelesscontrol.presentation.service.GeofenceHandlerService;
 
 public class MainActivity extends AppCompatActivity implements MainView {
