@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.data;
+package jasenmoloy.wirelesscontrol.application.data;
 
 /**
  * Created by jasenmoloy on 3/15/16.

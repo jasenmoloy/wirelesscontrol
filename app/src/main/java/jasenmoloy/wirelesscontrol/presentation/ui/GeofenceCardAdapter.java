@@ -1,6 +1,5 @@
 package jasenmoloy.wirelesscontrol.presentation.ui;
 
-import android.app.Application;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -8,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -18,7 +16,7 @@ import junit.framework.Assert;
 import java.util.List;
 
 import jasenmoloy.wirelesscontrol.R;
-import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.application.data.GeofenceData;
 
 /**
  * Created by jasenmoloy on 2/17/16.

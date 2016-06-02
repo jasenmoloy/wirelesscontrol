@@ -7,8 +7,8 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.support.v4.content.LocalBroadcastManager;
 
-import jasenmoloy.wirelesscontrol.data.Constants;
-import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.application.data.Constants;
+import jasenmoloy.wirelesscontrol.application.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.application.debug.Debug;
 
 /**

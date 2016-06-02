@@ -7,8 +7,8 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import jasenmoloy.wirelesscontrol.data.Constants;
-import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.application.data.Constants;
+import jasenmoloy.wirelesscontrol.application.data.GeofenceData;
 
 /**
  * Created by jasenmoloy on 4/26/16.

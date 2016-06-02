@@ -17,7 +17,7 @@ import junit.framework.Assert;
 import java.util.ArrayList;
 import java.util.List;
 
-import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.application.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.application.debug.Debug;
 import jasenmoloy.wirelesscontrol.presentation.service.GeofenceTransitionsIntentService;
 

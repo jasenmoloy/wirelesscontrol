@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.List;
 
-import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.application.data.GeofenceData;
 
 /**
  * Created by jasenmoloy on 2/25/16.

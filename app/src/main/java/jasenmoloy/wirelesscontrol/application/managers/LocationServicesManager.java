@@ -22,8 +22,8 @@ import com.google.android.gms.location.LocationSettingsStates;
 
 import java.util.ArrayList;
 
-import jasenmoloy.wirelesscontrol.data.Constants;
-import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.application.data.Constants;
+import jasenmoloy.wirelesscontrol.application.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.application.debug.Debug;
 
 /**

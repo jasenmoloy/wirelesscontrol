@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.data;
+package jasenmoloy.wirelesscontrol.application.data;
 
 import com.bluelinelabs.logansquare.typeconverters.TypeConverter;
 import com.fasterxml.jackson.core.JsonGenerator;

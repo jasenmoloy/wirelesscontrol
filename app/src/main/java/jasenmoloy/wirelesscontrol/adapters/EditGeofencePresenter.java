@@ -2,7 +2,7 @@ package jasenmoloy.wirelesscontrol.adapters;
 
 import android.app.Application;
 
-import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.application.data.GeofenceData;
 
 /**
  * Created by jasenmoloy on 5/13/16.

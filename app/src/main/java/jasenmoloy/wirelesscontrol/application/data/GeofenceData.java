@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.data;
+package jasenmoloy.wirelesscontrol.application.data;
 
 import android.graphics.Bitmap;
 import android.os.Parcel;

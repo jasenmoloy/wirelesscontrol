@@ -11,8 +11,8 @@ import junit.framework.Assert;
 import java.util.HashMap;
 import java.util.Map;
 
-import jasenmoloy.wirelesscontrol.data.Constants;
-import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.application.data.Constants;
+import jasenmoloy.wirelesscontrol.application.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.application.debug.Debug;
 import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceSaveFinishedListener;
 

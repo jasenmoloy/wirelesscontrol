@@ -1,6 +1,6 @@
 package jasenmoloy.wirelesscontrol.adapters;
 
-import jasenmoloy.wirelesscontrol.data.GeofenceData;
+import jasenmoloy.wirelesscontrol.application.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceSaveFinishedListener;
 
 /**

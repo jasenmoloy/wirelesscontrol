@@ -15,7 +15,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import jasenmoloy.wirelesscontrol.R;
-import jasenmoloy.wirelesscontrol.data.Constants;
+import jasenmoloy.wirelesscontrol.application.data.Constants;
 import jasenmoloy.wirelesscontrol.application.debug.Debug;
 
 public class GeofenceMapFragment extends FragmentActivity implements OnMapReadyCallback {
