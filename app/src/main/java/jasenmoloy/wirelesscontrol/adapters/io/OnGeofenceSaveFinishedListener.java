@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.io;
+package jasenmoloy.wirelesscontrol.adapters.io;
 
 /**
  * Created by jasenmoloy on 2/25/16.

@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.io;
+package jasenmoloy.wirelesscontrol.adapters.io;
 
 import java.util.ArrayList;
 

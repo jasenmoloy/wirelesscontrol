@@ -2,8 +2,6 @@ package jasenmoloy.wirelesscontrol.adapters;
 
 import android.app.Application;
 
-import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
-
 /**
  * Created by jasenmoloy on 2/25/16.
  */

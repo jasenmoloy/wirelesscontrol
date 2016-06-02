@@ -5,7 +5,7 @@ import android.location.Location;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 
-import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
+import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceSaveFinishedListener;
 
 /**
  * Created by jasenmoloy on 2/25/16.

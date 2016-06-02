@@ -14,7 +14,7 @@ import java.util.Map;
 import jasenmoloy.wirelesscontrol.data.Constants;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
-import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
+import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceSaveFinishedListener;
 
 /**
  * Created by jasenmoloy on 2/25/16.

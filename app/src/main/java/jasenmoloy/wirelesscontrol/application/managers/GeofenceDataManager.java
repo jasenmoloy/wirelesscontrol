@@ -19,10 +19,10 @@ import java.util.List;
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.data.GeofenceData;
 import jasenmoloy.wirelesscontrol.debug.Debug;
-import jasenmoloy.wirelesscontrol.io.OnGeofenceDataDeleteFinishedListener;
-import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
-import jasenmoloy.wirelesscontrol.io.OnGeofenceDataUpdateFinishedListener;
-import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
+import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceDataDeleteFinishedListener;
+import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceDataLoadFinishedListener;
+import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceDataUpdateFinishedListener;
+import jasenmoloy.wirelesscontrol.adapters.io.OnGeofenceSaveFinishedListener;
 
 /**
  * Created by jasenmoloy on 5/10/16.
