@@ -1,4 +1,4 @@
-package jasenmoloy.wirelesscontrol.managers;
+package jasenmoloy.wirelesscontrol.application.managers;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;

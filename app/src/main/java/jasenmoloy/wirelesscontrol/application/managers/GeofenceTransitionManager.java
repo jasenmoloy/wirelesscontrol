@@ -1,10 +1,8 @@
-package jasenmoloy.wirelesscontrol.managers;
+package jasenmoloy.wirelesscontrol.application.managers;
 
 import com.google.android.gms.location.Geofence;
 
 import java.util.List;
-
-import jasenmoloy.wirelesscontrol.managers.GeofenceTransitionManagerImpl;
 
 /**
  * Created by jasenmoloy on 5/20/16.

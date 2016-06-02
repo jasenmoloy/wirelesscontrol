@@ -32,8 +32,8 @@ import jasenmoloy.wirelesscontrol.io.OnGeofenceDataDeleteFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataLoadFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceDataUpdateFinishedListener;
 import jasenmoloy.wirelesscontrol.io.OnGeofenceSaveFinishedListener;
-import jasenmoloy.wirelesscontrol.managers.GeofenceDataManager;
-import jasenmoloy.wirelesscontrol.managers.LocationServicesManager;
+import jasenmoloy.wirelesscontrol.application.managers.GeofenceDataManager;
+import jasenmoloy.wirelesscontrol.application.managers.LocationServicesManager;
 import jasenmoloy.wirelesscontrol.presentation.ui.MainActivity;
 
 /**

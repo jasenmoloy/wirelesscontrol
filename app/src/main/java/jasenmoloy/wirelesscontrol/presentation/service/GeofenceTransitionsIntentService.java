@@ -11,7 +11,7 @@ import java.util.List;
 import jasenmoloy.wirelesscontrol.R;
 import jasenmoloy.wirelesscontrol.debug.Debug;
 import jasenmoloy.wirelesscontrol.debug.ErrorMessages;
-import jasenmoloy.wirelesscontrol.managers.GeofenceTransitionManager;
+import jasenmoloy.wirelesscontrol.application.managers.GeofenceTransitionManager;
 
 /**
  * Created by jasenmoloy on 3/10/16.
